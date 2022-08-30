@@ -1,11 +1,11 @@
 import UserModel from "./user-model.js"
-import "dotenv/config"
 import mongoose from "mongoose"
+import "dotenv/config"
 
 let mongoDB =
     process.env.ENV == "PROD"
         ? process.env.DB_CLOUD_URI
-        : process.env.DB_LOCAL_URI
+        : process.env.DB_LOCAL_URI // Either via docker-compose, or local mongo db needed
 
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true })
 

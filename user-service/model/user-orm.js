@@ -1,9 +1,9 @@
 import { createUser, doesUserExist, getUser } from "./repository.js"
-import bcrypt from "bcryptjs"
+import { hashPassword } from "../auth/index.js"
 
 //need to separate orm functions from repository to decouple business logic from persistence
 export async function ormCreateUser(username, password) {
-    const passwordHash = bcrypt.hashSync(password, 10)
+    const passwordHash = hashPassword(password)
     try {
         const newUser = await createUser({
             username,
@@ -31,6 +31,38 @@ export async function ormGetUser(username) {
         return await getUser(username)
     } catch (err) {
         console.log("ERROR: Could not get user")
+        return { err }
+    }
+}
+
+export async function ormGetUserRefreshToken(username) {
+    try {
+        return await getUser(username).refreshToken
+    } catch (err) {
+        console.log("ERROR: Could not get user")
+        return { err }
+    }
+}
+
+export async function ormSaveUserRefreshToken(user, refreshToken) {
+    try {
+        user.refreshToken = refreshToken
+        await user.save()
+        return true
+    } catch (err) {
+        console.log("ERROR: Could not save user refresh token")
+        return { err }
+    }
+}
+
+export async function ormDeleteUserRefreshToken(username) {
+    try {
+        const user = await getUser(username)
+        user.refreshToken = undefined
+        await user.save()
+        return true
+    } catch (err) {
+        console.log("ERROR: Could not delete user refresh token")
         return { err }
     }
 }

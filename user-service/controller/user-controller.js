@@ -1,91 +1,76 @@
+import { validatePassword, generateAccessToken, generateRefreshToken } from "../auth/index.js"
 import {
     ormCreateUser,
+    ormDeleteUserRefreshToken,
     ormDoesUserExist,
     ormGetUser,
+    ormSaveUserRefreshToken,
 } from "../model/user-orm.js"
-import bcrypt from "bcryptjs"
-import jwt from "jsonwebtoken"
 
 export async function createUser(req, res) {
     try {
         const { username, password } = req.body
-        if (username) {
-            const exist = await ormDoesUserExist(username)
-            if (exist) {
-                return res
-                    .status(409)
-                    .json({ message: "Username has been taken!" })
-            }
+        if (!(username && password)) {
+            return res.status(400).json({ message: "Username and/or Password are missing!" })
+        }
+        const exist = await ormDoesUserExist(username)
+        if (exist) {
+            return res.status(409).json({ message: "Username has been taken!" })
         }
         if (username && password) {
             const resp = await ormCreateUser(username, password)
             if (resp.err) {
-                return res
-                    .status(400)
-                    .json({ message: "Could not create a new user!" })
+                return res.status(400).json({ message: "Could not create a new user!" })
             } else {
                 console.log(`Created new user ${username} successfully!`)
                 return res.status(201).json({
                     message: `Created new user ${username} successfully!`,
                 })
             }
-        } else {
-            return res
-                .status(400)
-                .json({ message: "Username and/or Password are missing!" })
         }
+        return res.status(400).json({ message: "Username and/or Password are missing!" })
     } catch (err) {
-        return res
-            .status(500)
-            .json({ message: "Database failure when creating new user!" })
+        return res.status(500).json({ message: "Database failure when creating new user!" })
     }
 }
 
 export async function login(req, res) {
     try {
         const { username, password } = req.body
-        if (username) {
-            const exist = await ormDoesUserExist(username)
-            if (!exist) {
-                return res.status(400).json({ message: "User does not exist!" })
-            }
+        if (!(username && password)) {
+            return res.status(400).json({ message: "Username and/or Password are missing!" })
         }
-        if (username && password) {
-            const user = await ormGetUser(username)
-            const isMatched = bcrypt.compareSync(password, user.password)
-            if (isMatched) {
-                const token = jwt.sign(
-                    { username: user.username },
-                    process.env.ACCESS_TOKEN,
-                    { algorithm: "HS256", expiresIn: "30s" }
-                )
-                const refreshtoken = jwt.sign(
-                    { username: user.username },
-                    process.env.REFRESH_TOKEN,
-                    { algorithm: "HS256" }
-                )
-                return res
-                    .setHeader("set-cookie", [
-                        `JWT_TOKEN=${token}; httponly; samesite=lax`,
-                    ])
-                    .status(200)
-                    .json({
-                        message: "User login is successful!",
-                        data: {
-                            refreshToken: refreshtoken,
-                        },
-                    })
-            } else {
-                return res
-                    .status(400)
-                    .json({ message: `User cannot be logged in!` })
-            }
-        } else {
+        const exist = await ormDoesUserExist(username)
+        if (!exist) {
+            return res.status(400).json({ message: "User does not exist!" })
+        }
+        const user = await ormGetUser(username)
+        const refreshToken = generateRefreshToken(user)
+        if (!ormSaveUserRefreshToken(user, refreshToken)) {
+            return res.status(500).json({ message: "Could not save user refresh token!" })
+        }
+        if (validatePassword(password, user.password)) {
             return res
-                .status(400)
-                .json({ message: "Username and/or Password are missing!" })
+                .status(200)
+                .cookie("JWT_ACCESS_TOKEN", generateAccessToken(user))
+                .json({
+                    message: "User login is successful!",
+                    data: {
+                        refreshToken: refreshToken,
+                    },
+                })
         }
+        return res.status(400).json({ message: `Username and/or Password are incorrect!` })
     } catch (err) {
+        console.log(err)
         return res.status(500).json({ message: "Login failed!" })
     }
 }
+
+export async function logout(req, res) {
+    if (ormDeleteUserRefreshToken(req.user.username)) {
+        return res.status(200).json({ message: "User logout is successful!" })
+    }
+    return res.status(500).json({ message: "Could not logout user!" })
+}
+

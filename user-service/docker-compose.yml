@@ -7,3 +7,11 @@ services:
             dockerfile: Dockerfile
         ports:
             - "8000:8000"
+        links:
+            - mongo
+    mongo:
+        image: mongo
+        volumes:
+            - ./data/db
+        ports:
+            - "27017:27017"

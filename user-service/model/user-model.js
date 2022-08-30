@@ -1,8 +1,8 @@
 import mongoose from "mongoose"
 
 var Schema = mongoose.Schema
-let UserModelSchema = new Schema({
-    username: {
+const UserModelSchema = new Schema({
+    username: { // Identifier for the user, since it is unique
         type: String,
         required: true,
         minLength: 1,
@@ -11,6 +11,15 @@ let UserModelSchema = new Schema({
     password: {
         type: String,
         required: true,
+    },
+    email: { // For communication purposes
+        type: String,
+    },
+    role: { // For future proofing, we can add roles to users
+        type: String,
+    },
+    refreshToken: { // Refresh token (JWT)
+        type: String,
     },
     createdAt: {
         type: Date,
