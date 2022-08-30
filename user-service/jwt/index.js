@@ -1,14 +1,13 @@
-import jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken"
 
 export async function validateToken(token, secret) {
     try {
-        const result = jwt.verify(token, secret);
+        const result = jwt.verify(token, secret)
         return {
-            "username": result.username,
+            username: result.username,
         }
-    }
-    catch (err) {
+    } catch (err) {
         console.log(err)
-        return null;
+        return null
     }
 }

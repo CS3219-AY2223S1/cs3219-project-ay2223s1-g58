@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose"
 
 var Schema = mongoose.Schema
 let UserModelSchema = new Schema({
@@ -23,9 +23,9 @@ let UserModelSchema = new Schema({
     },
 })
 
-UserModelSchema.pre('save', function (next) {
+UserModelSchema.pre("save", function (next) {
     this.updatedAt = Date.now()
     next()
 })
 
-export default mongoose.model('UserModel', UserModelSchema)
+export default mongoose.model("UserModel", UserModelSchema)

@@ -1,5 +1,5 @@
-import { createUser, doesUserExist, getUser } from './repository.js'
-import bcrypt from 'bcryptjs'
+import { createUser, doesUserExist, getUser } from "./repository.js"
+import bcrypt from "bcryptjs"
 
 //need to separate orm functions from repository to decouple business logic from persistence
 export async function ormCreateUser(username, password) {
@@ -12,7 +12,7 @@ export async function ormCreateUser(username, password) {
         newUser.save()
         return true
     } catch (err) {
-        console.log('ERROR: Could not create new user')
+        console.log("ERROR: Could not create new user")
         return { err }
     }
 }
@@ -21,7 +21,7 @@ export async function ormDoesUserExist(username) {
     try {
         return await doesUserExist(username)
     } catch (err) {
-        console.log('ERROR: Could not check user existence')
+        console.log("ERROR: Could not check user existence")
         return { err }
     }
 }
@@ -30,7 +30,7 @@ export async function ormGetUser(username) {
     try {
         return await getUser(username)
     } catch (err) {
-        console.log('ERROR: Could not get user')
+        console.log("ERROR: Could not get user")
         return { err }
     }
 }
