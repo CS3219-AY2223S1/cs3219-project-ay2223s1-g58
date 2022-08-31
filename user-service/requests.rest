@@ -18,6 +18,15 @@ Content-Type: application/json
     "password": "test"
 }
 
-### LOGOUT
+### LOGOUT (Need to login to get the token from cookie)
 POST http://localhost:8000/api/user/logout
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2NjE4NzkwMTAsImV4cCI6MTY2MTg3OTA3MH0.mwjM28UpYxHOicRFFYNUZHfVimMSun3XkGZsL44HmMg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2NjE5MDkyNDEsImV4cCI6MTY2MTkwOTI3MX0.r60lUUXGFzGiGM4v5A2Okj-u8mFDdjkk9hDfcnwVlGE
+
+### TOKEN REFRESH
+POST http://localhost:8000/api/user/token
+Content-Type: application/json
+
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2NjE5MDgzMjYsImV4cCI6MTY2MTk5NDcyNn0.EzIo3d5Iz8NCVOKcSZKFK_n1uz_-CEmQcSKwZTOkhSA"
+}
+

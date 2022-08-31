@@ -8,7 +8,7 @@
 
 ## Docker
 
-- Via docker-compose: `docker-compose up -d --build`
+- Via docker-compose: `docker-compose up --build`
 - Via docker
 
 ```bash

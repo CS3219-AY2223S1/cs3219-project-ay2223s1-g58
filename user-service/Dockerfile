@@ -1,5 +1,4 @@
 FROM node:14.17.0
-ENV ENV=PROD
 
 # Create /usr/app directory
 WORKDIR /usr/app

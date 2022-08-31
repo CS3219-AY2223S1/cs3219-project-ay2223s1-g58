@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser"
 import morgan from "morgan"
 import helmet from "helmet";
 import compression from "compression";
-import { createUser, login, logout } from "./controller/user-controller.js"
+import { createUser, login, logout, token } from "./controller/user-controller.js"
 import { authenticateToken } from './middleware.js'
 
 const app = express()
@@ -33,6 +33,6 @@ router.post("/login", login)
 // LOGOUT
 router.post('/logout', authenticateToken, logout)
 // TOKEN REFRESH
-// router.post('/token', token)
+router.post('/token', token)
 
 app.listen(8000, () => console.log("user-service listening on port 8000"))
