@@ -1,0 +1,35 @@
+GET http://localhost:8000/api/user/
+
+### CREATE USER
+POST http://localhost:8000/api/user
+Content-Type: application/json
+
+{
+    "username": "test",
+    "password": "test"
+}
+
+### LOGIN
+POST http://localhost:8000/api/user/login
+Content-Type: application/json
+
+{
+    "username": "test",
+    "password": "test"
+}
+
+### LOGOUT (Need to login to get the token from cookie)
+POST http://localhost:8000/api/user/logout
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2NjE5MzA5MjYsImV4cCI6MTY2MTkzMDk4Nn0.11jte_FzZn6JAw_8lXfEvsRxgrV_2iUuY7VwbtBUGW8
+
+### TOKEN REFRESH
+POST http://localhost:8000/api/user/token
+Content-Type: application/json
+
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2NjE5MDgzMjYsImV4cCI6MTY2MTk5NDcyNn0.EzIo3d5Iz8NCVOKcSZKFK_n1uz_-CEmQcSKwZTOkhSA"
+}
+
+### TEST TOKEN
+POST http://localhost:8000/api/user/testToken
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2NjE5MzA5MjYsImV4cCI6MTY2MTkzMDk4Nn0.11jte_FzZn6JAw_8lXfEvsRxgrV_2iUuY7VwbtBUGW8
