@@ -11,6 +11,7 @@ import {
     ormGetUser,
     ormSaveUserRefreshToken,
 } from "../model/user-orm.js"
+import { redisClient } from "../index.js"
 
 export async function createUser(req, res) {
     try {
@@ -47,6 +48,7 @@ export async function login(req, res) {
             return res.status(400).json({ message: "User does not exist!" })
         }
         const user = await ormGetUser(username)
+        const accessToken = generateAccessToken(user)
         const refreshToken = generateRefreshToken(user)
         if (!ormSaveUserRefreshToken(user, refreshToken)) {
             return res.status(500).json({ message: "Could not save user refresh token!" })
@@ -54,7 +56,7 @@ export async function login(req, res) {
         if (validatePassword(password, user.password)) {
             return res
                 .status(200)
-                .cookie("JWT_ACCESS_TOKEN", generateAccessToken(user))
+                .cookie("JWT_ACCESS_TOKEN", accessToken)
                 .json({
                     message: "User login is successful!",
                     data: {
@@ -71,6 +73,8 @@ export async function login(req, res) {
 
 export async function logout(req, res) {
     if (ormDeleteUserRefreshToken(req.user.username)) {
+        // Blocklist the access token from future requests 
+        await redisClient.set(req.accessToken, req.user.username, "EX", 30) // Since at max, the access token is valid for 30 seconds
         return res.status(200).json({ message: "User logout is successful!" })
     }
     return res.status(500).json({ message: "Could not logout user!" })
