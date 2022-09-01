@@ -56,11 +56,13 @@ export async function login(req, res) {
         if (validatePassword(password, user.password)) {
             return res
                 .status(200)
-                .cookie("JWT_ACCESS_TOKEN", accessToken)
+                .cookie("jwt_refresh_token", refreshToken, {
+                    httpOnly: true,
+                })
                 .json({
                     message: "User login is successful!",
                     data: {
-                        refreshToken: refreshToken,
+                        accessToken: accessToken,
                     },
                 })
         }
@@ -80,14 +82,19 @@ export async function logout(req, res) {
     return res.status(500).json({ message: "Could not logout user!" })
 }
 
+// Handle refresh token
 export async function token(req, res) {
     try {
-        const { refreshToken } = req.body
+        const refreshToken = req.cookies.jwt_refresh_token
+        if (!refreshToken) {
+            return res.status(400).json({ message: "Refresh token is missing!" })
+        }
         const userInfo = validateToken(refreshToken, process.env.REFRESH_TOKEN_SECRET)
         if (!userInfo) {
             return res.status(400).json({ message: "Invalid refresh token!" })
         }
         const newRefreshToken = generateRefreshToken(userInfo)
+        // Token is valid, so we can generate a new access token
         const resp = await ormGetUser(userInfo.username)
         if (resp.err) {
             return res.status(400).json({ message: "Could not get user!" })
@@ -95,15 +102,18 @@ export async function token(req, res) {
         if (resp.refreshToken !== refreshToken) {
             return res.status(400).json({ message: "Invalid refresh token!" })
         }
+        const accessToken = generateAccessToken(resp)
         resp.refreshToken = newRefreshToken
         await resp.save()
         return res
             .status(200)
-            .cookie("JWT_ACCESS_TOKEN", generateAccessToken(resp))
+            .cookie("jwt_refresh_token", refreshToken, {
+                httpOnly: true,
+            })
             .json({
                 message: "Token refreshed successfully!",
                 data: {
-                    "refreshToken": newRefreshToken,
+                    "accessToken": accessToken,
                 }
             })
     } catch (err) {
