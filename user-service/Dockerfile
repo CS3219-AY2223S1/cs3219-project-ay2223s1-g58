@@ -4,7 +4,7 @@ FROM node:14.17.0
 WORKDIR /usr/app
 
 # Install dependencies
-COPY package*.json .
+COPY package.json .
 COPY package-lock.json .
 RUN npm ci --quiet
 
