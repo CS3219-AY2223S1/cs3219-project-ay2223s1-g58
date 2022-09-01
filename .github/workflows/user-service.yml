@@ -1,0 +1,24 @@
+name: User Service Test
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+  pull_request:
+
+jobs:
+  user-service-lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: user-service
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run docker-compose stack
+        run: docker-compose up -d
+      - name: Check docker-compose stack
+        run: docker-compose ps
+      - name: Check running containers
+        run: docker ps -a
