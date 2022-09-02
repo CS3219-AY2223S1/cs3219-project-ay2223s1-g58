@@ -5,11 +5,14 @@ async function findMatch(payload) {
   const socket = this;
   try {
     const json = JSON.parse(payload);
-    const matchResult = await MatchRepository.findByDifficulty(json.difficulty);
-    console.log("found repo");
-    console.log(matchResult);
+    // finds same difficulty excluding same socketId
+    const matchResult = await MatchRepository.findByDifficulty(
+      json.difficulty,
+      socket.id
+    );
+    // no other user with same requirements ready for match
     if (matchResult.length === 0) {
-      MatchRepository.create(socket.id, json.difficulty);
+      await MatchRepository.create(socket.id, json.difficulty);
       socket.emit("matching", {
         status: "matching",
       });
@@ -18,7 +21,7 @@ async function findMatch(payload) {
     const match = matchResult[0];
     // TODO check that both sockets are still open
     // TODO additional validations
-    MatchRepository.delete(match.socketId);
+    await MatchRepository.delete(match.socketId);
     sendMessage(match.socketId, socket.id, "matchSuccess", {
       status: "matchSuccess",
       room: `${match.socketId}|${socket.id}`,

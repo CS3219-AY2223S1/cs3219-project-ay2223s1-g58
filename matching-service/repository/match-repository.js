@@ -1,10 +1,15 @@
+const Sequelize = require("sequelize");
 const db = require("../models/index.js");
 
 const MatchRepository = {
-  findByDifficulty: function (difficulty) {
+  // finds by difficulty excluding same socketId
+  findByDifficulty: function (difficulty, socketId) {
     return db.Match.findAll({
       where: {
         difficulty: difficulty,
+        socketId: {
+          [Sequelize.Op.ne]: socketId,
+        },
       },
     });
   },
