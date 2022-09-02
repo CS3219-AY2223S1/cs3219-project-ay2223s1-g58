@@ -1,7 +1,4 @@
 {
-  "parserOptions": {
-    "sourceType": "module"
-  },
   "extends": ["airbnb", "prettier", "plugin:node/recommended"],
   "plugins": ["prettier"],
   "rules": {
@@ -15,6 +12,12 @@
     "node/no-unsupported-features/es-syntax": [
       "error",
       { "ignores": ["modules"] }
+    ],
+    "import/extensions": [
+      "error",
+      {
+          "js": "ignorePackages"
+      }
     ]
   }
 }

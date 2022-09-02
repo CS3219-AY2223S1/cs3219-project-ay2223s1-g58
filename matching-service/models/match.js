@@ -13,8 +13,13 @@ module.exports = (sequelize, DataTypes) => {
   }
   Match.init(
     {
-      socket_id: DataTypes.INTEGER,
-      difficulty: DataTypes.STRING,
+      socketId: {
+        type: DataTypes.INTEGER,
+        field: "socket_id",
+      },
+      difficulty: {
+        type: DataTypes.STRING,
+      },
     },
     {
       sequelize,

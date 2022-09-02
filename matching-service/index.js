@@ -1,8 +1,8 @@
-import express from "express";
-import cors from "cors";
-import { createServer } from "http";
-import { Server } from "socket.io";
-// import findMatch from "./handler/match-handler.js";
+const express = require("express");
+const cors = require("cors");
+const { createServer } = require("http");
+const { initSocket } = require("./utils/socket-io.js");
+const findMatch = require("./handler/match-handler.js");
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -15,12 +15,6 @@ app.get("/", (req, res) => {
 });
 
 const httpServer = createServer(app);
+initSocket(httpServer, findMatch);
 
 httpServer.listen(8001);
-
-const io = new Server(httpServer);
-
-io.on("connection", (socket) => {
-  // socket.on("match", findMatch);
-  console.log("Socket Connected");
-});

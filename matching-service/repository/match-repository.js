@@ -1,23 +1,23 @@
-import db from "../models";
+const db = require("../models/index.js");
 
 const MatchRepository = {
   findByDifficulty: function (difficulty) {
-    return db.Model.findAll({
+    return db.Match.findAll({
       where: {
         difficulty: difficulty,
       },
     });
   },
-  create: function (id, difficulty) {
-    return db.Model.create({ socket_id: id, difficulty });
+  create: function (socketId, difficulty) {
+    return db.Match.create({ socketId: socketId, difficulty });
   },
-  delete: function (id) {
-    return db.Model.destroy({
+  delete: function (socketId) {
+    return db.Match.destroy({
       where: {
-        socket_id: id,
+        socketId: socketId,
       },
     });
   },
 };
 
-export default MatchRepository;
+module.exports = MatchRepository;
