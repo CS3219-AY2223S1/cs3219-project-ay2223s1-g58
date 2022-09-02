@@ -4,15 +4,15 @@ const { sendMessage } = require("../utils/socket-io.js");
 async function findMatch(payload) {
   const socket = this;
   try {
-    const json = JSON.parse(payload);
     // finds same difficulty excluding same socketId
+    // TODO add validation for payload
     const matchResult = await MatchRepository.findByDifficulty(
-      json.difficulty,
+      payload.difficulty,
       socket.id
     );
     // no other user with same requirements ready for match
     if (matchResult.length === 0) {
-      await MatchRepository.create(socket.id, json.difficulty);
+      await MatchRepository.create(socket.id, payload.difficulty);
       socket.emit("matching", {
         status: "matching",
       });
@@ -27,6 +27,7 @@ async function findMatch(payload) {
       room: `${match.socketId}|${socket.id}`,
     });
   } catch (e) {
+    // TODO add custom error messages
     socket.emit("matchFail", {
       status: "matchFail",
       error: e.message,
