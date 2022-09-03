@@ -1,5 +1,5 @@
-const MatchRepository = require("../repository/match-repository.js");
-const { sendMessage } = require("../utils/socket-io.js");
+const MatchRepository = require("../repository/match-repository");
+const { sendMessage } = require("../utils/socket-io");
 
 async function findMatch(payload) {
   const socket = this;

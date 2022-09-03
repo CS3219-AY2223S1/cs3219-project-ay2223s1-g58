@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {

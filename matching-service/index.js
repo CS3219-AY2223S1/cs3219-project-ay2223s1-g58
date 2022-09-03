@@ -1,8 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const { createServer } = require("http");
-const { initSocket } = require("./utils/socket-io.js");
-const findMatch = require("./handler/match-handler.js");
+const { initSocket } = require("./utils/socket-io");
+const findMatch = require("./handler/match-handler");
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
