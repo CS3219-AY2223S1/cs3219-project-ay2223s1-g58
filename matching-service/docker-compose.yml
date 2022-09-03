@@ -1,0 +1,7 @@
+version: "3.8"
+services:
+    nodeserver:
+        build:
+            context: .
+        ports:
+            - "8001:8001"

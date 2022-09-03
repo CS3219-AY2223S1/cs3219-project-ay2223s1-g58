@@ -1,17 +1,20 @@
-import express from 'express';
-import cors from 'cors';
-import { createServer } from 'http';
+const express = require("express");
+const cors = require("cors");
+const { createServer } = require("http");
+const { initSocket } = require("./utils/socket-io");
+const findMatch = require("./handler/match-handler");
 
 const app = express();
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
-app.use(cors()) // config cors so that front-end can use
-app.options('*', cors())
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(cors()); // config cors so that front-end can use
+app.options("*", cors());
 
-app.get('/', (req, res) => {
-    res.send('Hello World from matching-service');
+app.get("/", (req, res) => {
+  res.send("Hello World from matching-service");
 });
 
-const httpServer = createServer(app)
+const httpServer = createServer(app);
+initSocket(httpServer, findMatch);
 
 httpServer.listen(8001);

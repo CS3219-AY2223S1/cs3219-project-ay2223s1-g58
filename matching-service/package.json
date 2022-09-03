@@ -1,25 +1,39 @@
 {
   "name": "matching-service",
   "version": "1.0.0",
-  "description": "",
+  "description": "Match users based on critera set by the user",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix --ext .js .",
+    "db:migrate": "sequelize-cli db:migrate",
+    "db:migrate:undo": "sequelize-cli db:migrate:undo:all"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^2.0.19"
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-node": "^4.1.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "nodemon": "^2.0.19",
+    "prettier": "^2.7.1",
+    "sequelize-cli": "^6.4.1"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.18.1",
-    "sequelize": "^6.21.3",
+    "http": "^0.0.1-security",
+    "sequelize": "^6.21.4",
     "socket.io": "^4.5.1",
-    "sqlite3": "^5.0.10",
+    "sqlite3": "^5.0.11",
     "uuid": "^8.3.2"
   }
 }
