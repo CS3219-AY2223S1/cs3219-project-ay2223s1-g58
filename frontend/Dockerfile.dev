@@ -1,0 +1,13 @@
+FROM node:14-alpine
+
+WORKDIR /app
+
+COPY package.json .
+COPY package-lock.json .
+
+RUN npm ci
+
+# Can be removed if using docker-compose, which maps the volume for you
+COPY . .
+
+CMD ["npm", "start"]
