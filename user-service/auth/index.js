@@ -25,7 +25,7 @@ export function validateToken(token, secret) {
 
 export function generateAccessToken(user) {
     return jwt.sign({ username: user.username }, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: "10s",
+        expiresIn: "60s",
     })
 }
 

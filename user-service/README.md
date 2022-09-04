@@ -2,7 +2,7 @@
 
 ## Development Guide
 
-(Initial setup)
+(initial setup)
 
 1. Install Node.js 14 and above
 1. Install dependencies via `npm ci`
