@@ -8,7 +8,7 @@ describe('GET /status', function () {
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(200, {
-                message: 'Hello World from user-servic'
+                message: 'Hello World from user-service'
             }, done);
     });
 });
