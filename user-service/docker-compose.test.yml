@@ -1,0 +1,29 @@
+version: "3.3"
+
+services:
+    web:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "8000:8000"
+        links:
+            - mongo
+            - redis
+        env_file:
+            - .env.test
+        depends_on:
+            - mongo
+            - redis
+        command: npm run test:ci
+    mongo:
+        image: mongo
+        command:
+            - "--logpath"
+            - "/dev/null"
+        ports:
+            - "27017:27017"
+    redis:
+        image: redis:alpine
+        ports:
+            - "6379:6379"

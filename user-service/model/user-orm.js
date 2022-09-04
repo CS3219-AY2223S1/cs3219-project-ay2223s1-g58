@@ -1,19 +1,20 @@
-import { createUser, doesUserExist, getUser } from "./repository.js"
+import { createUser, doesUserExist, getUser, deleteUser, updateUser } from "./repository.js"
 import { hashPassword } from "../auth/index.js"
+import logger from "../logger.js"
 
-//need to separate orm functions from repository to decouple business logic from persistence
+// need to separate orm functions from repository to decouple business logic from persistence
 export async function ormCreateUser(username, password) {
-    const passwordHash = hashPassword(password)
     try {
         const newUser = await createUser({
             username,
-            password: passwordHash,
+            password: hashPassword(password),
         })
         newUser.save()
         return true
     } catch (err) {
-        console.log("ERROR: Could not create new user")
-        return { err }
+        logger.error("Could not create new user")
+        logger.error(err)
+        return false
     }
 }
 
@@ -21,7 +22,7 @@ export async function ormDoesUserExist(username) {
     try {
         return await doesUserExist(username)
     } catch (err) {
-        console.log("ERROR: Could not check user existence")
+        logger.error("Could not check user existence")
         return { err }
     }
 }
@@ -30,7 +31,7 @@ export async function ormGetUser(username) {
     try {
         return await getUser(username)
     } catch (err) {
-        console.log("ERROR: Could not get user")
+        logger.error("Could not get user")
         return { err }
     }
 }
@@ -39,7 +40,7 @@ export async function ormGetUserRefreshToken(username) {
     try {
         return await getUser(username).refreshToken
     } catch (err) {
-        console.log("ERROR: Could not get user")
+        logger.error("Could not get user refresh token")
         return { err }
     }
 }
@@ -50,7 +51,7 @@ export async function ormSaveUserRefreshToken(user, refreshToken) {
         await user.save()
         return true
     } catch (err) {
-        console.log("ERROR: Could not save user refresh token")
+        logger.error("Could not save user refresh token")
         return { err }
     }
 }
@@ -62,7 +63,27 @@ export async function ormDeleteUserRefreshToken(username) {
         await user.save()
         return true
     } catch (err) {
-        console.log("ERROR: Could not delete user refresh token")
+        logger.error("Could not delete user refresh token")
+        return { err }
+    }
+}
+
+export async function ormDeleteUser(username) {
+    try {
+        await deleteUser(username)
+        return true
+    } catch (err) {
+        logger.error("Could not delete user")
+        return { err }
+    }
+}
+
+export async function ormUpdateUser(username, password) {
+    try {
+        await updateUser(username, hashPassword(password))
+        return true
+    } catch (err) {
+        logger.error("Could not create new user")
         return { err }
     }
 }

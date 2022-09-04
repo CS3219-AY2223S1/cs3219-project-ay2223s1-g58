@@ -2,38 +2,102 @@ import {
     validatePassword,
     generateAccessToken,
     generateRefreshToken,
-    validateToken
+    validateToken,
+    denyAccessToken
 } from "../auth/index.js"
 import {
     ormCreateUser,
+    ormDeleteUser,
     ormDeleteUserRefreshToken,
     ormDoesUserExist,
     ormGetUser,
     ormSaveUserRefreshToken,
+    ormUpdateUser,
 } from "../model/user-orm.js"
-import { redisClient } from "../index.js"
+import logger from "../logger.js"
+
+export async function getUser(req, res) {
+    try {
+        const { username } = req.user
+        const resp = await ormGetUser(username)
+        if (resp.err) {
+            logger.error(resp.err)
+            return res.status(400).json({ message: "Could not get user info" })
+        }
+        return res.status(200).json({
+            message: "Get user info successfully",
+            data: {
+                username: resp.username,
+                createdAt: resp.createdAt,
+                updatedAt: resp.updatedAt,
+            }
+        })
+    } catch (err) {
+        logger.error(err)
+        return res.status(500).json({ message: "Database failure when querying user" })
+    }
+}
 
 export async function createUser(req, res) {
     try {
         const { username, password } = req.body
         if (!(username && password)) {
-            return res.status(400).json({ message: "Username and/or Password are missing!" })
+            return res.status(400).json({ message: "Username and/or Password are missing" })
         }
+
         const exist = await ormDoesUserExist(username)
         if (exist) {
-            return res.status(409).json({ message: "Username has been taken!" })
+            return res.status(409).json({ message: "Username has been taken" })
         }
+
         const resp = await ormCreateUser(username, password)
         if (resp.err) {
-            return res.status(400).json({ message: "Could not create a new user!" })
-        } else {
-            console.log(`Created new user ${username} successfully!`)
-            return res.status(201).json({
-                message: `Created new user ${username} successfully!`,
-            })
+            logger.error(resp.err)
+            return res.status(400).json({ message: "Could not create a new user" })
         }
+
+        const msg = `Created new user ${username} successfully`
+        logger.info(msg)
+        return res.status(201).json({ message: msg })
     } catch (err) {
-        return res.status(500).json({ message: "Database failure when creating new user!" })
+        logger.error(err)
+        return res.status(500).json({ message: "Database failure when creating new user" })
+    }
+}
+
+export async function deleteUser(req, res) {
+    try {
+        const { username } = req.user
+        const resp = await ormDeleteUser(username)
+        if (resp.err) {
+            logger.error(resp.err)
+            return res.status(400).json({ message: "Could not delete user" })
+        }
+        const msg = `Deleted user ${username} successfully`
+        logger.info(msg)
+        await denyAccessToken(req.accessToken, req.user.username)
+        return res.status(200).json({ message: msg })
+    } catch (err) {
+        logger.error(err)
+        return res.status(500).json({ message: "Database failure when deleting user" })
+    }
+}
+
+export async function updateUser(req, res) {
+    try {
+        const { username, password } = req.body
+        const resp = await ormUpdateUser(username, password)
+        if (resp.err) {
+            logger.error(resp.err)
+            return res.status(400).json({ message: "Could not update user" })
+        }
+        const msg = `Updated user ${username} successfully`
+        logger.info(msg)
+        await denyAccessToken(req.accessToken, req.user.username)
+        return res.status(200).json({ message: msg })
+    } catch (err) {
+        logger.error(err)
+        return res.status(500).json({ message: "Database failure when updating user" })
     }
 }
 
@@ -41,45 +105,53 @@ export async function login(req, res) {
     try {
         const { username, password } = req.body
         if (!(username && password)) {
-            return res.status(400).json({ message: "Username and/or Password are missing!" })
+            return res.status(400).json({ message: "Username and/or Password are missing" })
         }
         const exist = await ormDoesUserExist(username)
         if (!exist) {
-            return res.status(400).json({ message: "User does not exist!" })
+            return res.status(400).json({ message: "User does not exist" })
         }
         const user = await ormGetUser(username)
         const accessToken = generateAccessToken(user)
         const refreshToken = generateRefreshToken(user)
         if (!ormSaveUserRefreshToken(user, refreshToken)) {
-            return res.status(500).json({ message: "Could not save user refresh token!" })
+            return res.status(500).json({ message: "Could not save user refresh token" })
         }
         if (validatePassword(password, user.password)) {
             return res
                 .status(200)
                 .cookie("jwt_refresh_token", refreshToken, {
                     httpOnly: true,
+                    maxAge: 7 * 24 * 60 * 60 * 1000, // expires in 7days
                 })
                 .json({
-                    message: "User login is successful!",
+                    message: "User login is successful",
                     data: {
                         accessToken: accessToken,
                     },
                 })
         }
-        return res.status(400).json({ message: `Username and/or Password are incorrect!` })
+        return res.status(400).json({ message: `Username and/or Password are incorrect` })
     } catch (err) {
-        console.log(err)
-        return res.status(500).json({ message: "Login failed!" })
+        logger.error(err)
+        return res.status(500).json({ message: "Login failed" })
     }
 }
 
 export async function logout(req, res) {
-    if (ormDeleteUserRefreshToken(req.user.username)) {
-        // Blocklist the access token from future requests 
-        await redisClient.set(req.accessToken, req.user.username, "EX", 30) // Since at max, the access token is valid for 30 seconds
-        return res.status(200).json({ message: "User logout is successful!" })
+    try {
+        if (ormDeleteUserRefreshToken(req.user.username)) {
+            await denyAccessToken(req.accessToken, req.user.username)
+            return res
+                .status(200)
+                .cookie("jwt_refresh_token", "", { maxAge: 0 })
+                .json({ message: "User logout is successful" })
+        }
+        return res.status(500).json({ message: "Could not logout user" })
+    } catch (err) {
+        logger.error(err)
+        return res.status(500).json({ message: "Could not logout user" })
     }
-    return res.status(500).json({ message: "Could not logout user!" })
 }
 
 // Handle refresh token
@@ -87,38 +159,43 @@ export async function token(req, res) {
     try {
         const refreshToken = req.cookies.jwt_refresh_token
         if (!refreshToken) {
-            return res.status(400).json({ message: "Refresh token is missing!" })
+            return res.status(400).json({ message: "Refresh token is missing" })
         }
+
         const userInfo = validateToken(refreshToken, process.env.REFRESH_TOKEN_SECRET)
         if (!userInfo) {
-            return res.status(400).json({ message: "Invalid refresh token!" })
+            return res.status(400).json({ message: "Invalid refresh token" })
         }
-        const newRefreshToken = generateRefreshToken(userInfo)
-        // Token is valid, so we can generate a new access token
+
         const resp = await ormGetUser(userInfo.username)
         if (resp.err) {
-            return res.status(400).json({ message: "Could not get user!" })
+            return res.status(400).json({ message: "Could not get user" })
         }
         if (resp.refreshToken !== refreshToken) {
-            return res.status(400).json({ message: "Invalid refresh token!" })
+            return res.status(400).json({ message: "Invalid refresh token" })
         }
+
+        await denyAccessToken(req.accessToken, userInfo.username)
         const accessToken = generateAccessToken(resp)
+        const newRefreshToken = generateRefreshToken(userInfo)
         resp.refreshToken = newRefreshToken
         await resp.save()
+
         return res
             .status(200)
             .cookie("jwt_refresh_token", refreshToken, {
                 httpOnly: true,
+                maxAge: 7 * 24 * 60 * 60 * 1000, // expires in 7days
             })
             .json({
-                message: "Token refreshed successfully!",
+                message: "Token refreshed successfully",
                 data: {
                     "accessToken": accessToken,
                 }
             })
     } catch (err) {
-        console.log(err)
-        return res.status(500).json({ message: "Database failure when refreshing token!" })
+        logger.error(err)
+        return res.status(500).json({ message: "Database failure when refreshing token" })
     }
 }
 

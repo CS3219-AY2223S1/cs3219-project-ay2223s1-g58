@@ -17,8 +17,9 @@ const UserModelSchema = new Schema({
     },
     role: { // For future proofing, we can add roles to users
         type: String,
+        default: "user",
     },
-    refreshToken: { // Refresh token (JWT)
+    refreshToken: {
         type: String,
     },
     createdAt: {

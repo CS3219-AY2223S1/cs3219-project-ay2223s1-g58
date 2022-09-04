@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken"
 import bcrypt from "bcryptjs"
+import logger from "../logger.js"
+import { redisClient } from "../index.js"
 
 export function hashPassword(password) {
     return bcrypt.hashSync(password, 10)
@@ -16,14 +18,14 @@ export function validateToken(token, secret) {
             username: result.username,
         }
     } catch (err) {
-        console.log(err)
+        logger.error(err)
         return null
     }
 }
 
 export function generateAccessToken(user) {
     return jwt.sign({ username: user.username }, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: "15m",
+        expiresIn: "10s",
     })
 }
 
@@ -31,4 +33,27 @@ export function generateRefreshToken(user) {
     return jwt.sign({ username: user.username }, process.env.REFRESH_TOKEN_SECRET, {
         expiresIn: "7d", // to be safe, we set it to 7 days instead of no expiration
     })
+}
+
+export async function denyAccessToken(accessToken, username) {
+    try {
+        // Revoke access token immediately
+        await redisClient.set(accessToken, username, "EX", 900)
+    } catch (err) {
+        logger.error(err)
+    }
+}
+
+export async function isAccessTokenDenied(accessToken) {
+    try {
+        const username = await redisClient.get(accessToken);
+        if (username != null) {
+            logger.warn("Token has been revoked");
+            return true
+        }
+        return false
+    } catch (err) {
+        logger.error(err)
+        return true
+    }
 }
