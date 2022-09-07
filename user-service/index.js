@@ -7,7 +7,15 @@ import compression from "compression"
 import redis from "redis"
 import "dotenv/config"
 
-import { createUser, deleteUser, getUser, login, logout, token } from "./controller/user-controller.js"
+import {
+    createUser,
+    deleteUser,
+    getUser,
+    login,
+    logout,
+    token,
+    updateUser
+} from "./controller/user-controller.js"
 import { authenticateToken } from './middleware.js'
 import logger from './logger.js'
 
@@ -41,14 +49,6 @@ app.use(API_PREFIX, router).all((_, res) => {
     res.setHeader("Access-Control-Allow-Origin", "*")
 })
 
-// Error handling
-app.use((err, _, res, next) => {
-    logger.error(err)
-    res.status(500).send({ message: "Server error" })
-    next(err);
-})
-
-
 // CHECK SERVER ALIVE
 router.get("/status", (_, res) => {
     res.status(200).send({ message: "Hello World from user-service" })
@@ -60,7 +60,8 @@ router.post("/", createUser)
 router.post("/login", login)
 // REFRESH TOKEN
 router.post('/token', token)
-
+// UPDATE USER
+router.put("/", authenticateToken, updateUser)
 // GET USER
 router.get("/", authenticateToken, getUser)
 // DELETE USER
@@ -69,8 +70,16 @@ router.delete("/", authenticateToken, deleteUser)
 router.post('/logout', authenticateToken, logout)
 
 // TEST TOKEN
-router.post("/testToken", authenticateToken, (_, res) => {
+router.post("/testToken", authenticateToken, (req, res) => {
+    console.log(req)
     res.status(200).send("Hello World from user-service token test")
+})
+
+// Error handling
+app.use((err, _, res, next) => {
+    logger.error(err)
+    res.status(500).send({ message: "Server error" })
+    next(err);
 })
 
 app.listen(8000, () => logger.info("user-service listening on port 8000"))

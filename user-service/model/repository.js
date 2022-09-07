@@ -27,10 +27,3 @@ export async function getUser(username) {
 export async function deleteUser(username) {
     return UserModel.deleteOne({ username: username })
 }
-
-export async function updateUser(username, password) {
-    return UserModel.findOneAndUpdate(
-        { username: username },
-        { password: password },
-        { new: true })
-}

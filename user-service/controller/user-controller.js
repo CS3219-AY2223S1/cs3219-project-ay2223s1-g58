@@ -3,7 +3,8 @@ import {
     generateAccessToken,
     generateRefreshToken,
     validateToken,
-    denyAccessToken
+    denyAccessToken,
+    hashPassword
 } from "../auth/index.js"
 import {
     ormCreateUser,
@@ -12,7 +13,6 @@ import {
     ormDoesUserExist,
     ormGetUser,
     ormSaveUserRefreshToken,
-    ormUpdateUser,
 } from "../model/user-orm.js"
 import logger from "../logger.js"
 
@@ -28,6 +28,7 @@ export async function getUser(req, res) {
             message: "Get user info successfully",
             data: {
                 username: resp.username,
+                email: resp.email,
                 createdAt: resp.createdAt,
                 updatedAt: resp.updatedAt,
             }
@@ -35,6 +36,47 @@ export async function getUser(req, res) {
     } catch (err) {
         logger.error(err)
         return res.status(500).json({ message: "Database failure when querying user" })
+    }
+}
+
+export async function updateUser(req, res) {
+    try {
+        const { username } = req.user
+
+        const resp = await ormGetUser(username)
+        if (resp.err) {
+            logger.error(resp.err)
+            return res.status(400).json({ message: "Could not get user info" })
+        }
+        const user = resp
+        if (req.body?.email) {
+            user.email = req.body.email
+        }
+        if ((req.body?.previousPassword && !req.body?.updatedPassword) || (!req.body?.previousPassword && req.body?.updatedPassword)) {
+            return res.status(400).json({ message: "Previous password and updated password must be provided together" })
+        }
+        if (req.body?.previousPassword && req.body?.updatedPassword) {
+            if (req.body.previousPassword === req.body.updatedPassword) {
+                return res.status(400).json({ message: "Previous password and updated password cannot be the same" })
+            }
+            if (!validatePassword(req.body.previousPassword, user.password)) {
+                return res.status(400).json({ message: "Invalid password" })
+            }
+            user.password = hashPassword(req.body.updatedPassword)
+        }
+        user.save()
+        return res.status(200).json({
+            message: "Update user info successfully",
+            data: {
+                username: resp.username,
+                email: resp.email,
+                createdAt: resp.createdAt,
+                updatedAt: resp.updatedAt,
+            }
+        })
+    } catch (err) {
+        logger.error(err)
+        return res.status(500).json({ message: "Database failure when updating user" })
     }
 }
 
@@ -80,24 +122,6 @@ export async function deleteUser(req, res) {
     } catch (err) {
         logger.error(err)
         return res.status(500).json({ message: "Database failure when deleting user" })
-    }
-}
-
-export async function updateUser(req, res) {
-    try {
-        const { username, password } = req.body
-        const resp = await ormUpdateUser(username, password)
-        if (resp.err) {
-            logger.error(resp.err)
-            return res.status(400).json({ message: "Could not update user" })
-        }
-        const msg = `Updated user ${username} successfully`
-        logger.info(msg)
-        await denyAccessToken(req.accessToken, req.user.username)
-        return res.status(200).json({ message: msg })
-    } catch (err) {
-        logger.error(err)
-        return res.status(500).json({ message: "Database failure when updating user" })
     }
 }
 

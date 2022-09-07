@@ -1,4 +1,4 @@
-import { createUser, doesUserExist, getUser, deleteUser, updateUser } from "./repository.js"
+import { createUser, doesUserExist, getUser, deleteUser } from "./repository.js"
 import { hashPassword } from "../auth/index.js"
 import logger from "../logger.js"
 
@@ -74,16 +74,6 @@ export async function ormDeleteUser(username) {
         return true
     } catch (err) {
         logger.error("Could not delete user")
-        return { err }
-    }
-}
-
-export async function ormUpdateUser(username, password) {
-    try {
-        await updateUser(username, hashPassword(password))
-        return true
-    } catch (err) {
-        logger.error("Could not create new user")
         return { err }
     }
 }

@@ -12,11 +12,22 @@ Content-Type: application/json
 
 ### GET USER
 GET http://localhost:8000/api/user
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2NjIzMDU2NTcsImV4cCI6MTY2MjMwNjU1N30.kqQ-rfMjzeSMfx8QNnS3wtLDUYhTNOWiPjQdJ0-cjWQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2NjI1NjY0MTksImV4cCI6MTY2MjU2NzMxOX0.QYeoCA_qNSWfnY9wyJjWEvmT6p8T0XO6Oz7iadSwbyE
+
+### UPDATE USER
+PUT http://localhost:8000/api/user
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2NjI1NjY0MTksImV4cCI6MTY2MjU2NzMxOX0.QYeoCA_qNSWfnY9wyJjWEvmT6p8T0XO6Oz7iadSwbyE
+
+{
+    "email": "test",
+    "previousPassword": "test",
+    "updatedPassword": "test1"
+}
 
 ### DELETE USER
 DELETE http://localhost:8000/api/user
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2NjIzMDU2NTcsImV4cCI6MTY2MjMwNjU1N30.kqQ-rfMjzeSMfx8QNnS3wtLDUYhTNOWiPjQdJ0-cjWQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2NjI1NjYxMTgsImV4cCI6MTY2MjU2NzAxOH0.7u4he3mncLOWH-o9EYFFpSd_-DT822X1FONZ4WFeZOk
 
 
 ### LOGIN
@@ -39,4 +50,11 @@ Cookie: jwt_refresh_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZS
 
 ### TEST TOKEN
 POST http://localhost:8000/api/user/testToken
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2NjIzMDY0MTcsImV4cCI6MTY2MjMwNzMxN30.2r7zAXJ7gMP3l-zYaOYWNUkJA8sB0vVYrH7QDniwquA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2NjI1NjU5MzQsImV4cCI6MTY2MjU2NTk5NH0.UlW3Vw7RCkK_k-9Ky3WQA3pSLNXaBznSx-y32ChjHhg
+
+Content-Type: application/json
+
+{
+    "username": "test",
+    "password": "test"
+}
