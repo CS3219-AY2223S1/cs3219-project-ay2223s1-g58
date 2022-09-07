@@ -13,8 +13,14 @@ const router = express.Router()
 
 
 // Controller will contain all the User-defined Routes
-router.get('/', getQuestion)
+// CHECK SERVER ALIVE
+router.get("/", (_, res) => {
+    res.status(200).send("Hello World from question-service")
+})
+
+router.get('/content', getQuestion)
 router.post('/', createQuestion)
+// CHECK SERVER ALIVE
 
 app.use('/api/question', router).all((_, res) => {
     res.setHeader('content-type', 'application/json')
