@@ -1,17 +1,22 @@
 
-import { QuestionsRepository } from "../repository/questions";
-import { CategoriesRepository } from "../repository/categories";
+const QuestionsRepository = require('../repository/questions')
+const CategoriesRepository = require('../repository/categories');
 
-export async function createQuestion(req, res) {
+async function createQuestion(req, res) {
     try {
         const { name, type, content, difficulty } = req.body;
         if (name && content && difficulty) {
             difficulty.toLowerCase()
-            await QuestionsRepository.createTable()
-            await CategoriesRepository.createTable()
-            const q_id = await QuestionsRepository.add(name, content);
-            const resp = await CategoriesRepository.add(q_id, difficulty, type);
-            return res.status(201).json({message: `Create new question successfully!`});
+            await QuestionsRepository.createTable();
+            await CategoriesRepository.createTable();
+            console.log("Table created/initialized successfully")
+            QuestionsRepository.add(name, content).then(id => { 
+                console.log("Question inserted succesfully with question id: " + id.q_id)
+                CategoriesRepository.add(id.q_id, difficulty, [type]);
+                console.log("Category inserted succesfully")
+                return res.status(201).json({message: `Create new question successfully!`});
+            })
+
         } else {
             return res.status(400).json({message: 'Question name, difficulty and/or content are missing!'});
         }
@@ -20,18 +25,24 @@ export async function createQuestion(req, res) {
     }
 }
 
-export async function getQuestion(req, res) {
+async function getQuestion(req, res) {
     try {
         const {difficulty} = req.body;
         if (difficulty) {
-            const q_id = await CategoriesRepository.findByDifficulty(difficulty)
-            const result = await QuestionsRepository.findById(q_id)
-            return res.status(201).json(result)
+            await CategoriesRepository.findByDifficulty(difficulty).then(id => {
+                console.log("Question id retrieved: " + id.q_id)
+                const result = QuestionsRepository.findById(id.q_id).then(result => {
+                    console.log("Result: " + result.q_name)
+                    return res.status(201).json(result)
+                })
+            })
         } else {
-            return res.status(400).json({message: `Require valid difficulty`})
+            return res.status(400).json({message: `Difficulty is missing!`})
         }
     } catch ( err ) {
         return res.status(500).json({message: 'Database failure when retrieving the question! ' + err})
     }
 }
+
+module.exports = {createQuestion, getQuestion}
 

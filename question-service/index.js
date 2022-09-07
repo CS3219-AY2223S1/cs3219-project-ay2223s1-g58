@@ -1,5 +1,5 @@
-import express from 'express';
-import cors from 'cors';
+const express = require('express');
+const cors = require('cors');
 
 const app = express();
 app.use(express.urlencoded({ extended: true }))
@@ -7,8 +7,8 @@ app.use(express.json())
 app.use(cors()) // config cors so that front-end can use
 app.options('*', cors())
 
-import { createQuestion } from './controller/question-controller.js';
-import { getQuestion } from './controller/question-controller.js';
+const { createQuestion } = require('./controller/question-controller')
+const { getQuestion } = require('./controller/question-controller')
 const router = express.Router()
 
 

@@ -1,5 +1,6 @@
-import pgPromise from 'pg-promise'
-import promise from 'bluebird'
+const pgPromise = require('pg-promise')
+const promise = require('bluebird')
+require("dotenv").config();
 
 // pg-promise initialization options:
 const initOptions = {
@@ -16,4 +17,4 @@ const db = pgp({
     port: process.env.PGPORT
 });
 
-export { db }
+module.exports =  db ;

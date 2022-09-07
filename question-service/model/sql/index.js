@@ -1,6 +1,6 @@
 
-import {QueryFile} from 'pg-promise'
-import {joinPath} from 'path'
+const { QueryFile } = require('pg-promise')();
+const {join: joinPath} = require('path');
 
 
 function sql(file) {
