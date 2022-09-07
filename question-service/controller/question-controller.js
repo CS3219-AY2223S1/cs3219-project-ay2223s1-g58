@@ -1,7 +1,7 @@
 
 const QuestionsRepository = require('../repository/questions')
 const CategoriesRepository = require('../repository/categories');
-
+const md = require('markdown-it')();
 async function createQuestion(req, res) {
     try {
         const { name, type, content, difficulty } = req.body;
@@ -33,6 +33,7 @@ async function getQuestion(req, res) {
                 console.log("Question id retrieved: " + id.q_id)
                 const result = QuestionsRepository.findById(id.q_id).then(result => {
                     console.log("Result: " + result.q_name)
+                    console.log("html: " +  parseMarkDown(result.content))
                     return res.status(201).json(result)
                 })
             })
@@ -42,6 +43,10 @@ async function getQuestion(req, res) {
     } catch ( err ) {
         return res.status(500).json({message: 'Database failure when retrieving the question! ' + err})
     }
+}
+
+function parseMarkDown(text) {
+    return md.render(text)
 }
 
 module.exports = {createQuestion, getQuestion}
