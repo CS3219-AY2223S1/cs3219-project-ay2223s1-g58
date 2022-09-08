@@ -7,11 +7,11 @@ import logger from "./logger.js";
 export async function authenticateToken(req, res, next) {
     try {
         const authHeader = req.headers['authorization'];
-        const token = authHeader && authHeader.split(' ')[1];
-        if (token == null) {
+        const authContent = authHeader && authHeader.split(' ');
+        if (authContent.length !== 2 || authContent[0] !== "Bearer" || authContent[1] === null) {
             return res.status(401).json({ message: "Access token not found" });
         }
-
+        const token = authContent[1];
         const denied = await isAccessTokenDenied(token);
         if (denied) {
             return res.status(403).json({ message: "Token has been revoked" });

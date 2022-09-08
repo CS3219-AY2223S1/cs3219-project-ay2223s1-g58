@@ -11,7 +11,7 @@ services:
             - mongo
             - redis
         env_file:
-            - .env.testConfig
+            - .env
     mongo:
         image: mongo
         ports:

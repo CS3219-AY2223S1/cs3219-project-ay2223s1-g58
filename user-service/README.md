@@ -1,5 +1,9 @@
 # User service
 
+## Prerequisites
+
+It is recommended to have redis and mongodb installed locally. If you don't have them installed, you can use docker-compose to start them.
+
 ## Development Guide
 
 (initial setup)
@@ -20,6 +24,8 @@
 
 ## Docker Guide
 
+(Work in progress, development wise please follow the development guide)
+
 Run everything in docker, for production/preview environment:
 
 - Either via docker-compose: `docker-compose up --build`,
@@ -27,7 +33,7 @@ Run everything in docker, for production/preview environment:
   - `docker build -t user-service .`
   - `docker run -p 8000:8000 user-service`
 
-Then visit `http://localhost:8000/api/user/status` to see that hello world!
+Then visit `http://localhost:8000/api/v1/user/status` to see that hello world!
 
 ## JWT
 

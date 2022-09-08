@@ -1,8 +1,8 @@
 ### CHECK SERVER ALIVE
-GET http://localhost:8000/api/user/status
+GET http://localhost:8000/api/v1/user/status
 
 ### CREATE USER
-POST http://localhost:8000/api/user
+POST http://localhost:8000/api/v1/user
 Content-Type: application/json
 
 {
@@ -11,11 +11,11 @@ Content-Type: application/json
 }
 
 ### GET USER
-GET http://localhost:8000/api/user
+GET http://localhost:8000/api/v1/user
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2NjI1NjY0MTksImV4cCI6MTY2MjU2NzMxOX0.QYeoCA_qNSWfnY9wyJjWEvmT6p8T0XO6Oz7iadSwbyE
 
 ### UPDATE USER
-PUT http://localhost:8000/api/user
+PUT http://localhost:8000/api/v1/user
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2NjI1NjY0MTksImV4cCI6MTY2MjU2NzMxOX0.QYeoCA_qNSWfnY9wyJjWEvmT6p8T0XO6Oz7iadSwbyE
 
@@ -26,12 +26,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc
 }
 
 ### DELETE USER
-DELETE http://localhost:8000/api/user
+DELETE http://localhost:8000/api/v1/user
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2NjI1NjYxMTgsImV4cCI6MTY2MjU2NzAxOH0.7u4he3mncLOWH-o9EYFFpSd_-DT822X1FONZ4WFeZOk
 
 
 ### LOGIN
-POST http://localhost:8000/api/user/login
+POST http://localhost:8000/api/v1/user/login
 Content-Type: application/json
 
 {
@@ -40,16 +40,16 @@ Content-Type: application/json
 }
 
 ### LOGOUT (Need to login to get the token from cookie)
-POST http://localhost:8000/api/user/logout
+POST http://localhost:8000/api/v1/user/logout
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2NjIzMDYzMzksImV4cCI6MTY2MjMwNzIzOX0.5r4boZMBQxnPlpCMrjl-v0FoR3gJwTKgWGRqa-SJKpQ
 
 ### TOKEN REFRESH
-POST http://localhost:8000/api/user/token
+POST http://localhost:8000/api/v1/user/token
 Content-Type: application/json
 Cookie: jwt_refresh_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2NjIzMDYzNjAsImV4cCI6MTY2MjkxMTE2MH0.biena8VzR0shF4Q84qIi2aNzd3yWi87DQ0Vn4rQojRk"
 
 ### TEST TOKEN
-POST http://localhost:8000/api/user/testToken
+POST http://localhost:8000/api/v1/user/testToken
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2NjI1NjU5MzQsImV4cCI6MTY2MjU2NTk5NH0.UlW3Vw7RCkK_k-9Ky3WQA3pSLNXaBznSx-y32ChjHhg
 
 Content-Type: application/json

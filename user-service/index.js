@@ -19,7 +19,7 @@ import {
 import { authenticateToken } from './middleware.js'
 import logger from './logger.js'
 
-const API_PREFIX = "/api/user"
+const API_PREFIX = "/api/v1/user"
 
 const app = express()
 const router = express.Router()
