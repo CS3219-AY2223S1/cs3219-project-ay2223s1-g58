@@ -1,15 +1,16 @@
-import {
-    Box,
-    Button,
-    Grid,
-    TextField,
-    Typography
-} from "@mui/material";
+import { AuthLayout } from '../components/AuthLayout'
+import { Button } from '../components/Button'
+import { TextField } from '../components/Fields'
 import { useEffect, useRef, useState } from "react";
 import axios from "../api/axios";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+    Typography
+} from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
 import { URL_USER_LOGIN, STATUS_CODE_CONFLICT, STATUS_CODE_SUCCESS } from "../constants";
 import useAuth from '../hooks/useAuth';
+import { ToastContainer, toast } from 'react-toastify';
+
 
 function Login() {
     const { setAuth } = useAuth()
@@ -43,45 +44,54 @@ function Login() {
         setErrorMsg('');
     }, [username, password])
 
-    return (
-        <Box display={"flex"} flexDirection={"column"} width={"30%"} >
-            <Typography variant={"h3"} marginBottom={"2rem"}>Login</Typography>
-            <TextField
-                label="Username"
-                variant="standard"
-                value={username}
-                autoComplete="off"
-                onChange={(e) => setUsername(e.target.value)}
-                sx={{ marginBottom: "1rem" }}
-                autoFocus
-                required
-            />
-            <TextField
-                label="Password"
-                variant="standard"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                sx={{ marginBottom: "2rem" }}
-                required
-            />
-            <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"}>
-                <Button variant={"outlined"} onClick={handleLogin}>Login</Button>
-            </Box>
-            <Grid container>
-                <Grid item xs>
-                    <Link to="/signup" variant="body2">
-                        Forgot password?
-                    </Link>
-                </Grid>
-                <Grid item>
-                    <Link to="/signup" variant="body2">
-                        {"Don't have an account? Sign Up"}
-                    </Link>
-                </Grid>
-            </Grid>
-            <Typography variant={"p"} marginBottom={"2rem"} ref={errRef} className={errorMsg ? "errormsg" : "offscreen"} aria-live="assertive">{errorMsg}</Typography>
-        </Box>
+    useEffect(() => {
+        toast({ errorMsg });
+    }, [errorMsg])
+    return (<>
+        <AuthLayout
+            title="Sign in to account"
+            subtitle={
+                <>
+                    Don’t have an account?{' '}
+                    <a href="/register" className="text-cyan-600">
+                        Sign up
+                    </a>
+                </>
+            }
+        >
+            <div>
+                <ToastContainer />
+                <div className="space-y-6">
+                    <TextField
+                        label="Username"
+                        value={username}
+                        autoComplete="off"
+                        onChange={(e) => setUsername(e.target.value)}
+                        sx={{ marginBottom: "1rem" }}
+                        autoFocus
+                        required
+                    />
+                    <TextField
+                        label="Password"
+                        id="password"
+                        name="password"
+                        type="password"
+                        autoComplete="current-password"
+                        required
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        sx={{ marginBottom: "2rem" }}
+                    />
+                </div>
+                <Button color="cyan" className="w-full mt-8" onClick={handleLogin}>
+                    Sign in to account
+                </Button>
+
+                <Typography variant={"p"} marginBottom={"2rem"} ref={errRef} className={errorMsg ? "errormsg" : "offscreen"} aria-live="assertive">{errorMsg}</Typography>
+            </div>
+        </AuthLayout>
+    </>
+
     )
 }
 
