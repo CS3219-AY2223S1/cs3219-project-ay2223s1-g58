@@ -16,12 +16,12 @@ const router = express.Router()
 router.get("/", (_, res) => {
     res.status(200).send("Hello World from question-service")
 })
-router.get('/v1/difficulty', getQuestionByDifficulty)
-router.post('/v1', createQuestion)
-router.post('/v1/delete', deleteQuestionById)
+router.get('/difficulty', getQuestionByDifficulty)
+router.post('/', createQuestion)
+router.post('/delete', deleteQuestionById)
 
 // CHECK SERVER ALIVE
-app.use('/api/question', router).all((_, res) => {
+app.use('/api/v1/question', router).all((_, res) => {
     res.setHeader('content-type', 'application/json')
     res.setHeader('Access-Control-Allow-Origin', '*')
 })
