@@ -14,13 +14,13 @@ export async function authenticateToken(req, res, next) {
         const token = authContent[1];
         const denied = await isAccessTokenDenied(token);
         if (denied) {
-            return res.status(403).json({ message: "Token has been revoked" });
+            return res.status(401).json({ message: "Token has been revoked" });
         }
 
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
             if (err) {
                 logger.error(err)
-                return res.status(403).json({ message: "Invalid access token" });
+                return res.status(401).json({ message: "Invalid access token" });
             }
             req.user = user;
             req.accessToken = token;
