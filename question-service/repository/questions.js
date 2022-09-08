@@ -14,8 +14,11 @@ const QuestionsRepository = {
     },
     deleteById: function(id) {
         return db.result('DELETE FROM questions where q_id = $1', [id]);
+    },
+    deleteByName: function(name) {
+        return db.result('DELETE FROM questions where q_name = $1', [name])
     }
-    
+ 
 }
 
 

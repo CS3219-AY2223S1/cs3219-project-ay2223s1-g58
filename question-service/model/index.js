@@ -17,11 +17,11 @@ const initOptions = {
 const pgp = pgPromise(initOptions)
 
 const db = pgp({
-    user: process.env.POSTGRES_USER,
-    host: process.env.POSTGRES_HOST,
-    password: process.env.POSTGRES_PASSWORD,
-    database: process.env.POSTGRES_DB,
-    port: process.env.POSTGRES_PORT
+    user: process.env.POSTGRES_USER || 'postgres',
+    host: process.env.POSTGRES_HOST || 'localhost',
+    password: process.env.POSTGRES_PASSWORD || 'postgres',
+    database: process.env.POSTGRES_DB || 'postgres-db',
+    port: process.env.POSTGRES_PORT || 5432
 });
 
 

@@ -15,13 +15,10 @@ services:
         image: postgres:latest
         restart: always
         ports:
-            - '5435:5435'
+            - '5432:5432'
         environment:
             POSTGRES_PASSWORD: postgres
             POSTGRES_DB: postgres
-            POSTGRES_USER: user
+            POSTGRES_USER: postgres
             POSTGRES_HOST: postgres_db
-            POSTGRES_PORT: 5435
-        command: -p 5435
-
-
+            POSTGRES_PORT: 5432       

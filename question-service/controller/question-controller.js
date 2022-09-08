@@ -2,6 +2,7 @@
 const QuestionsRepository = require('../repository/questions')
 const CategoriesRepository = require('../repository/categories');
 const md = require('markdown-it')();
+
 async function createQuestion(req, res) {
     try {
         const { name, type, content, difficulty } = req.body;
@@ -25,16 +26,19 @@ async function createQuestion(req, res) {
     }
 }
 
-async function getQuestion(req, res) {
+async function getQuestionByDifficulty(req, res) {
     try {
         const {difficulty} = req.body;
         if (difficulty) {
             await CategoriesRepository.findByDifficulty(difficulty).then(id => {
                 console.log("Question id retrieved: " + id.q_id)
                 const result = QuestionsRepository.findById(id.q_id).then(result => {
-                    console.log("Result: " + result.q_name)
-                    console.log("html: " +  parseMarkDown(result.content))
-                    return res.status(201).json(result)
+                    console.log("Question Id: " + id.q_id)
+                    console.log("Question Name: " + result.q_name)
+                    return res.status(201).json({
+                        "Name": result.q_name,
+                        "Content": parseMarkDown(result.content)
+                    })
                 })
             })
         } else {
@@ -45,9 +49,27 @@ async function getQuestion(req, res) {
     }
 }
 
+async function deleteQuestionById(req, res) {
+    try {
+        const {id} = req.body;
+        if (id) {
+            await QuestionsRepository.deleteById(id).then(result => {
+                console.log("Question delete succesfully")
+                return res.status(201).json({message: `Question deleted succesfully`});
+            }).catch(err => {
+                console.log("Error occurs when deleting question: " + err)
+            })
+        } else {
+            return res.status(400).json({message: 'Question id is missing for deletion'})
+        }
+    } catch (err) {
+        return res.status(500).json({message: 'Database failure when retrieving the question! ' + err})
+    }
+}
+
 function parseMarkDown(text) {
     return md.render(text)
 }
 
-module.exports = {createQuestion, getQuestion}
+module.exports = {createQuestion, getQuestionByDifficulty, deleteQuestionById}
 
