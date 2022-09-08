@@ -7,11 +7,10 @@ const useRefreshToken = () => {
 
     const refresh = async () => {
         const response = await axios.post(URL_USER_TOKEN);
-        console.log(response);
         setAuth(prev => {
-            return { ...prev, accessToken: response.data.accessToken }
+            return { ...prev, accessToken: response.data.data.accessToken }
         });
-        return response.data.accessToken;
+        return response.data.data.accessToken;
     }
     return refresh;
 };

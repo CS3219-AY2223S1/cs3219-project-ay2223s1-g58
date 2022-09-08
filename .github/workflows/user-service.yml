@@ -16,9 +16,5 @@ jobs:
         working-directory: user-service
     steps:
       - uses: actions/checkout@v2
-      - name: Run docker-compose stack
-        run: docker-compose up -d
-      - name: Check docker-compose stack
-        run: docker-compose ps
-      - name: Check running containers
-        run: docker ps -a
+      - name: Run lint & test via docker-compose
+        run: docker-compose -f docker-compose.test.yml up --exit-code-from web --build
