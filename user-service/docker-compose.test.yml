@@ -11,9 +11,16 @@ services:
             - mongo
             - redis
         env_file:
-            - .env
+            - .env.test
+        depends_on:
+            - mongo
+            - redis
+        command: npm run test:ci
     mongo:
         image: mongo
+        command:
+            - "--logpath"
+            - "/dev/null"
         ports:
             - "27017:27017"
     redis:
