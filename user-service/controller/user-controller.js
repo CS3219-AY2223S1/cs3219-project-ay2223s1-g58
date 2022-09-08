@@ -207,7 +207,7 @@ export async function token(req, res) {
 
         return res
             .status(200)
-            .cookie("jwt_refresh_token", refreshToken, {
+            .cookie("jwt_refresh_token", newRefreshToken, {
                 httpOnly: true,
                 maxAge: 7 * 24 * 60 * 60 * 1000, // expires in 7days
             })
