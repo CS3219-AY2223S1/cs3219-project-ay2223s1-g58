@@ -1,0 +1,24 @@
+version: "3.3"
+
+services:
+    web:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "8500:8500"
+        depends_on:
+            - "postgres_db"
+        env_file:
+            - .env
+    postgres_db:
+        image: postgres:latest
+        restart: always
+        ports:
+            - '5432:5432'
+        environment:
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: postgres
+            POSTGRES_USER: postgres
+            POSTGRES_HOST: postgres_db
+            POSTGRES_PORT: 5432       
