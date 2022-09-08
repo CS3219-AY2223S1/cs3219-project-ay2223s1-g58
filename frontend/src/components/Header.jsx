@@ -1,11 +1,18 @@
-import Link from 'next/link'
 import { Popover } from '@headlessui/react'
 import { AnimatePresence, motion } from 'framer-motion'
 
-import { Button } from '@/components/Button'
-import { Container } from '@/components/Container'
-import { Logo } from '@/components/Logo'
-import { NavLinks } from '@/components/NavLinks'
+import { Button } from './Button'
+import { Container } from './Container'
+import { Logo } from './Logo'
+import { NavLinks } from './NavLinks'
+import { Link, useNavigate } from 'react-router-dom'
+import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import {
+  STATUS_CODE_CONFLICT,
+  STATUS_CODE_SUCCESS,
+  URL_USER_LOGOUT,
+} from '../constants'
+import useAuth from '../hooks/useAuth'
 
 function MenuIcon(props) {
   return (
@@ -36,7 +43,6 @@ function ChevronUpIcon(props) {
 function MobileNavLink({ children, ...props }) {
   return (
     <Popover.Button
-      as={Link}
       className="block text-base leading-7 tracking-tight text-gray-700"
       {...props}
     >
@@ -46,13 +52,32 @@ function MobileNavLink({ children, ...props }) {
 }
 
 export function Header() {
+  const { setAuth } = useAuth()
+  const axiosPrivate = useAxiosPrivate()
+  const navigate = useNavigate()
+  const logout = async () => {
+    const res = await axiosPrivate.post(URL_USER_LOGOUT).catch((err) => {
+      if (err.response.status === STATUS_CODE_CONFLICT) {
+        console.log(err.response.data.message)
+      } else {
+        console.log(err.response.data.message)
+      }
+    })
+    if (res && res.status === STATUS_CODE_SUCCESS) {
+      setAuth({
+        accessToken: '',
+        username: '',
+      })
+      navigate('/login')
+    }
+  }
   return (
     <header>
       <nav>
         <Container className="relative z-50 flex justify-between py-8">
           <div className="relative z-10 flex items-center gap-16">
-            <Link href="/" aria-label="Home">
-              <Logo className="h-10 w-auto" />
+            <Link to="/" aria-label="Home">
+              <Logo className="w-auto h-10" />
             </Link>
             <div className="hidden lg:flex lg:gap-10">
               <NavLinks />
@@ -68,9 +93,9 @@ export function Header() {
                   >
                     {({ open }) =>
                       open ? (
-                        <ChevronUpIcon className="h-6 w-6" />
+                        <ChevronUpIcon className="w-6 h-6" />
                       ) : (
-                        <MenuIcon className="h-6 w-6" />
+                        <MenuIcon className="w-6 h-6" />
                       )
                     }
                   </Popover.Button>
@@ -95,25 +120,29 @@ export function Header() {
                             y: -32,
                             transition: { duration: 0.2 },
                           }}
-                          className="absolute inset-x-0 top-0 z-0 origin-top rounded-b-2xl bg-gray-50 px-6 pb-6 pt-32 shadow-2xl shadow-gray-900/20"
+                          className="absolute inset-x-0 top-0 z-0 px-6 pt-32 pb-6 origin-top shadow-2xl rounded-b-2xl bg-gray-50 shadow-gray-900/20"
                         >
                           <div className="space-y-4">
-                            <MobileNavLink href="#features">
-                              Features
+                            <MobileNavLink href="/">Home</MobileNavLink>
+                            <MobileNavLink href="/profile">
+                              Profile
                             </MobileNavLink>
-                            <MobileNavLink href="#reviews">
-                              Reviews
-                            </MobileNavLink>
+                            <MobileNavLink href="#reviews">Match</MobileNavLink>
                             <MobileNavLink href="#pricing">
-                              Pricing
+                              Learning History
                             </MobileNavLink>
-                            <MobileNavLink href="#faqs">FAQs</MobileNavLink>
+                            <MobileNavLink href="#faqs">
+                              Question Bank
+                            </MobileNavLink>
                           </div>
-                          <div className="mt-8 flex flex-col gap-4">
+                          <div className="flex flex-col gap-4 mt-8">
                             <Button href="/login" variant="outline">
                               Log in
                             </Button>
-                            <Button href="#">Download the app</Button>
+                            <Button variant="outline" onClick={logout}>
+                              Logout
+                            </Button>
+                            <Button href="/signup">Sign up</Button>
                           </div>
                         </Popover.Panel>
                       </>
@@ -125,8 +154,15 @@ export function Header() {
             <Button href="/login" variant="outline" className="hidden lg:block">
               Log in
             </Button>
-            <Button href="#" className="hidden lg:block">
-              Download
+            <Button
+              onClick={logout}
+              variant="outline"
+              className="hidden lg:block"
+            >
+              Logout
+            </Button>
+            <Button href="/signup" className="hidden lg:block">
+              Sign up
             </Button>
           </div>
         </Container>

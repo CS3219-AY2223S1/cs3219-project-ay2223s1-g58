@@ -196,7 +196,7 @@ export async function token(req, res) {
             return res.status(400).json({ message: "Could not get user" })
         }
         if (resp.refreshToken !== refreshToken) {
-            return res.status(400).json({ message: "Invalid refresh token" })
+            return res.status(400).json({ message: "Refresh token does not match the user's token record" })
         }
 
         await denyAccessToken(req.accessToken, userInfo.username)
