@@ -1,6 +1,6 @@
 
-const QuestionsRepository = require('../repository/questions')
-const CategoriesRepository = require('../repository/categories');
+const QuestionRepository = require('../repository/questions')
+const CategoryRepository = require('../repository/categories');
 const md = require('markdown-it')();
 
 async function createQuestion(req, res) {
@@ -8,12 +8,12 @@ async function createQuestion(req, res) {
         const { name, type, content, difficulty } = req.body;
         if (name && content && difficulty) {
             difficulty.toLowerCase()
-            await QuestionsRepository.createTable();
-            await CategoriesRepository.createTable();
+            await QuestionRepository.createTable();
+            await CategoryRepository.createTable();
             console.log("Table created/initialized successfully")
-            QuestionsRepository.add(name, content).then(id => { 
+            QuestionRepository.add(name, content).then(id => { 
                 console.log("Question inserted succesfully with question id: " + id.q_id)
-                CategoriesRepository.add(id.q_id, difficulty, [type]);
+                CategoryRepository.add(id.q_id, difficulty, [type]);
                 console.log("Category inserted succesfully")
                 return res.status(201).json({message: `Create new question successfully!`});
             })
@@ -30,9 +30,9 @@ async function getQuestionByDifficulty(req, res) {
     try {
         const {difficulty} = req.body;
         if (difficulty) {
-            await CategoriesRepository.findByDifficulty(difficulty).then(id => {
+            await CategoryRepository.findByDifficulty(difficulty).then(id => {
                 console.log("Question id retrieved: " + id.q_id)
-                const result = QuestionsRepository.findById(id.q_id).then(result => {
+                const result = QuestionRepository.findById(id.q_id).then(result => {
                     console.log("Question Id: " + id.q_id)
                     console.log("Question Name: " + result.q_name)
                     return res.status(201).json({
@@ -53,7 +53,7 @@ async function deleteQuestionById(req, res) {
     try {
         const {id} = req.body;
         if (id) {
-            await QuestionsRepository.deleteById(id).then(result => {
+            await QuestionRepository.deleteById(id).then(result => {
                 console.log("Question delete succesfully")
                 return res.status(201).json({message: `Question deleted succesfully`});
             }).catch(err => {

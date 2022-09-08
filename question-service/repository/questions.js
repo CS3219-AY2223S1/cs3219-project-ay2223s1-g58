@@ -2,7 +2,7 @@ const {questions: sql} = require('../model/sql');
 const db = require('../model')
 
 
-const QuestionsRepository = {
+const QuestionRepository = {
     createTable: function() {
         return db.none(sql.create);
     },
@@ -23,4 +23,4 @@ const QuestionsRepository = {
 
 
 
-module.exports =   QuestionsRepository ;
+module.exports =   QuestionRepository ;

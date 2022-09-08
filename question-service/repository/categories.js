@@ -2,7 +2,7 @@ const {categories: sql} = require('../model/sql');
 const db = require('../model')
 
 
-const CategoriesRepository = {
+const CategoryRepository = {
     createTable: function() {
         return db.none(sql.create);
     },
@@ -14,4 +14,4 @@ const CategoriesRepository = {
     }
 }
 
-module.exports =  CategoriesRepository;
+module.exports =  CategoryRepository;
