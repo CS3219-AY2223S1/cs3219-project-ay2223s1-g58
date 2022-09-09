@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import UserTokenTest from "./pages/UserTokenTest";
 import Layout from "./components/Layout";
 import RequireAuth from "./components/RequireAuth";
+import Profile from "./pages/Profile";
 
 function App() {
     return (
@@ -20,6 +21,7 @@ function App() {
                         {/* private routes */}
                         <Route element={<RequireAuth />}>
                             <Route path="/" element={<Home />} />
+                            <Route path="/profile" element={<Profile />} />
                             <Route path="/userTokenTest" element={<UserTokenTest />} />
                         </Route>
 

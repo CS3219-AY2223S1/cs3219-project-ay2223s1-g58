@@ -1,6 +1,7 @@
 export const STATUS_CODE_CREATED = 201
 export const STATUS_CODE_SUCCESS = 200
 export const STATUS_CODE_CONFLICT = 409
+export const STATUS_CODE_BAD_REQUEST = 400
 
 // USER SERVICE API
 const URI_USER_SERVICE = process.env.URI_USER_SERVICE || 'http://localhost:8000'
