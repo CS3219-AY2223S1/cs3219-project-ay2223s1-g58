@@ -199,9 +199,6 @@ export async function token(req, res) {
             return res.status(400).json({ message: "Could not get user" })
         }
         if (resp.refreshToken !== refreshToken) {
-            logger.info(`Refresh token mismatch for user ${userInfo.username}`)
-            logger.info("Refresh token in database: " + resp.refreshToken)
-            logger.info("Refresh token in cookie: " + refreshToken)
             return res.status(400).json({ message: "Refresh token does not match the user's token record" })
         }
 
