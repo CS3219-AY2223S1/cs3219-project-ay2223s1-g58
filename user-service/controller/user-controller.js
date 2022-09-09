@@ -55,6 +55,7 @@ export async function updateUser(req, res) {
         if ((req.body?.previousPassword && !req.body?.updatedPassword) || (!req.body?.previousPassword && req.body?.updatedPassword)) {
             return res.status(400).json({ message: "Previous password and updated password must be provided together" })
         }
+        let passwordUpdated = false
         if (req.body?.previousPassword && req.body?.updatedPassword) {
             if (req.body.previousPassword === req.body.updatedPassword) {
                 return res.status(400).json({ message: "Previous password and updated password cannot be the same" })
@@ -63,8 +64,22 @@ export async function updateUser(req, res) {
                 return res.status(400).json({ message: "Invalid password" })
             }
             user.password = hashPassword(req.body.updatedPassword)
+            passwordUpdated = true
         }
         user.save()
+        if (passwordUpdated) {
+            return res.status(200)
+                .cookie("jwt_refresh_token", "", { maxAge: 0, overwrite: true })
+                .json({
+                    message: "Update user info successfully",
+                    data: {
+                        username: resp.username,
+                        email: resp.email,
+                        createdAt: resp.createdAt,
+                        updatedAt: resp.updatedAt,
+                    }
+                })
+        }
         return res.status(200).json({
             message: "Update user info successfully",
             data: {
@@ -218,6 +233,7 @@ export async function token(req, res) {
             .json({
                 message: "Token refreshed successfully",
                 data: {
+                    "username": userInfo.username,
                     "accessToken": accessToken,
                 }
             })

@@ -7,7 +7,7 @@ import UserTokenTest from "./pages/UserTokenTest";
 import Layout from "./components/Layout";
 import RequireAuth from "./components/RequireAuth";
 import Profile from "./pages/Profile";
-
+import PersistLogin from './components/PersistLogin';
 function App() {
     return (
         <div className="App">
@@ -19,10 +19,12 @@ function App() {
                         <Route path="/login" element={<Login />} />
 
                         {/* private routes */}
-                        <Route element={<RequireAuth />}>
-                            <Route path="/" element={<Home />} />
-                            <Route path="/profile" element={<Profile />} />
-                            <Route path="/userTokenTest" element={<UserTokenTest />} />
+                        <Route element={<PersistLogin />}>
+                            <Route element={<RequireAuth />}>
+                                <Route path="/" element={<Home />} />
+                                <Route path="/profile" element={<Profile />} />
+                                <Route path="/userTokenTest" element={<UserTokenTest />} />
+                            </Route>
                         </Route>
 
                         {/* 404 */}

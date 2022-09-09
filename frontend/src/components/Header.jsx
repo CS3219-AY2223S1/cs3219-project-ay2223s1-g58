@@ -5,14 +5,8 @@ import { Button } from './Button'
 import { Container } from './Container'
 import { Logo } from './Logo'
 import { NavLinks } from './NavLinks'
-import { Link, useNavigate } from 'react-router-dom'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
-import {
-  STATUS_CODE_CONFLICT,
-  STATUS_CODE_SUCCESS,
-  URL_USER_LOGOUT,
-} from '../constants'
-import useAuth from '../hooks/useAuth'
+import { Link } from 'react-router-dom'
+import useLogout from '../hooks/useLogout'
 
 function MenuIcon(props) {
   return (
@@ -52,25 +46,8 @@ function MobileNavLink({ children, ...props }) {
 }
 
 export function Header() {
-  const { setAuth } = useAuth()
-  const axiosPrivate = useAxiosPrivate()
-  const navigate = useNavigate()
-  const logout = async () => {
-    const res = await axiosPrivate.post(URL_USER_LOGOUT).catch((err) => {
-      if (err.response.status === STATUS_CODE_CONFLICT) {
-        console.log(err.response.data.message)
-      } else {
-        console.log(err.response.data.message)
-      }
-    })
-    if (res && res.status === STATUS_CODE_SUCCESS) {
-      setAuth({
-        accessToken: '',
-        username: '',
-      })
-      navigate('/login')
-    }
-  }
+  const logout = useLogout()
+
   return (
     <header>
       <nav>
