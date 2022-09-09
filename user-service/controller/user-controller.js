@@ -118,7 +118,9 @@ export async function deleteUser(req, res) {
         const msg = `Deleted user ${username} successfully`
         logger.info(msg)
         await denyAccessToken(req.accessToken, req.user.username)
-        return res.status(200).json({ message: msg })
+        return res.status(200)
+            .cookie("jwt_refresh_token", "", { maxAge: 0, overwrite: true })
+            .json({ message: msg })
     } catch (err) {
         logger.error(err)
         return res.status(500).json({ message: "Database failure when deleting user" })
@@ -146,6 +148,7 @@ export async function login(req, res) {
                 .status(200)
                 .cookie("jwt_refresh_token", refreshToken, {
                     httpOnly: true,
+                    overwrite: true,
                     maxAge: 7 * 24 * 60 * 60 * 1000, // expires in 7days
                 })
                 .json({
@@ -168,7 +171,7 @@ export async function logout(req, res) {
             await denyAccessToken(req.accessToken, req.user.username)
             return res
                 .status(200)
-                .cookie("jwt_refresh_token", "", { maxAge: 0 })
+                .cookie("jwt_refresh_token", "", { maxAge: 0, overwrite: true })
                 .json({ message: "User logout is successful" })
         }
         return res.status(500).json({ message: "Could not logout user" })
@@ -196,6 +199,9 @@ export async function token(req, res) {
             return res.status(400).json({ message: "Could not get user" })
         }
         if (resp.refreshToken !== refreshToken) {
+            logger.info(`Refresh token mismatch for user ${userInfo.username}`)
+            logger.info("Refresh token in database: " + resp.refreshToken)
+            logger.info("Refresh token in cookie: " + refreshToken)
             return res.status(400).json({ message: "Refresh token does not match the user's token record" })
         }
 
@@ -209,6 +215,7 @@ export async function token(req, res) {
             .status(200)
             .cookie("jwt_refresh_token", newRefreshToken, {
                 httpOnly: true,
+                overwrite: true,
                 maxAge: 7 * 24 * 60 * 60 * 1000, // expires in 7days
             })
             .json({
