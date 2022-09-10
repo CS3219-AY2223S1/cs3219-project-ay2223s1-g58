@@ -1,8 +1,12 @@
 # Question service
 
+## Usage
+1. Rename .env.sample to .env
+2. Install npm packages using `npm install`.
+3. Run Matching Service using `npm run dev`.
 
 ## Docker
-
+- Replace content of 
 - Via docker-compose: `docker-compose up --build`
 
 

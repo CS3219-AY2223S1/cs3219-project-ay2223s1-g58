@@ -7,6 +7,7 @@ services:
         ports:
             - '5432:5432'
         environment:
+            ENV: production
             POSTGRES_PASSWORD: postgres
             POSTGRES_DB: postgres
             POSTGRES_USER: postgres
@@ -21,5 +22,5 @@ services:
         depends_on:
             - "postgres_db"
         env_file:
-            - .env         
+            - .env.prod        
 

@@ -3,7 +3,7 @@
     "username": "postgres",
     "password": "postgres",
     "database": "postgres_db",
-    "host": "host.docker.internal",
+    "host": "localhost",
     "port": 5432, 
     "dialect": "postgres",
     "storage": "./database.postgres"
@@ -19,8 +19,8 @@
   "production": {
     "username": "postgres",
     "password": "postgres",
-    "database": "postgres",
-    "host": "postgres_db",
+    "database": "postgres_db",
+    "host": "host.docker.internal",
     "dialect": "postgres",
     "storage": "./database.postgres"
   }
