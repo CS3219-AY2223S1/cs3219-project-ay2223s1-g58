@@ -15,7 +15,6 @@ import {
     ormSaveUserRefreshToken,
 } from "../model/user-orm.js"
 import logger from "../logger.js"
-import { attachAccessToken } from "../middleware.js"
 
 export async function getUser(req, res) {
     try {
@@ -227,8 +226,6 @@ export async function token(req, res) {
             return res.status(400).json({ message: "Refresh token does not match the user's token record" })
         }
 
-        attachAccessToken(req)
-        await denyAccessToken(req.accessToken, userInfo.username)
         const accessToken = generateAccessToken(resp)
         const newRefreshToken = generateRefreshToken(userInfo)
         resp.refreshToken = newRefreshToken

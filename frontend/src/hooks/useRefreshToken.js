@@ -3,21 +3,10 @@ import { URL_USER_TOKEN } from '../constants';
 import useAuth from './useAuth';
 
 const useRefreshToken = () => {
-    const { auth, setAuth } = useAuth();
+    const { setAuth } = useAuth();
 
     const refresh = async () => {
-        let response;
-        if (auth.accessToken !== '') {
-            response = await axios.post(URL_USER_TOKEN,
-                {
-                    headers: {
-                        'Authorization': `Bearer ${auth.accessToken}`
-                    }
-                }
-            );
-        } else {
-            response = await axios.post(URL_USER_TOKEN);
-        }
+        const response = await axios.post(URL_USER_TOKEN);
         setAuth(prev => {
             return {
                 ...prev,
