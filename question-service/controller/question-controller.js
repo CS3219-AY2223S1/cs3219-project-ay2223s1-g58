@@ -1,6 +1,6 @@
 
-const QuestionRepository = require('../repository/questions')
-const CategoryRepository = require('../repository/categories');
+const QuestionRepository = require('../repository/question-repository')
+const CategoryRepository = require('../repository/category-repository');
 const md = require('markdown-it')();
 
 async function createQuestion(req, res) {
@@ -8,16 +8,11 @@ async function createQuestion(req, res) {
         const { name, type, content, difficulty } = req.body;
         if (name && content && difficulty) {
             difficulty.toLowerCase()
-            await QuestionRepository.createTable();
-            await CategoryRepository.createTable();
-            console.log("Table created/initialized successfully")
-            QuestionRepository.add(name, content).then(id => { 
-                console.log("Question inserted succesfully with question id: " + id.q_id)
-                CategoryRepository.add(id.q_id, difficulty, [type]);
-                console.log("Category inserted succesfully")
-                return res.status(201).json({message: `Create new question successfully!`});
-            })
-
+            const question = await QuestionRepository.create(name, content);
+            console.log("Question created succesfully with id: " + question.id)
+            const category = await CategoryRepository.create(question.id, difficulty, [type])
+            console.log("Category created succesfully for q_id: " + question.id)
+            return res.status(201).json({message: `Create new question successfully!`});
         } else {
             return res.status(400).json({message: 'Question name, difficulty and/or content are missing!'});
         }
@@ -30,16 +25,18 @@ async function getQuestionByDifficulty(req, res) {
     try {
         const {difficulty} = req.body;
         if (difficulty) {
-            await CategoryRepository.findByDifficulty(difficulty).then(id => {
-                console.log("Question id retrieved: " + id.q_id)
-                const result = QuestionRepository.findById(id.q_id).then(result => {
-                    console.log("Question Id: " + id.q_id)
-                    console.log("Question Name: " + result.q_name)
-                    return res.status(201).json({
-                        "Name": result.q_name,
-                        "Content": parseMarkDown(result.content)
-                    })
-                })
+            var q_id;
+            const category = await CategoryRepository.findByDifficulty(difficulty).then(data => {
+                q_id = String(data[0].QuestionId);
+            }).catch(err => {
+                return res.status(500).json({message: 'Database failure when retrieving the category! ' + err})
+            });
+            console.log("Question id retrieved: " + q_id)
+            const question = await QuestionRepository.findById(q_id)
+            console.log("Question retrieved: " + question.q_name)
+            return res.status(201).json({
+                "Name": question.q_name,
+                "Content": parseMarkDown(question.content)
             })
         } else {
             return res.status(400).json({message: `Difficulty is missing!`})
@@ -53,12 +50,8 @@ async function deleteQuestionById(req, res) {
     try {
         const {id} = req.body;
         if (id) {
-            await QuestionRepository.deleteById(id).then(result => {
-                console.log("Question delete succesfully")
-                return res.status(201).json({message: `Question deleted succesfully`});
-            }).catch(err => {
-                console.log("Error occurs when deleting question: " + err)
-            })
+            const deletedQuestion = await QuestionRepository.deleteById(id);
+            return res.status(201).json({message: `Question deleted succesfully`});
         } else {
             return res.status(400).json({message: 'Question id is missing for deletion'})
         }

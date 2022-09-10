@@ -15,12 +15,14 @@
     "nodemon": "^2.0.19"
   },
   "dependencies": {
-    "bluebird": "^3.7.2",
     "cors": "^2.8.5",
+    "db-migrate": "^0.11.13",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "markdown-it": "^13.0.1",
     "path": "^0.12.7",
-    "pg-promise": "^10.12.0"
+    "pg": "^8.8.0",
+    "sequelize": "^6.21.6",
+    "sequelize-cli": "^6.4.1"
   }
 }
