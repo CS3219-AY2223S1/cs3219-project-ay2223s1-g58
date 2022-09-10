@@ -4,6 +4,7 @@ import {
   STATUS_CODE_SUCCESS,
   URL_USER_SERVICE,
   PASSWORD_REGEX,
+  EMAIL_REGEX,
 } from '../constants'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
@@ -17,9 +18,56 @@ const Profile = () => {
   const navigate = useNavigate()
   const axiosPrivate = useAxiosPrivate()
 
+  const [school, setSchool] = useState(auth.school)
+  const [email, setEmail] = useState(auth.email)
+
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [repeatPassword, setRepeatPassword] = useState('')
+
+  const updateAccountInfo = async (e) => {
+    e.preventDefault()
+    if (school === auth.school && email === auth.email) {
+      toast({
+        title: `Nothing to update!`,
+        status: 'warning',
+        isClosable: true,
+      })
+      return
+    }
+    if (!EMAIL_REGEX.test(email)) {
+      toast({
+        title: 'Invalid email!',
+        status: 'error',
+        isClosable: true,
+      })
+      return
+    }
+    const res = await axiosPrivate
+      .put(URL_USER_SERVICE, {
+        school,
+        email,
+      })
+      .catch((err) => {
+        if (err.response.status === STATUS_CODE_BAD_REQUEST) {
+          console.log(err.response.data.message)
+        } else {
+          console.log('Server Error')
+        }
+      })
+    if (res && res.status === STATUS_CODE_SUCCESS) {
+      toast({
+        title: `Account info changed!`,
+        status: 'success',
+        isClosable: true,
+      })
+      setAuth({
+        ...auth,
+        school,
+        email,
+      })
+    }
+  }
 
   const updateAccountPassword = async () => {
     if (newPassword !== repeatPassword) {
@@ -148,23 +196,31 @@ const Profile = () => {
                   id="school"
                   className="flex-1 w-full px-4 py-2 text-base text-gray-700 placeholder-gray-400 bg-white border border-transparent border-gray-300 rounded-lg shadow-sm appearance-none focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600"
                   placeholder="School"
+                  value={school}
+                  onChange={(e) => setSchool(e.target.value)}
                 />
               </div>
             </div>
             <div>
               <div className="relative">
                 <input
-                  type="text"
-                  id="user-info-phone"
+                  type="email"
+                  id="email"
                   className="flex-1 w-full px-4 py-2 text-base text-gray-700 placeholder-gray-400 bg-white border border-transparent border-gray-300 rounded-lg shadow-sm appearance-none focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600"
+                  autoComplete="off"
                   placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
             </div>
           </div>
         </div>
         <div className="w-full px-2 ml-auto text-center text-gray-500 md:w-3/12 ">
-          <button className="px-6 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-blue-200">
+          <button
+            onClick={(e) => updateAccountInfo(e)}
+            className="px-6 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-blue-200"
+          >
             Update
           </button>
         </div>

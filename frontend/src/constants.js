@@ -15,3 +15,4 @@ export const URL_USER_TOKEN_TEST = URL_USER_SERVICE + '/testToken'
 
 export const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/
 export const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/
+export const EMAIL_REGEX = /^\S+@\S+\.\S+$/

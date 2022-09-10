@@ -4,6 +4,21 @@ import jwt from "jsonwebtoken";
 import { isAccessTokenDenied } from "./auth/index.js";
 import logger from "./logger.js";
 
+export async function attachAccessToken(req) {
+    try {
+        const authHeader = req.headers['authorization'];
+        const authContent = authHeader && authHeader.split(' ');
+        if (authContent.length !== 2 || authContent[0] !== "Bearer" || authContent[1] === null) {
+            logger.info("No access token provided");
+            return
+        }
+        req.accessToken = authContent[1];
+    } catch (err) {
+        logger.info("No access token provided");
+        return
+    }
+}
+
 export async function authenticateToken(req, res, next) {
     try {
         const authHeader = req.headers['authorization'];

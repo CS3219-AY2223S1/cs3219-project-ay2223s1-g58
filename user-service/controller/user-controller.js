@@ -15,6 +15,7 @@ import {
     ormSaveUserRefreshToken,
 } from "../model/user-orm.js"
 import logger from "../logger.js"
+import { attachAccessToken } from "../middleware.js"
 
 export async function getUser(req, res) {
     try {
@@ -29,6 +30,7 @@ export async function getUser(req, res) {
             data: {
                 username: resp.username,
                 email: resp.email,
+                school: resp.school,
                 createdAt: resp.createdAt,
                 updatedAt: resp.updatedAt,
             }
@@ -51,6 +53,9 @@ export async function updateUser(req, res) {
         const user = resp
         if (req.body?.email) {
             user.email = req.body.email
+        }
+        if (req.body?.school) {
+            user.school = req.body.school
         }
         if ((req.body?.previousPassword && !req.body?.updatedPassword) || (!req.body?.previousPassword && req.body?.updatedPassword)) {
             return res.status(400).json({ message: "Previous password and updated password must be provided together" })
@@ -75,6 +80,7 @@ export async function updateUser(req, res) {
                     data: {
                         username: resp.username,
                         email: resp.email,
+                        school: resp.school,
                         createdAt: resp.createdAt,
                         updatedAt: resp.updatedAt,
                     }
@@ -85,6 +91,7 @@ export async function updateUser(req, res) {
             data: {
                 username: resp.username,
                 email: resp.email,
+                school: resp.school,
                 createdAt: resp.createdAt,
                 updatedAt: resp.updatedAt,
             }
@@ -169,6 +176,9 @@ export async function login(req, res) {
                 .json({
                     message: "User login is successful",
                     data: {
+                        username: user.username,
+                        email: user.email,
+                        school: user.school,
                         accessToken: accessToken,
                     },
                 })
@@ -217,6 +227,7 @@ export async function token(req, res) {
             return res.status(400).json({ message: "Refresh token does not match the user's token record" })
         }
 
+        attachAccessToken(req)
         await denyAccessToken(req.accessToken, userInfo.username)
         const accessToken = generateAccessToken(resp)
         const newRefreshToken = generateRefreshToken(userInfo)
@@ -233,8 +244,10 @@ export async function token(req, res) {
             .json({
                 message: "Token refreshed successfully",
                 data: {
-                    "username": userInfo.username,
-                    "accessToken": accessToken,
+                    username: userInfo.username,
+                    email: resp.email,
+                    school: resp.school,
+                    accessToken: accessToken,
                 }
             })
     } catch (err) {

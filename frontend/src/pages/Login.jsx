@@ -23,6 +23,7 @@ function Login() {
   useEffect(() => {
     localStorage.setItem('persist:peerprep', persist)
   }, [persist])
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
@@ -38,7 +39,12 @@ function Login() {
         }
       })
     if (res && res.status === STATUS_CODE_SUCCESS) {
-      setAuth({ username, accessToken: res.data.data.accessToken })
+      setAuth({
+        username,
+        school: res.data.data.school,
+        email: res.data.data.email,
+        accessToken: res.data.data.accessToken,
+      })
       setUsername('')
       setPassword('')
       navigate(from, { replace: true })

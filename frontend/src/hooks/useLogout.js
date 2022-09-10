@@ -19,6 +19,8 @@ const useLogout = () => {
                 setAuth({
                     accessToken: '',
                     username: '',
+                    email: '',
+                    school: ''
                 })
                 navigate('/login')
             }
