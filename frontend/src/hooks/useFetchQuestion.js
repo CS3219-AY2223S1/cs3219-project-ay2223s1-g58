@@ -1,5 +1,6 @@
-import axios from '../api/axios'
+import axios from '../api/axios';
 import {useState, useEffect} from 'react'
+import { URL_RETRIEVE_QUESTION } from '../constants';
 
 const useFetchQuestion = () => {
     const [loading, setLoading] = useState(true);
@@ -9,10 +10,13 @@ const useFetchQuestion = () => {
         const fetchData = async () =>{
           setLoading(true);
           try {
-            const {data: response} = await axios.get('http://localhost:8500/api/v1/question/difficulty', { params: { difficulty: 'easy' } })
+            const {data: response} = await axios.post(URL_RETRIEVE_QUESTION,  {
+                difficulty: 'easy'
+              })
             setData(response);
+            console.log(response)
           } catch (error) {
-            console.error(error.message);
+            console.error(error);
           }
           setLoading(false);
         }
