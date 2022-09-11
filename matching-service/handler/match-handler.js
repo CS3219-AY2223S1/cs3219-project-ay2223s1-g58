@@ -1,14 +1,17 @@
 const MatchService = require("../service/match-service");
 const { sendMessageToBoth, isSocketActive } = require("../utils/socket-io");
 const { EVENTS } = require("../const/constants");
+const { matchDto } = require("../dto/match-dto");
 
 async function findMatch(payload) {
   const socket = this;
   try {
-    // finds same difficulty excluding same socketId
-    // TODO add validation for payload
+    const { value, error } = matchDto.validate(payload);
+    if (error) {
+      throw error;
+    }
     const match = await MatchService.findByDifficulty(
-      payload.difficulty,
+      value.difficulty,
       socket.id
     );
     // no other user with same requirements ready for match, or other user is not active
@@ -18,7 +21,7 @@ async function findMatch(payload) {
         console.log("Inactive user found");
         MatchService.deleteMatch(match.socketId);
       }
-      await MatchService.createMatch(socket.id, payload.difficulty);
+      await MatchService.createMatch(socket.id, value.difficulty);
       socket.emit(EVENTS.MATCHING, {
         status: EVENTS.MATCHING,
       });
