@@ -12,6 +12,12 @@ It is recommended to have redis and mongodb installed locally. If you don't have
 1. Install dependencies via `npm ci`
 1. Rename `.env.dev` file to `.env`
 
+(for local setup and manual testing)
+
+`docker-compose -f docker-compose.yml up --build`
+
+OR
+
 (daily development)
 
 1. Start the required database services:
@@ -19,7 +25,9 @@ It is recommended to have redis and mongodb installed locally. If you don't have
 1. Start the express server:
    1. `npm run dev`
 
-(running tests in docker)
+OR
+
+(running automated tests in docker)
 `docker-compose -f docker-compose.test.yml up --exit-code-from web --build`
 
 ## Docker Guide

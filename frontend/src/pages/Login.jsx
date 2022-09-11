@@ -12,11 +12,17 @@ import {
 import useAuth from '../hooks/useAuth'
 
 function Login() {
-  const { auth, setAuth } = useAuth()
+  const { auth, setAuth, persist, setPersist } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from?.pathname || '/'
   const errRef = useRef()
+  const togglePersist = () => {
+    setPersist((prev) => !prev)
+  }
+  useEffect(() => {
+    localStorage.setItem('persist:peerprep', persist)
+  }, [persist])
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -33,7 +39,12 @@ function Login() {
         }
       })
     if (res && res.status === STATUS_CODE_SUCCESS) {
-      setAuth({ username, accessToken: res.data.data.accessToken })
+      setAuth({
+        username,
+        school: res.data.data.school,
+        email: res.data.data.email,
+        accessToken: res.data.data.accessToken,
+      })
       setUsername('')
       setPassword('')
       navigate(from, { replace: true })
@@ -81,6 +92,15 @@ function Login() {
             onChange={(e) => setPassword(e.target.value)}
             sx={{ marginBottom: '2rem' }}
           />
+        </div>
+        <div className="flex items-center justify-center gap-2 mt-2">
+          <input
+            type="checkbox"
+            id="persist"
+            onChange={togglePersist}
+            checked={persist}
+          />
+          <label htmlFor="persist">Trust This Device (Persist Sign In)</label>
         </div>
         <Button color="cyan" className="w-full mt-8" onClick={handleLogin}>
           Sign In
