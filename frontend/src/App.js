@@ -3,6 +3,7 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import PageNotFound from "./pages/PageNotFound";
 import Home from "./pages/Home";
+import Question from "./pages/Question";
 import UserTokenTest from "./pages/UserTokenTest";
 import Layout from "./components/Layout";
 import RequireAuth from "./components/RequireAuth";
@@ -14,11 +15,14 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<Layout />}>
+
                         {/* public routes */}
                         <Route element={<PersistLogin />}>
                             <Route path="/signup" element={<Signup />} />
                             <Route path="/login" element={<Login />} />
+                            <Route path="/question" element={<Question />} />
                         </Route>
+
 
                         {/* private routes */}
                         <Route element={<PersistLogin />}>
