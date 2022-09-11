@@ -15,6 +15,9 @@ import {
     ormSaveUserRefreshToken,
 } from "../model/user-orm.js"
 import logger from "../logger.js"
+import { updateCookieToken } from "../middleware.js";
+
+const REFRESH_TOKEN_EXPIRATION = 60 * 60 * 24 * 7 * 1000; // 1 week
 
 export async function getUser(req, res) {
     try {
@@ -72,8 +75,8 @@ export async function updateUser(req, res) {
         }
         user.save()
         if (passwordUpdated) {
+            updateCookieToken(res, "", 0)
             return res.status(200)
-                .cookie("jwt_refresh_token", "", { maxAge: 0, overwrite: true })
                 .json({
                     message: "Update user info successfully",
                     data: {
@@ -139,8 +142,8 @@ export async function deleteUser(req, res) {
         const msg = `Deleted user ${username} successfully`
         logger.info(msg)
         await denyAccessToken(req.accessToken, req.user.username)
+        updateCookieToken(res, "", 0)
         return res.status(200)
-            .cookie("jwt_refresh_token", "", { maxAge: 0, overwrite: true })
             .json({ message: msg })
     } catch (err) {
         logger.error(err)
@@ -165,13 +168,9 @@ export async function login(req, res) {
             return res.status(500).json({ message: "Could not save user refresh token" })
         }
         if (validatePassword(password, user.password)) {
+            updateCookieToken(res, refreshToken, REFRESH_TOKEN_EXPIRATION)
             return res
                 .status(200)
-                .cookie("jwt_refresh_token", refreshToken, {
-                    httpOnly: true,
-                    overwrite: true,
-                    maxAge: 7 * 24 * 60 * 60 * 1000, // expires in 7days
-                })
                 .json({
                     message: "User login is successful",
                     data: {
@@ -193,9 +192,9 @@ export async function logout(req, res) {
     try {
         if (ormDeleteUserRefreshToken(req.user.username)) {
             await denyAccessToken(req.accessToken, req.user.username)
+            updateCookieToken(res, "", 0)
             return res
                 .status(200)
-                .cookie("jwt_refresh_token", "", { maxAge: 0, overwrite: true })
                 .json({ message: "User logout is successful" })
         }
         return res.status(500).json({ message: "Could not logout user" })
@@ -230,14 +229,9 @@ export async function token(req, res) {
         const newRefreshToken = generateRefreshToken(userInfo)
         resp.refreshToken = newRefreshToken
         await resp.save()
-
+        updateCookieToken(res, newRefreshToken, REFRESH_TOKEN_EXPIRATION)
         return res
             .status(200)
-            .cookie("jwt_refresh_token", newRefreshToken, {
-                httpOnly: true,
-                overwrite: true,
-                maxAge: 7 * 24 * 60 * 60 * 1000, // expires in 7days
-            })
             .json({
                 message: "Token refreshed successfully",
                 data: {

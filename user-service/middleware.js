@@ -4,34 +4,41 @@ import jwt from "jsonwebtoken";
 import { isAccessTokenDenied } from "./auth/index.js";
 import logger from "./logger.js";
 
-export async function attachAccessToken(req) {
+function getAccessToken(req) {
     try {
         const authHeader = req.headers['authorization'];
         const authContent = authHeader && authHeader.split(' ');
-        if (authContent.length !== 2 || authContent[0] !== "Bearer" || authContent[1] === null) {
-            logger.info("No access token provided");
-            return
+        if (!authHeader || authContent.length !== 2 || authContent[0] !== "Bearer" || authContent[1] === null) {
+            logger.info("Access token not provided or invalid");
+            return null;
         }
-        req.accessToken = authContent[1];
+        return authContent[1];
     } catch (err) {
-        logger.info("No access token provided");
-        return
+        logger.info("Access token not provided or invalid");
+        return null;
     }
+}
+
+// Modifies the response object to configure the cookie
+export async function updateCookieToken(res, token, maxAge) {
+    res.cookie("jwt_refresh_token", token, {
+        httpOnly: true,
+        overwrite: true,
+        maxAge: maxAge,
+    })
 }
 
 export async function authenticateToken(req, res, next) {
     try {
-        const authHeader = req.headers['authorization'];
-        const authContent = authHeader && authHeader.split(' ');
-        if (authContent.length !== 2 || authContent[0] !== "Bearer" || authContent[1] === null) {
+        const token = getAccessToken(req);
+        if (token === null) {
             return res.status(401).json({ message: "Access token not found" });
         }
-        const token = authContent[1];
+
         const denied = await isAccessTokenDenied(token);
         if (denied) {
             return res.status(401).json({ message: "Token has been revoked" });
         }
-
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
             if (err) {
                 logger.error(err)

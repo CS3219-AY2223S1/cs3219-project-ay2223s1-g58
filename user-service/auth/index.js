@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs"
 import logger from "../logger.js"
 import { redisClient } from "../index.js"
 
+const ACCESS_TOKEN_EXPIRATION = 60; // 1 minute
+
 export function hashPassword(password) {
     return bcrypt.hashSync(password, 10)
 }
@@ -52,7 +54,7 @@ export async function denyAccessToken(accessToken, username) {
             return
         }
         // Revoke access token immediately
-        await redisClient.set(accessToken, username, "EX", 60)
+        await redisClient.set(accessToken, username, "EX", ACCESS_TOKEN_EXPIRATION)
         logger.info("Access token is denied")
     } catch (err) {
         logger.error(err)
