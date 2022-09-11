@@ -15,6 +15,9 @@ const UserModelSchema = new Schema({
     email: { // For communication purposes
         type: String,
     },
+    school: {
+        type: String,
+    },
     role: { // For future proofing, we can add roles to users
         type: String,
         default: "user",
