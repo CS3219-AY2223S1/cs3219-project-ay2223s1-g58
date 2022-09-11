@@ -1,27 +1,27 @@
 {
-  "development": {
-    "username": "postgres",
-    "password": "postgres",
-    "database": "postgres_db",
-    "host": "localhost",
-    "port": 5432, 
-    "dialect": "postgres",
-    "storage": "./database.postgres"
-  },
-  "test": {
-    "username": "postgres",
-    "password": "postgres",
-    "database": "postgres_db",
-    "host": "127.0.0.1",
-    "dialect": "postgres",
-    "storage": "./database.postgres"
-  },
-  "production": {
-    "username": "postgres",
-    "password": "postgres",
-    "database": "postgres_db",
-    "host": "host.docker.internal",
-    "dialect": "postgres",
-    "storage": "./database.postgres"
-  }
+    "development": {
+        "username": "postgres",
+        "password": "postgres",
+        "database": "postgres_db",
+        "host": "localhost",
+        "port": 5432,
+        "dialect": "postgres",
+        "storage": "./database.postgres"
+    },
+    "test": {
+        "username": "postgres",
+        "password": "postgres",
+        "database": "postgres_db",
+        "host": "127.0.0.1",
+        "dialect": "postgres",
+        "storage": "./database.postgres"
+    },
+    "production": {
+        "username": "postgres",
+        "password": "postgres",
+        "database": "postgres_db",
+        "host": "host.docker.internal",
+        "dialect": "postgres",
+        "storage": "./database.postgres"
+    }
 }

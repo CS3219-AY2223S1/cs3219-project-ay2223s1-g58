@@ -1,31 +1,26 @@
-const Sequelize = require("sequelize");
 const db = require('../models')
 
-
 const QuestionRepository = {
-    findById: function(id) {
+    findById: function (id) {
         return db.Question.findOne({
             where: {
-                id: id
-            }
-        });
+                id: id,
+            },
+        })
     },
-    create: function(name, content) {
+    create: function (name, content) {
         return db.Question.create({
             q_name: name,
-            content: content
+            content: content,
         })
     },
-    deleteById: function(id) {
+    deleteById: function (id) {
         return db.Question.destroy({
             where: {
-                id: id
-            }
+                id: id,
+            },
         })
-    }
-
+    },
 }
 
-
-
-module.exports =   QuestionRepository;
+module.exports = QuestionRepository

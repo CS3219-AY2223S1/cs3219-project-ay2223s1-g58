@@ -1,28 +1,36 @@
 {
-  "name": "question-service",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "dev": "nodemon index.js",
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "nodemon": "^2.0.19"
-  },
-  "dependencies": {
-    "cors": "^2.8.5",
-    "db-migrate": "^0.11.13",
-    "dotenv": "^16.0.1",
-    "express": "^4.18.1",
-    "markdown-it": "^13.0.1",
-    "path": "^0.12.7",
-    "pg": "^8.8.0",
-    "sequelize": "^6.21.6",
-    "sequelize-cli": "^6.4.1"
-  }
+    "name": "question-service",
+    "version": "1.0.0",
+    "description": "1. Rename .env.sample to .env\r 2. Install npm packages using `npm install`.\r 3. Run Question Service using `npm run dev`.",
+    "main": "index.js",
+    "scripts": {
+        "dev": "nodemon index.js",
+        "start": "node index.js",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "format:check": "prettier --check .",
+        "format:write": "prettier --write .",
+        "lint:check": "eslint .",
+        "lint:fix": "eslint --fix --ext .js .",
+        "db:migrate": "sequelize-cli db:migrate"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "eslint": "^8.23.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-vue": "^9.4.0",
+        "nodemon": "^2.0.19",
+        "prettier": "^2.7.1",
+        "sequelize-cli": "^6.4.1"
+    },
+    "dependencies": {
+        "cors": "^2.8.5",
+        "dotenv": "^16.0.1",
+        "express": "^4.18.1",
+        "markdown-it": "^13.0.1",
+        "path": "^0.12.7",
+        "pg": "^8.8.0",
+        "sequelize": "^6.21.6"
+    }
 }

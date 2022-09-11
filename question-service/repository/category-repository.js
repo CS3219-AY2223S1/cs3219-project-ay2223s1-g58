@@ -1,22 +1,22 @@
 const db = require('../models')
 
-
 const CategoryRepository = {
-    create: function(id, difficulty, type) {
+    create: function (id, difficulty, type) {
         return db.Category.create({
             difficulty: difficulty,
             types: type,
-            QuestionId: id,
+            q_id: id,
         })
     },
-    findByDifficulty: function(difficulty) {
+    findByDifficulty: function (difficulty) {
         return db.Category.findAll({
             where: {
-                difficulty: difficulty
+                difficulty: difficulty,
             },
-            order: db.sequelize.random(), limit:1
+            order: db.sequelize.random(),
+            limit: 1,
         })
-    }
+    },
 }
 
-module.exports =  CategoryRepository;
+module.exports = CategoryRepository
