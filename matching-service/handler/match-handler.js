@@ -1,5 +1,5 @@
 const MatchService = require("../service/match-service");
-const { sendMessageToBoth } = require("../utils/socket-io");
+const { sendMessageToBoth, isSocketActive } = require("../utils/socket-io");
 const { EVENTS } = require("../const/constants");
 
 async function findMatch(payload) {
@@ -11,18 +11,21 @@ async function findMatch(payload) {
       payload.difficulty,
       socket.id
     );
-    // no other user with same requirements ready for match
-    if (!match) {
+    // no other user with same requirements ready for match, or other user is not active
+    if (!match || !isSocketActive(match.socketId)) {
+      // matched but socket inactive
+      if (match) {
+        console.log("Inactive user found");
+        MatchService.deleteMatch(match.socketId);
+      }
       await MatchService.createMatch(socket.id, payload.difficulty);
       socket.emit(EVENTS.MATCHING, {
         status: EVENTS.MATCHING,
       });
-      MatchService.scheduleTimeout(socket.id);
       return;
     }
-    // TODO check that both sockets are still open
     // TODO additional validations
-    await MatchService.deleteMatch(match.socketId);
+    MatchService.deleteMatch(match.socketId);
     sendMessageToBoth(match.socketId, socket.id, EVENTS.MATCH_SUCCESS, {
       status: EVENTS.MATCH_SUCCESS,
       room: `${match.socketId}|${socket.id}`,

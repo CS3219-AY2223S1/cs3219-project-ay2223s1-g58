@@ -13,3 +13,8 @@ exports.sendMessageToBoth = (firstSocket, secondSocket, event, message) =>
 
 exports.sendMessageToOne = (socket, event, message) =>
   io.to(socket).emit(event, message);
+
+exports.isSocketActive = (socket) => {
+  const socketList = io.sockets.server.eio.clients;
+  return socketList[socket] !== undefined;
+};
