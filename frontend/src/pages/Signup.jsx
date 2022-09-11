@@ -2,15 +2,12 @@ import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useEffect, useRef, useState } from 'react'
 import axios from '../api/axios'
-import { URL_USER_SERVICE } from '../constants'
+import { URL_USER_SERVICE, USER_REGEX, PASSWORD_REGEX } from '../constants'
 import { STATUS_CODE_CONFLICT, STATUS_CODE_CREATED } from '../constants'
 import { AuthLayout } from '../components/AuthLayout'
 import { Button } from '../components/Button'
 import { FormTextField } from '../components/Fields'
 import { Link } from 'react-router-dom'
-
-const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/
-const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/
 
 function Signup() {
   const [username, setUsername] = useState('')
