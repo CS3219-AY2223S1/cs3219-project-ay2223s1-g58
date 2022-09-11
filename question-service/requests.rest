@@ -15,7 +15,7 @@ Content-Type: application/json
 
 
 ### GET QUESTION
-GET http://localhost:8500/api/v1/question/difficulty
+POST http://localhost:8500/api/v1/question/difficulty
 Content-Type: application/json
 
 {

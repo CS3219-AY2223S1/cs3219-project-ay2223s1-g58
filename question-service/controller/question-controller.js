@@ -1,6 +1,5 @@
 const QuestionRepository = require('../repository/question-repository')
 const CategoryRepository = require('../repository/category-repository')
-const md = require('markdown-it')()
 
 async function createQuestion(req, res) {
     try {
@@ -48,7 +47,7 @@ async function getQuestionByDifficulty(req, res) {
             console.log('Question retrieved: ' + question.q_name)
             return res.status(201).json({
                 Name: question.q_name,
-                Content: parseMarkDown(question.content),
+                Content: question.content,
             })
         } else {
             return res.status(400).json({ message: `Difficulty is missing!` })
@@ -80,10 +79,5 @@ async function deleteQuestionById(req, res) {
     }
 }
 
-function parseMarkDown(text) {
-    text = text.replace(/\n\n/g, "\n")
-    text = md.render(text).replace(/\n/g, "<br>")
-    return text
-}
 
 module.exports = { createQuestion, getQuestionByDifficulty, deleteQuestionById }
