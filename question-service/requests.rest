@@ -1,5 +1,5 @@
 ### CHECK SERVER ALIVE
-GET `http://localhost:8500/api/question`
+GET http://localhost:8500/api/v1/question
 
 ### CREATE QUESTION
 POST http://localhost:8500/api/v1/question
