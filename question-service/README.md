@@ -3,7 +3,7 @@
 ## Usage
 1. Rename .env.sample to .env
 2. Install npm packages using `npm install`.
-3. Run Matching Service using `npm run dev`.
+3. Run Question Service using `npm run dev`.
 
 ## Docker
 - Via docker-compose: `docker-compose up --build`
