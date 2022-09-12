@@ -1,6 +1,6 @@
 const MatchService = require("../service/match-service");
 const { sendMessageToBoth, isSocketActive } = require("../utils/socket-io");
-const { EVENTS } = require("../const/constants");
+const { EVENT } = require("../const/constants");
 const { matchDto } = require("../dto/match-dto");
 
 async function findMatch(payload) {
@@ -22,21 +22,21 @@ async function findMatch(payload) {
         MatchService.deleteMatch(match.socketId);
       }
       await MatchService.createMatch(socket.id, value.difficulty);
-      socket.emit(EVENTS.MATCHING, {
-        status: EVENTS.MATCHING,
+      socket.emit(EVENT.MATCHING, {
+        status: EVENT.MATCHING,
       });
       return;
     }
     // TODO additional validations
     MatchService.deleteMatch(match.socketId);
-    sendMessageToBoth(match.socketId, socket.id, EVENTS.MATCH_SUCCESS, {
-      status: EVENTS.MATCH_SUCCESS,
+    sendMessageToBoth(match.socketId, socket.id, EVENT.MATCH_SUCCESS, {
+      status: EVENT.MATCH_SUCCESS,
       room: `${match.socketId}|${socket.id}`,
     });
   } catch (e) {
     // TODO add custom error messages
-    socket.emit(EVENTS.MATCH_FAIL, {
-      status: EVENTS.MATCH_FAIL,
+    socket.emit(EVENT.MATCH_FAIL, {
+      status: EVENT.MATCH_FAIL,
       error: e.message,
     });
   }

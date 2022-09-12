@@ -1,7 +1,7 @@
 const schedule = require("node-schedule");
 const MatchRepository = require("../repository/match-repository");
 const { sendMessageToOne } = require("../utils/socket-io");
-const { EVENTS } = require("../const/constants");
+const { EVENT } = require("../const/constants");
 
 const MATCH_TIMEOUT_SECONDS = 30;
 const MATCH_TIMEOUT = MATCH_TIMEOUT_SECONDS * 1000;
@@ -13,7 +13,7 @@ const scheduleTimeout = (socketId) => {
       MatchRepository.delete(socketId);
       sendMessageToOne(
         socketId,
-        EVENTS.MATCH_TIMEOUT,
+        EVENT.MATCH_TIMEOUT,
         `Match timeout after ${MATCH_TIMEOUT_SECONDS}s`
       );
     }

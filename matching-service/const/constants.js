@@ -1,4 +1,4 @@
-exports.EVENTS = {
+exports.EVENT = {
   MATCHING: "matching",
   MATCH_SUCCESS: "matchSuccess",
   MATCH_FAIL: "matchFail",
