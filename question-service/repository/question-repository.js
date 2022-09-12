@@ -10,7 +10,7 @@ const QuestionRepository = {
     },
     create: function (name, content) {
         return db.Question.create({
-            q_name: name,
+            name: name,
             content: content,
         })
     },

@@ -2,9 +2,6 @@
 const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
     class Category extends Model {
-        static associate(models) {
-
-        }
     }
     Category.init(
         {
@@ -16,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.ARRAY(DataTypes.STRING),
                 allowNull: true,
             },
-            q_id: {
+            questionId: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 references: { model: 'Questions', key: 'id' },

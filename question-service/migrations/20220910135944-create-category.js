@@ -15,7 +15,7 @@ module.exports = {
             types: {
                 type: Sequelize.ARRAY(Sequelize.STRING),
             },
-            q_id: {
+            questionId: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
                 references: { model: 'Questions', key: 'id' },

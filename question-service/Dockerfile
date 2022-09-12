@@ -12,6 +12,7 @@ RUN npm install --quiet
 COPY . .
 
 RUN npx sequelize-cli db:migrate --env production
+RUN npx sequelize-cli db:seed:all --env production
 
 # Expose port 
 EXPOSE 8500

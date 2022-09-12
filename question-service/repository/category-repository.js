@@ -5,7 +5,7 @@ const CategoryRepository = {
         return db.Category.create({
             difficulty: difficulty,
             types: type,
-            q_id: id,
+            questionId: id,
         })
     },
     findByDifficulty: function (difficulty) {
