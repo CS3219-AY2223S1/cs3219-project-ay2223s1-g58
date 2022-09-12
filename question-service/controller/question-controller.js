@@ -32,16 +32,16 @@ async function getQuestionById(req, res) {
         if (id) {
             const question = await QuestionRepository.findById(id)
             return res.status(201).json({
-                id : question.id,
+                id: question.id,
                 name: question.name,
-                content: question.content
+                content: question.content,
             })
         } else {
-            return res.status(400).json({message: 'Missing "id" field'})
+            return res.status(400).json({ message: 'Missing "id" field' })
         }
     } catch (err) {
         return res.status(500).json({
-            message: 'Database failure when retrieving the question! ' + err
+            message: 'Database failure when retrieving the question! ' + err,
         })
     }
 }
@@ -53,7 +53,9 @@ async function getQuestionByDifficulty(req, res) {
             var questionId
             var questionDifficulty
             var types
-            const category = await CategoryRepository.findByDifficulty(difficulty)
+            await CategoryRepository.findByDifficulty(
+                difficulty
+            )
                 .then((data) => {
                     questionId = String(data[0].questionId)
                     questionDifficulty = data[0].difficulty
@@ -74,7 +76,7 @@ async function getQuestionByDifficulty(req, res) {
                 name: question.name,
                 content: question.content,
                 difficulty: questionDifficulty,
-                types: types[0]
+                types: types[0],
             })
         } else {
             return res.status(400).json({ message: `Difficulty is missing!` })
@@ -106,6 +108,9 @@ async function deleteQuestionById(req, res) {
     }
 }
 
-
-
-module.exports = { createQuestion, getQuestionByDifficulty, deleteQuestionById, getQuestionById }
+module.exports = {
+    createQuestion,
+    getQuestionByDifficulty,
+    deleteQuestionById,
+    getQuestionById,
+}

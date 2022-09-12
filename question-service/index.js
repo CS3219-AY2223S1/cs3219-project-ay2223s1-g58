@@ -11,7 +11,7 @@ const {
     createQuestion,
     getQuestionByDifficulty,
     deleteQuestionById,
-    getQuestionById
+    getQuestionById,
 } = require('./controller/question-controller')
 const router = express.Router()
 
