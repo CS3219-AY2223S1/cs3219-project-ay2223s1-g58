@@ -11,7 +11,8 @@
         "format:write": "prettier --write .",
         "lint:check": "eslint .",
         "lint:fix": "eslint --fix --ext .js .",
-        "db:migrate": "sequelize-cli db:migrate"
+        "db:migrate": "sequelize-cli db:migrate",
+        "db:seed": "sequelize-cli db:seed:all"
     },
     "keywords": [],
     "author": "",
@@ -28,7 +29,6 @@
         "cors": "^2.8.5",
         "dotenv": "^16.0.1",
         "express": "^4.18.1",
-        "markdown-it": "^13.0.1",
         "path": "^0.12.7",
         "pg": "^8.8.0",
         "sequelize": "^6.21.6"

@@ -1,6 +1,5 @@
 const QuestionRepository = require('../repository/question-repository')
 const CategoryRepository = require('../repository/category-repository')
-const md = require('markdown-it')()
 
 async function createQuestion(req, res) {
     try {
@@ -27,14 +26,38 @@ async function createQuestion(req, res) {
     }
 }
 
+async function getQuestionById(req, res) {
+    try {
+        const { id } = req.body
+        if (id) {
+            const question = await QuestionRepository.findById(id)
+            return res.status(201).json({
+                id : question.id,
+                name: question.name,
+                content: question.content
+            })
+        } else {
+            return res.status(400).json({message: 'Missing "id" field'})
+        }
+    } catch (err) {
+        return res.status(500).json({
+            message: 'Database failure when retrieving the question! ' + err
+        })
+    }
+}
+
 async function getQuestionByDifficulty(req, res) {
     try {
         const { difficulty } = req.body
         if (difficulty) {
-            var q_id
-            await CategoryRepository.findByDifficulty(difficulty)
+            var questionId
+            var questionDifficulty
+            var types
+            const category = await CategoryRepository.findByDifficulty(difficulty)
                 .then((data) => {
-                    q_id = String(data[0].q_id)
+                    questionId = String(data[0].questionId)
+                    questionDifficulty = data[0].difficulty
+                    types = data[0].types
                 })
                 .catch((err) => {
                     return res.status(500).json({
@@ -43,12 +66,15 @@ async function getQuestionByDifficulty(req, res) {
                             err,
                     })
                 })
-            console.log('Question id retrieved: ' + q_id)
-            const question = await QuestionRepository.findById(q_id)
-            console.log('Question retrieved: ' + question.q_name)
+            console.log('Question id retrieved: ' + questionId)
+            const question = await QuestionRepository.findById(questionId)
+            console.log('Question retrieved: ' + question.name)
             return res.status(201).json({
-                Name: question.q_name,
-                Content: parseMarkDown(question.content),
+                id: question.id,
+                name: question.name,
+                content: question.content,
+                difficulty: questionDifficulty,
+                types: types[0]
             })
         } else {
             return res.status(400).json({ message: `Difficulty is missing!` })
@@ -80,10 +106,6 @@ async function deleteQuestionById(req, res) {
     }
 }
 
-function parseMarkDown(text) {
-    text = text.replace(/\n\n/g, "\n")
-    text = md.render(text).replace(/\n/g, "<br>")
-    return text
-}
 
-module.exports = { createQuestion, getQuestionByDifficulty, deleteQuestionById }
+
+module.exports = { createQuestion, getQuestionByDifficulty, deleteQuestionById, getQuestionById }

@@ -11,6 +11,7 @@ const {
     createQuestion,
     getQuestionByDifficulty,
     deleteQuestionById,
+    getQuestionById
 } = require('./controller/question-controller')
 const router = express.Router()
 
@@ -19,7 +20,9 @@ const router = express.Router()
 router.get('/', (_, res) => {
     res.status(200).send('Hello World from question-service')
 })
-router.get('/difficulty', getQuestionByDifficulty)
+
+router.post('/id', getQuestionById)
+router.post('/difficulty', getQuestionByDifficulty)
 router.post('/', createQuestion)
 router.post('/delete', deleteQuestionById)
 
