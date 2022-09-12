@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     }
     Question.init(
         {
-            q_name: {
+            name: {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
