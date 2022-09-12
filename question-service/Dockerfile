@@ -11,8 +11,8 @@ RUN npm install --quiet
 # Copy all files from project excluding node_modules (via .dockerignore)
 COPY . .
 
-RUN npm run db:migrate --env production
-RUN npm run db:seed
+RUN npx sequelize-cli db:migrate --env production
+RUN npx sequelize-cli db:seed:all --env production
 
 # Expose port 
 EXPOSE 8500
