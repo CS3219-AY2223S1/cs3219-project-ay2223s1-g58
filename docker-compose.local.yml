@@ -1,0 +1,32 @@
+version: '3.3'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - '3000:3000'
+    depends_on:
+      - user-service
+  user-service:
+    build:
+      context: ./user-service
+    ports:
+      - '8000:8000'
+    links:
+      - mongo
+      - redis
+    depends_on:
+      - mongo
+      - redis
+    env_file:
+      - .env.local
+  mongo:
+    image: mongo
+    ports:
+      - '27017:27017'
+  redis:
+    image: redis:alpine
+    ports:
+      - '6379:6379'
