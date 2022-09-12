@@ -3,12 +3,19 @@ const db = require("../models/index");
 
 const MatchRepository = {
   findByDifficulty: function (difficulty, socketId) {
-    return db.Match.findAll({
+    return db.Match.findOne({
       where: {
         difficulty: difficulty,
         socketId: {
           [Sequelize.Op.ne]: socketId,
         },
+      },
+    });
+  },
+  findBySocketId: function (socketId) {
+    return db.Match.findOne({
+      where: {
+        socketId: socketId,
       },
     });
   },
