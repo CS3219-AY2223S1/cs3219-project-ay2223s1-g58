@@ -1,41 +1,43 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Signup from "./pages/Signup";
-import Login from "./pages/Login";
-import PageNotFound from "./pages/PageNotFound";
-import Home from "./pages/Home";
-import UserTokenTest from "./pages/UserTokenTest";
-import Layout from "./components/Layout";
-import RequireAuth from "./components/RequireAuth";
-import Profile from "./pages/Profile";
-import PersistLogin from './components/PersistLogin';
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Signup from './pages/Signup'
+import Login from './pages/Login'
+import PageNotFound from './pages/PageNotFound'
+import Home from './pages/Home'
+import UserTokenTest from './pages/UserTokenTest'
+import Layout from './components/Layout'
+import RequireAuth from './components/RequireAuth'
+import Profile from './pages/Profile'
+import PersistLogin from './components/PersistLogin'
+import MatchTest from './pages/MatchTest'
 function App() {
-    return (
-        <div className="App">
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<Layout />}>
-                        {/* public routes */}
-                        <Route element={<PersistLogin />}>
-                            <Route path="/signup" element={<Signup />} />
-                            <Route path="/login" element={<Login />} />
-                        </Route>
+  return (
+    <div className="App">
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            {/* public routes */}
+            <Route element={<PersistLogin />}>
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/matchTest" element={<MatchTest />} />
+            </Route>
 
-                        {/* private routes */}
-                        <Route element={<PersistLogin />}>
-                            <Route element={<RequireAuth />}>
-                                <Route path="/" element={<Home />} />
-                                <Route path="/profile" element={<Profile />} />
-                                <Route path="/userTokenTest" element={<UserTokenTest />} />
-                            </Route>
-                        </Route>
+            {/* private routes */}
+            <Route element={<PersistLogin />}>
+              <Route element={<RequireAuth />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/userTokenTest" element={<UserTokenTest />} />
+              </Route>
+            </Route>
 
-                        {/* 404 */}
-                        <Route path="*" element={<PageNotFound />} />
-                    </Route>
-                </Routes>
-            </BrowserRouter>
-        </div>
-    );
+            {/* 404 */}
+            <Route path="*" element={<PageNotFound />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </div>
+  )
 }
 
-export default App;
+export default App
