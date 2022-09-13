@@ -1,8 +1,14 @@
+import { Helmet } from 'react-helmet'
 import { Link } from 'react-router-dom'
 
 const PageNotFound = () => {
   return (
     <main className="flex h-screen w-full flex-col items-center justify-center bg-[#1A2238]">
+      <Helmet>
+        <title>404 | PeerPrep</title>
+        <meta charSet="utf-8" />
+        <meta name="description" content="PeerPrep help you prep" />
+      </Helmet>
       <h1 className="font-extrabold tracking-widest text-white text-9xl">
         404
       </h1>
