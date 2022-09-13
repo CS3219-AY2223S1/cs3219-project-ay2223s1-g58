@@ -2,6 +2,22 @@
 
 PeerPrep
 
+## Development
+
+Spin up all the services for local manual testing
+
+```bash
+docker-compose -f docker-compose.local.yml up --build -d
+```
+
+Visit the frontend at http://localhost:3000
+
+To stop the services
+
+```bash
+docker-compose -f docker-compose.local.yml stop
+```
+
 ## User Service
 1. Rename `.env.sample` file to `.env`.
 1. Create a Cloud DB URL using Mongo Atlas.
