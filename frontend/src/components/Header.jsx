@@ -56,7 +56,7 @@ export function Header() {
         <Container className="relative z-50 flex justify-between py-8">
           <div className="relative z-10 flex items-center gap-16">
             <Link to="/" aria-label="Home">
-              <Logo className="w-auto h-10" />
+              <Logo className="h-10 w-auto" />
             </Link>
             <div className="hidden lg:flex lg:gap-10">
               <NavLinks />
@@ -72,9 +72,9 @@ export function Header() {
                   >
                     {({ open }) =>
                       open ? (
-                        <ChevronUpIcon className="w-6 h-6" />
+                        <ChevronUpIcon className="h-6 w-6" />
                       ) : (
-                        <MenuIcon className="w-6 h-6" />
+                        <MenuIcon className="h-6 w-6" />
                       )
                     }
                   </Popover.Button>
@@ -99,7 +99,7 @@ export function Header() {
                             y: -32,
                             transition: { duration: 0.2 },
                           }}
-                          className="absolute inset-x-0 top-0 z-0 px-6 pt-32 pb-6 origin-top shadow-2xl rounded-b-2xl bg-gray-50 shadow-gray-900/20"
+                          className="absolute inset-x-0 top-0 z-0 origin-top rounded-b-2xl bg-gray-50 px-6 pt-32 pb-6 shadow-2xl shadow-gray-900/20"
                         >
                           <div className="space-y-4">
                             <MobileNavLink href="/">Home</MobileNavLink>
@@ -114,7 +114,7 @@ export function Header() {
                               Question Bank
                             </MobileNavLink>
                           </div>
-                          <div className="flex flex-col gap-4 mt-8">
+                          <div className="mt-8 flex flex-col gap-4">
                             {auth.isLoggedIn ? (
                               <Button variant="outline" onClick={logout}>
                                 Logout

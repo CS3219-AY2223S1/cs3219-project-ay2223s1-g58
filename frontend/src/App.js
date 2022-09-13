@@ -8,7 +8,9 @@ import Layout from './components/Layout'
 import RequireAuth from './components/RequireAuth'
 import Profile from './pages/Profile'
 import PersistLogin from './components/PersistLogin'
-import MatchTest from './pages/MatchTest'
+import Match from './pages/Match'
+import Room from './pages/Room'
+
 function App() {
   return (
     <div className="App">
@@ -19,7 +21,6 @@ function App() {
             <Route element={<PersistLogin />}>
               <Route path="/signup" element={<Signup />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/matchTest" element={<MatchTest />} />
             </Route>
 
             {/* private routes */}
@@ -28,6 +29,8 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/userTokenTest" element={<UserTokenTest />} />
+                <Route path="/match" element={<Match />} />
+                <Route path="/room" element={<Room />} />
               </Route>
             </Route>
 
