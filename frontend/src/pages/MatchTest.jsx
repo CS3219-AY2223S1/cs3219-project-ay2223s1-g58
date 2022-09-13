@@ -12,9 +12,9 @@ const MatchTest = () => {
   const genID = () => {
     const newDocRef = db.ref(`docs`).push()
     const docID = newDocRef.key
-    db.ref(`users/${auth.username}`).set(docID)
     // Temporary method to check for user's ongoing session
-    db.ref(`users/default`).set(docID) // Save this docID under current user
+    db.ref(`users/${auth.username}`).set(docID)  // Save this docID under current user
+    db.ref(`users/qwe`).set(docID) // user "qwe" is the default partner
     setID(docID)
   }
 

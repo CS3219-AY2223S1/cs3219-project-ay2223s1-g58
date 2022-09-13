@@ -37,6 +37,7 @@ const RightPane = ({ user }) => {
             alert('clicked End session! Going to Home...')
             // Temporary method to keep user's session
             db.ref(`users/${user}`).remove() // removes docID from user entry
+            db.ref(`users/qwe`).remove()
             navigate('/')
           }}
         >
