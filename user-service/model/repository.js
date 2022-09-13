@@ -1,6 +1,7 @@
 import UserModel from "./user-model.js"
 import mongoose from "mongoose"
 import logger from "../logger.js"
+import { hashPassword } from "../auth/index.js"
 
 const mongoDB = process.env.ENV == "PROD"
     ? process.env.DB_CLOUD_URI
@@ -26,4 +27,13 @@ export async function getUser(username) {
 
 export async function deleteUser(username) {
     return UserModel.deleteOne({ username: username })
+}
+
+export async function seedUsers() {
+    const users = [
+        { username: "qwe", password: hashPassword("qwe") },
+        { username: "asd", password: hashPassword("asd") },
+        { username: "zxc", password: hashPassword("zxc") },
+    ]
+    await UserModel.insertMany(users)
 }
