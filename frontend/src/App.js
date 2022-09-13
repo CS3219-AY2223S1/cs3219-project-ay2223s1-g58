@@ -7,7 +7,16 @@ import UserTokenTest from "./pages/UserTokenTest";
 import Layout from "./components/Layout";
 import RequireAuth from "./components/RequireAuth";
 import Profile from "./pages/Profile";
+import MatchTest from "./pages/MatchTest";
+import Collaboration from "./pages/Collaboration";
 import PersistLogin from './components/PersistLogin';
+
+// Text to simulate question. This should be provided 
+// by the Question Service once it is ready. 
+let veryLongText = "Hello World "
+for (let i = 0; i < 1000; i++) {
+  veryLongText += "Hello World "
+}
 function App() {
     return (
         <div className="App">
@@ -26,6 +35,8 @@ function App() {
                                 <Route path="/" element={<Home />} />
                                 <Route path="/profile" element={<Profile />} />
                                 <Route path="/userTokenTest" element={<UserTokenTest />} />
+                                <Route path="/match/test" element={<MatchTest />} />
+                                <Route path="/room/:docID" element={<Collaboration questionText={veryLongText}/>} />
                             </Route>
                         </Route>
 
