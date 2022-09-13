@@ -11,7 +11,7 @@ const useFetchQuestion = (difficulty) => {
           setLoading(true);
           try {
             const {data: response} = await axios.post(URL_RETRIEVE_QUESTION,  {
-                difficulty: difficulty
+                difficulty: difficulty || 'medium'
               })
             setData(response);
             console.log(response)

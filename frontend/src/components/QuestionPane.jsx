@@ -30,7 +30,7 @@ const QuestionPane = (difficulty) => {
                             </Badge>
                         </HStack>
                         <Divider orientation='horizontal' />
-                        <div className="mx-1 my-1 h-85v overflow-y-auto">
+                        <div className="mx-3 my-3 h-85v overflow-y-auto border-10 border-white">
                             <ReactMarkdown m={[1, 1]} components={ChakraUIRenderer()} children={data.content} skipHtml />;
                         </div>
                     </VStack>
