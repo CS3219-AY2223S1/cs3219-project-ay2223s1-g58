@@ -20,7 +20,8 @@ const useLogout = () => {
                     accessToken: '',
                     username: '',
                     email: '',
-                    school: ''
+                    school: '',
+                    isLoggedIn: false
                 })
                 navigate('/login')
             }

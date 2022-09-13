@@ -7,6 +7,7 @@ import { Logo } from './Logo'
 import { NavLinks } from './NavLinks'
 import { Link } from 'react-router-dom'
 import useLogout from '../hooks/useLogout'
+import useAuth from '../hooks/useAuth'
 
 function MenuIcon(props) {
   return (
@@ -47,6 +48,7 @@ function MobileNavLink({ children, ...props }) {
 
 export function Header() {
   const logout = useLogout()
+  const { auth } = useAuth()
 
   return (
     <header>
@@ -113,13 +115,18 @@ export function Header() {
                             </MobileNavLink>
                           </div>
                           <div className="flex flex-col gap-4 mt-8">
-                            <Button href="/login" variant="outline">
-                              Log in
-                            </Button>
-                            <Button variant="outline" onClick={logout}>
-                              Logout
-                            </Button>
-                            <Button href="/signup">Sign up</Button>
+                            {auth.isLoggedIn ? (
+                              <Button variant="outline" onClick={logout}>
+                                Logout
+                              </Button>
+                            ) : (
+                              <>
+                                <Button href="/login" variant="outline">
+                                  Log in
+                                </Button>
+                                <Button href="/signup">Sign up</Button>
+                              </>
+                            )}
                           </div>
                         </Popover.Panel>
                       </>
@@ -128,19 +135,29 @@ export function Header() {
                 </>
               )}
             </Popover>
-            <Button href="/login" variant="outline" className="hidden lg:block">
-              Log in
-            </Button>
-            <Button
-              onClick={logout}
-              variant="outline"
-              className="hidden lg:block"
-            >
-              Logout
-            </Button>
-            <Button href="/signup" className="hidden lg:block">
-              Sign up
-            </Button>
+            {auth.isLoggedIn ? (
+              <Button
+                onClick={logout}
+                variant="outline"
+                className="hidden lg:block"
+              >
+                Logout
+              </Button>
+            ) : (
+              <>
+                <Button
+                  href="/login"
+                  variant="outline"
+                  className="hidden lg:block"
+                >
+                  Log in
+                </Button>
+
+                <Button href="/signup" className="hidden lg:block">
+                  Sign up
+                </Button>
+              </>
+            )}
           </div>
         </Container>
       </nav>
