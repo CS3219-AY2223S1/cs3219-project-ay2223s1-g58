@@ -44,6 +44,7 @@ function Login() {
         school: res.data.data.school,
         email: res.data.data.email,
         accessToken: res.data.data.accessToken,
+        isLoggedIn: true,
       })
       setUsername('')
       setPassword('')
