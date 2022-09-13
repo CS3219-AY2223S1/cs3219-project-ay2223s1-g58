@@ -20,7 +20,7 @@ const Collaboration = ({ questionText }) => {
 
 const LeftPane = ({ text }) => {
   return (
-    <div className="mx-2 my-2 h-full max-h-screen overflow-y-auto border-x-2 border-y-2">
+    <div className="mx-2 my-2 h-85v overflow-y-auto border-x-2 border-y-2">
       {text}
     </div>
   )
@@ -29,18 +29,20 @@ const LeftPane = ({ text }) => {
 const RightPane = ({ user }) => {
   const navigate = useNavigate()
   return (
-    <div className="align-center flex flex-col">
+    <div className='flex flex-col justify-start' >
       <Editor />
-      <Button
-        onClick={() => {
-          alert('clicked End session! Going to Home...')
-          // Temporary method to keep user's session
-          db.ref(`users/${user}`).remove() // removes docID from user entry
-          navigate('/')
-        }}
-      >
-        End session
-      </Button>
+      <div className='flex flex-col items-center justify-start'>
+        <Button
+          onClick={() => {
+            alert('clicked End session! Going to Home...')
+            // Temporary method to keep user's session
+            db.ref(`users/${user}`).remove() // removes docID from user entry
+            navigate('/')
+          }}
+        >
+          End session
+        </Button>
+      </div>
     </div>
   )
 }

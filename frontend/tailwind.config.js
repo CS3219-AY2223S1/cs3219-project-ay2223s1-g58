@@ -39,6 +39,9 @@ module.exports = {
       fontFamily: {
         sans: ['Inter', ...defaultTheme.fontFamily.sans],
       },
+      height: {
+        '85v': '85vh',
+      },
       keyframes: {
         'fade-in': {
           from: {
