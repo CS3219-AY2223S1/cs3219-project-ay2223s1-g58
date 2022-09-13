@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const { createServer } = require("http");
 const { initSocket } = require("./utils/socket-io");
-const findMatch = require("./handler/match-handler");
+const { findMatch, cancelMatch } = require("./handler/match-handler");
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -15,6 +15,6 @@ app.get("/", (req, res) => {
 });
 
 const httpServer = createServer(app);
-initSocket(httpServer, findMatch);
+initSocket(httpServer, findMatch, cancelMatch);
 
 httpServer.listen(8001);
