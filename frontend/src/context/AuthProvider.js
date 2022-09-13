@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
         username: "",
         email: "",
         school: "",
+        isLoggedIn: false,
     });
     const [persist, setPersist] = useState(JSON.parse(localStorage.getItem("persist:peerprep")) || false);
 

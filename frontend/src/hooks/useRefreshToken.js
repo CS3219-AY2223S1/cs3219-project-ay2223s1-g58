@@ -7,16 +7,28 @@ const useRefreshToken = () => {
 
     const refresh = async () => {
         const response = await axios.post(URL_USER_TOKEN);
-        setAuth(prev => {
-            return {
-                ...prev,
-                username: response.data.data.username,
-                email: response.data.data.email,
-                school: response.data.data.school,
-                accessToken: response.data.data.accessToken
-            }
-        });
-        return response.data.data.accessToken;
+        if (response.status === 200) {
+            setAuth(prev => {
+                return {
+                    ...prev,
+                    accessToken: response.data.data.accessToken,
+                    username: response.data.data.username,
+                    email: response.data.data.email,
+                    school: response.data.data.school,
+                    isLoggedIn: true
+                }
+            })
+            return response.data.data.accessToken;
+        }
+        console.error(response.data.message);
+        setAuth({
+            accessToken: '',
+            username: '',
+            email: '',
+            school: '',
+            isLoggedIn: false
+        })
+        return null;
     }
     return refresh;
 };
