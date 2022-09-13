@@ -18,6 +18,14 @@ To stop the services
 docker-compose -f docker-compose.local.yml stop
 ```
 
+Available seeded users for testing:
+
+| Username | Password |
+|----------|----------|
+| qwe      | qwe      |
+| asd      | asd      |
+| zxc      | zxc      |
+
 ## User Service
 1. Rename `.env.sample` file to `.env`.
 1. Create a Cloud DB URL using Mongo Atlas.
