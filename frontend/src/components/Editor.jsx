@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, createRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { db } from '../api/firebase'
 import useAuth from '../hooks/useAuth'
@@ -13,6 +13,18 @@ import { java } from '@codemirror/lang-java'
 import { cpp } from '@codemirror/lang-cpp'
 import { Select } from '@chakra-ui/react'
 
+const indents = {
+  2: '  ',
+  4: '    ',
+}
+
+const languageExtensions = {
+  'Python': python(),
+  'Java': java(),
+  'C++': cpp(),
+  'JavaScript': javascript(),
+}
+
 const Editor = () => {
   // console.log("rendered Editor")
   const { auth } = useAuth()
@@ -21,18 +33,6 @@ const Editor = () => {
   const [ready, setReady] = useState(false)
   const [tabSize, setTabSize] = useState(4)
   const [lang, setLang] = useState('Python')
-
-  const indents = {
-    2: '  ',
-    4: '    ',
-  }
-
-  const languageExtensions = {
-    'Python': python(),
-    'Java': java(),
-    'C++': cpp(),
-    'JavaScript': javascript(),
-  }
 
   useEffect(() => {
     // console.log("useEffect...")
@@ -78,7 +78,7 @@ const Editor = () => {
       codeMirrorInstance.destroy()
       parentNode.removeChild(parentNode.children[0])
     }
-  }, [tabSize, lang])
+  }, [tabSize, lang, auth.username, docID])
 
   return (
     <>

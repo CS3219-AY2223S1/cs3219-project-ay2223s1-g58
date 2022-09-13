@@ -33,7 +33,7 @@ const MatchTest = () => {
       .catch((e) => {
         console.error(e)
       })
-  }, [])
+  }, [auth.username, id])
 
   return (
     <div className='flex flex-col items-center justify-start h-full'>
