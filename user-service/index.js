@@ -18,6 +18,7 @@ import {
 } from "./controller/user-controller.js"
 import { authenticateToken } from './middleware.js'
 import logger from './logger.js'
+import { seedUsers } from "./model/repository.js"
 
 const API_PREFIX = "/api/v1/user"
 
@@ -82,6 +83,13 @@ app.use((err, _, res, next) => {
     next(err);
 })
 
-app.listen(8000, () => logger.info("user-service listening on port 8000"))
+app.listen(8000, async () => {
+    try {
+        await seedUsers()
+    } catch {
+        logger.info("Seeded in the past")
+    }
+    logger.info("user-service listening on port 8000")
+})
 
 export { redisClient, app }

@@ -14,6 +14,8 @@ It is recommended to have redis and mongodb installed locally. If you don't have
 
 (for local setup and manual testing)
 
+First rename `.env.test` to `.env` and then run the following commands:
+
 `docker-compose -f docker-compose.yml up --build`
 
 OR

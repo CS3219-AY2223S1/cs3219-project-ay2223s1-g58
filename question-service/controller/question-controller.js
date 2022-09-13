@@ -108,7 +108,6 @@ async function deleteQuestionById(req, res) {
     }
 }
 
-
 module.exports = {
     createQuestion,
     getQuestionByDifficulty,

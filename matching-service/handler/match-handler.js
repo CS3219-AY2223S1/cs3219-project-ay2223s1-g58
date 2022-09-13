@@ -1,35 +1,42 @@
-const MatchRepository = require("../repository/match-repository");
-const { sendMessage } = require("../utils/socket-io");
+const MatchService = require("../service/match-service");
+const { sendMessageToBoth, isSocketActive } = require("../utils/socket-io");
+const { EVENT } = require("../const/constants");
+const { matchDto } = require("../dto/match-dto");
 
 async function findMatch(payload) {
   const socket = this;
   try {
-    // finds same difficulty excluding same socketId
-    // TODO add validation for payload
-    const matchResult = await MatchRepository.findByDifficulty(
-      payload.difficulty,
+    const { value, error } = matchDto.validate(payload);
+    if (error) {
+      throw error;
+    }
+    const match = await MatchService.findByDifficulty(
+      value.difficulty,
       socket.id
     );
-    // no other user with same requirements ready for match
-    if (matchResult.length === 0) {
-      await MatchRepository.create(socket.id, payload.difficulty);
-      socket.emit("matching", {
-        status: "matching",
+    // no other user with same requirements ready for match, or other user is not active
+    if (!match || !isSocketActive(match.socketId)) {
+      // matched but socket inactive
+      if (match) {
+        console.log("Inactive user found");
+        MatchService.deleteMatch(match.socketId);
+      }
+      await MatchService.createMatch(socket.id, value.difficulty);
+      socket.emit(EVENT.MATCHING, {
+        status: EVENT.MATCHING,
       });
       return;
     }
-    const match = matchResult[0];
-    // TODO check that both sockets are still open
     // TODO additional validations
-    await MatchRepository.delete(match.socketId);
-    sendMessage(match.socketId, socket.id, "matchSuccess", {
-      status: "matchSuccess",
+    MatchService.deleteMatch(match.socketId);
+    sendMessageToBoth(match.socketId, socket.id, EVENT.MATCH_SUCCESS, {
+      status: EVENT.MATCH_SUCCESS,
       room: `${match.socketId}|${socket.id}`,
     });
   } catch (e) {
     // TODO add custom error messages
-    socket.emit("matchFail", {
-      status: "matchFail",
+    socket.emit(EVENT.MATCH_FAIL, {
+      status: EVENT.MATCH_FAIL,
       error: e.message,
     });
   }
