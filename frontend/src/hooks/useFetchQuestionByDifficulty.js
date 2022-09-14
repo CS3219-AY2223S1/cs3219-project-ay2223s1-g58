@@ -1,6 +1,6 @@
 import axios from '../api/axios';
 import {useState, useEffect} from 'react'
-import { URL_RETRIEVE_QUESTION_DIFFICULTY } from '../constants';
+import { URL_QUESTION_SERVICE } from '../constants';
 
 const useFetchQuestionByDifficulty = (inputDifficulty) => {
     const [loading, setLoading] = useState(true);
@@ -8,16 +8,18 @@ const useFetchQuestionByDifficulty = (inputDifficulty) => {
 
     useEffect((inputDifficulty) => {
         const fetchData = async () =>{
+          console.log(URL_QUESTION_SERVICE 
+            + '?difficulty=' + (inputDifficulty ? inputDifficulty : 'medium'))
           setLoading(true);
           try {
-            const {data: response} = await axios.post(URL_RETRIEVE_QUESTION_DIFFICULTY,  {
-                difficulty: inputDifficulty || 'medium'
-              })
+            const {data: response} = await axios.get(URL_QUESTION_SERVICE 
+              + '?difficulty=' + (inputDifficulty ? inputDifficulty : 'medium'))
             setData(response);
+            setLoading(false);
           } catch (error) {
             console.error(error);
           }
-          setLoading(false);
+          
         }
     
         fetchData();

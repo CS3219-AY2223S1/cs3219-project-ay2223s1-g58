@@ -13,24 +13,17 @@ app.use(
 
 const {
     createQuestion,
-    getQuestionByDifficulty,
+    getQuestion,
     deleteQuestionById,
-    getQuestionById,
 } = require('./controller/question-controller')
 const router = express.Router()
 
 // Controller will contain all the User-defined Routes
-// CHECK SERVER ALIVE
-router.get('/', (_, res) => {
-    res.status(200).send('Hello World from question-service')
-})
 
-router.post('/id', getQuestionById)
-router.post('/difficulty', getQuestionByDifficulty)
+router.get('', getQuestion)
 router.post('/', createQuestion)
-router.post('/delete', deleteQuestionById)
+router.delete('', deleteQuestionById)
 
-// CHECK SERVER ALIVE
 app.use('/api/v1/question', router).all((_, res) => {
     res.setHeader('content-type', 'application/json')
     res.setHeader('Access-Control-Allow-Origin', '*')

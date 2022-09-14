@@ -1,6 +1,6 @@
 import axios from '../api/axios';
 import {useState, useEffect} from 'react'
-import { URL_RETRIEVE_QUESTION_ID } from '../constants';
+import { URL_QUESTION_SERVICE } from '../constants';
 
 const useFetchQuestionById = (questionId) => {
     const [loading, setLoading] = useState(true);
@@ -10,14 +10,12 @@ const useFetchQuestionById = (questionId) => {
         const fetchData = async () =>{
           setLoading(true);
           try {
-            const {data: response} = await axios.post(URL_RETRIEVE_QUESTION_ID,  {
-                id: questionId
-              })
+            const {data: response} = await axios.get(URL_QUESTION_SERVICE + '?id=' + (questionId ? questionId : '1'))
             setData(response);
+            setLoading(false);
           } catch (error) {
             console.error(error);
           }
-          setLoading(false);
         }
         fetchData();
       }, []);

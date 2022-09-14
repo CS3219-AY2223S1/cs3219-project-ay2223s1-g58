@@ -1,6 +1,3 @@
-### CHECK SERVER ALIVE
-GET http://localhost:8500/api/v1/question
-
 ### CREATE QUESTION
 POST http://localhost:8500/api/v1/question
 Content-Type: application/json
@@ -15,17 +12,8 @@ Content-Type: application/json
 
 
 ### GET QUESTION
-POST http://localhost:8500/api/v1/question/difficulty
-Content-Type: application/json
+GET http://localhost:8500/api/v1/question/localhost:8500/api/question?difficulty=easy
 
-{
-    "difficulty":"easy"
-}
 
 ### DELETE QUESTION
-POST http://localhost:8500/api/v1/question/delete
-Content-Type: application/json
-
-{
-    "id":1
-}
+DELETE http://localhost:8500/api/v1/question/delete?id=1
