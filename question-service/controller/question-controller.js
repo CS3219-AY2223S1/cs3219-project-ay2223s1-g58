@@ -70,16 +70,16 @@ async function getQuestion(req, res) {
                 types: category.types,
             })
         } else {
-            return res.status(400).json({ message: `Difficulty/Question ID is missing!` })
+            return res
+                .status(400)
+                .json({ message: `Difficulty/Question ID is missing!` })
         }
     } catch (err) {
         return res.status(500).json({
             message: 'Database failure when retrieving the question! ' + err,
         })
-        
     }
 }
-
 
 async function deleteQuestionById(req, res) {
     try {
