@@ -22,7 +22,7 @@ docker run -p 8001:8001 -d matching-service
    ![image](https://user-images.githubusercontent.com/50147457/188167251-15b4bb10-a4d8-41c2-8727-382224a8ebac.png)
 3. Choose Socket.io in upper left dropdown, add the url `http://localhost:8001` and the message `{"difficulty":"easy"}`
    ![image](https://user-images.githubusercontent.com/50147457/188167374-825174fd-9d5a-4a04-9256-302ddd14143a.png)
-4. Select `JSON` and input `match` for the event to emit
+4. Select `JSON` and input `matchFind` for the event to emit (image outdated)
    ![image](https://user-images.githubusercontent.com/50147457/188168120-c66974f4-b773-4cc2-9954-eee17cc1b1c1.png)
 5. At the bottom right, add the any [events](https://github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g58/blob/main/matching-service/const/constants.json) you are interested in:
    ![image](https://user-images.githubusercontent.com/50147457/188168182-03431725-bbe2-4537-a0aa-2afb87d99bf4.png)

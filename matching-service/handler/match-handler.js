@@ -1,9 +1,9 @@
 const MatchService = require("../service/match-service");
 const { sendMessageToBoth, isSocketActive } = require("../utils/socket-io");
-const { EVENT } = require("../const/constants");
+const { EVENT_EMIT } = require("../const/constants");
 const { matchDto } = require("../dto/match-dto");
 
-async function findMatch(payload) {
+exports.findMatch = async function (payload) {
   const socket = this;
   try {
     const { value, error } = matchDto.validate(payload);
@@ -22,24 +22,31 @@ async function findMatch(payload) {
         MatchService.deleteMatch(match.socketId);
       }
       await MatchService.createMatch(socket.id, value.difficulty);
-      socket.emit(EVENT.MATCHING, {
-        status: EVENT.MATCHING,
+      console.log(EVENT_EMIT.MATCHING);
+      socket.emit(EVENT_EMIT.MATCHING, {
+        status: EVENT_EMIT.MATCHING,
       });
       return;
     }
     // TODO additional validations
     MatchService.deleteMatch(match.socketId);
-    sendMessageToBoth(match.socketId, socket.id, EVENT.MATCH_SUCCESS, {
-      status: EVENT.MATCH_SUCCESS,
+    console.log(EVENT_EMIT.MATCH_SUCCESS);
+    sendMessageToBoth(match.socketId, socket.id, EVENT_EMIT.MATCH_SUCCESS, {
+      status: EVENT_EMIT.MATCH_SUCCESS,
       room: `${match.socketId}|${socket.id}`,
     });
   } catch (e) {
     // TODO add custom error messages
-    socket.emit(EVENT.MATCH_FAIL, {
-      status: EVENT.MATCH_FAIL,
+    console.log(EVENT_EMIT.MATCH_FAIL);
+    socket.emit(EVENT_EMIT.MATCH_FAIL, {
+      status: EVENT_EMIT.MATCH_FAIL,
       error: e.message,
     });
   }
-}
+};
 
-module.exports = findMatch;
+exports.cancelMatch = async function () {
+  const socket = this;
+  console.log("Cancel Match");
+  MatchService.deleteMatch(socket.id);
+};
