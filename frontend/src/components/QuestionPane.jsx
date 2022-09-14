@@ -4,18 +4,19 @@ import useFetchQuestion from '../hooks/useFetchQuestion';
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
 import ReactMarkdown from 'react-markdown'
 
+const difficultyColorMap = new Map([
+    ['easy', 'green'],
+    ['medium', 'orange'],
+    ['hard', 'red']
+])
+
 const QuestionPane = (difficulty) => {
     const {
         data,
         loading,
       } = useFetchQuestion(difficulty);
     
-
-    console.log(data.content)
-    
-    const difficultyColor = data.difficulty == 'easy' 
-        ? 'green' 
-        : (data.difficulty == 'medium' ? 'orange' : 'red')
+    const difficultyColor = difficultyColorMap.get(data.difficulty)
 
     return (
         <>
