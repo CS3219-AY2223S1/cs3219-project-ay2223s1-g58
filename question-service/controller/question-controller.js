@@ -31,10 +31,13 @@ async function getQuestionById(req, res) {
         const { id } = req.body
         if (id) {
             const question = await QuestionRepository.findById(id)
+            const category = await CategoryRepository.findByQuestionId(id)
             return res.status(201).json({
                 id: question.id,
                 name: question.name,
                 content: question.content,
+                difficulty: category.difficulty,
+                types: category.types
             })
         } else {
             return res.status(400).json({ message: 'Missing "id" field' })

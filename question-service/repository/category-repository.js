@@ -17,6 +17,13 @@ const CategoryRepository = {
             limit: 1,
         })
     },
+    findByQuestionId: function (id) {
+        return db.Category.findOne({
+            where: {
+                questionId: id
+            },
+        })
+    }
 }
 
 module.exports = CategoryRepository
