@@ -32,3 +32,5 @@ export const EVENT_EMIT = {
   MATCH_FIND: 'matchFind',
   MATCH_CANCEL: 'matchCancel',
 }
+
+export const RANDOM_AVATAR_URL = 'https://avatars.dicebear.com/api/bottts/'
