@@ -6,7 +6,7 @@ const useFetchQuestionByDifficulty = (inputDifficulty) => {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([])
 
-    useEffect(() => {
+    useEffect((inputDifficulty) => {
         const fetchData = async () =>{
           setLoading(true);
           try {
