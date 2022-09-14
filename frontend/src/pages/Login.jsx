@@ -10,6 +10,7 @@ import {
   STATUS_CODE_BAD_REQUEST,
 } from '../constants'
 import useAuth from '../hooks/useAuth'
+import { Helmet } from 'react-helmet'
 
 function Login() {
   const { auth, setAuth, persist, setPersist } = useAuth()
@@ -59,64 +60,75 @@ function Login() {
   useEffect(() => {
     console.log(auth)
   }, [auth])
-  return auth?.username === '' ? (
-    <AuthLayout
-      title="Sign in to account"
-      subtitle={
-        <>
-          Don’t have an account?{' '}
-          <Link to="/signup" className="text-cyan-600">
-            Sign up
-          </Link>
-        </>
-      }
-    >
-      <div>
-        <div className="space-y-6">
-          <TextField
-            label="Username"
-            value={username}
-            autoComplete="off"
-            onChange={(e) => setUsername(e.target.value)}
-            sx={{ marginBottom: '1rem' }}
-            autoFocus
-            required
-          />
-          <TextField
-            label="Password"
-            id="password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            sx={{ marginBottom: '2rem' }}
-          />
-        </div>
-        <div className="flex items-center justify-center gap-2 mt-2">
-          <input
-            type="checkbox"
-            id="persist"
-            onChange={togglePersist}
-            checked={persist}
-          />
-          <label htmlFor="persist">Trust This Device (Persist Sign In)</label>
-        </div>
-        <Button color="cyan" className="w-full mt-8" onClick={handleLogin}>
-          Sign In
-        </Button>
-        <div
-          ref={errRef}
-          className={`mt-2 text-center ${errorMsg ? 'errormsg' : 'hidden'}`}
-          aria-live="assertive"
+  return (
+    <>
+      <Helmet>
+        <title>Login | PeerPrep</title>
+        <meta charSet="utf-8" />
+        <meta name="description" content="PeerPrep help you prep" />
+      </Helmet>
+      {auth?.username === '' ? (
+        <AuthLayout
+          title="Sign in to account"
+          subtitle={
+            <>
+              Don’t have an account?{' '}
+              <Link to="/signup" className="text-cyan-600">
+                Sign up
+              </Link>
+            </>
+          }
         >
-          {errorMsg}
-        </div>
-      </div>
-    </AuthLayout>
-  ) : (
-    <div className="mx-auto text-center">You have logged in!</div>
+          <div>
+            <div className="space-y-6">
+              <TextField
+                label="Username"
+                value={username}
+                autoComplete="off"
+                onChange={(e) => setUsername(e.target.value)}
+                sx={{ marginBottom: '1rem' }}
+                autoFocus
+                required
+              />
+              <TextField
+                label="Password"
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                sx={{ marginBottom: '2rem' }}
+              />
+            </div>
+            <div className="flex items-center justify-center gap-2 mt-2">
+              <input
+                type="checkbox"
+                id="persist"
+                onChange={togglePersist}
+                checked={persist}
+              />
+              <label htmlFor="persist">
+                Trust This Device (Persist Sign In)
+              </label>
+            </div>
+            <Button color="cyan" className="w-full mt-8" onClick={handleLogin}>
+              Sign In
+            </Button>
+            <div
+              ref={errRef}
+              className={`mt-2 text-center ${errorMsg ? 'errormsg' : 'hidden'}`}
+              aria-live="assertive"
+            >
+              {errorMsg}
+            </div>
+          </div>
+        </AuthLayout>
+      ) : (
+        <div className="mx-auto text-center">You have logged in!</div>
+      )}
+    </>
   )
 }
 

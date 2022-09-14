@@ -11,6 +11,8 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { Tooltip } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useToast } from '@chakra-ui/react'
+import { Helmet } from 'react-helmet'
+
 const Profile = () => {
   const { auth, setAuth } = useAuth()
   const [deleteConfirmation, setDeleteConfirmation] = useState('')
@@ -152,6 +154,11 @@ const Profile = () => {
 
   return (
     <form className="container max-w-2xl mx-auto mt-4 shadow-md md:w-3/4">
+      <Helmet>
+        <title>Profile | PeerPrep</title>
+        <meta charSet="utf-8" />
+        <meta name="description" content="PeerPrep help you prep" />
+      </Helmet>
       <div className="p-4 bg-gray-100 border-t-2 rounded-lg bg-opacity-5">
         <div className="max-w-sm mx-auto md:mx-0 md:w-full">
           <div className="inline-flex items-center space-x-4">
