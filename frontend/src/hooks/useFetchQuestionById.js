@@ -6,7 +6,7 @@ const useFetchQuestionById = (questionId) => {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([])
   
-    useEffect((questionId) => {
+    useEffect(() => {
         const fetchData = async () =>{
           setLoading(true);
           try {
@@ -18,7 +18,7 @@ const useFetchQuestionById = (questionId) => {
           }
         }
         fetchData();
-      }, []);
+      }, [questionId]);
   
     return {
         data,

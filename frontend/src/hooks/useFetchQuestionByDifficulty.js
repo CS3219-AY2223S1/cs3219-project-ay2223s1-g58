@@ -6,10 +6,8 @@ const useFetchQuestionByDifficulty = (inputDifficulty) => {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([])
 
-    useEffect((inputDifficulty) => {
+    useEffect( () => {
         const fetchData = async () =>{
-          console.log(URL_QUESTION_SERVICE 
-            + '?difficulty=' + (inputDifficulty ? inputDifficulty : 'medium'))
           setLoading(true);
           try {
             const {data: response} = await axios.get(URL_QUESTION_SERVICE 
@@ -19,11 +17,10 @@ const useFetchQuestionByDifficulty = (inputDifficulty) => {
           } catch (error) {
             console.error(error);
           }
-          
         }
     
         fetchData();
-      }, []);
+      }, [inputDifficulty]);
 
     return {
         data,
