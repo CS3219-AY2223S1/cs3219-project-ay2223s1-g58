@@ -1,10 +1,17 @@
 const { Server } = require("socket.io");
+const { EVENT_LISTEN } = require("../const/constants");
 
 let io;
-exports.initSocket = (httpServer, matchHandler) => {
-  io = new Server(httpServer);
+exports.initSocket = (httpServer, matchHandler, cancelHandler) => {
+  io = new Server(httpServer, {
+    cors: {
+      origin: "*",
+      methods: ["GET", "POST"],
+    },
+  });
   io.on("connection", (socket) => {
-    socket.on("match", matchHandler);
+    socket.on(EVENT_LISTEN.MATCH_FIND, matchHandler);
+    socket.on(EVENT_LISTEN.MATCH_CANCEL, cancelHandler);
   });
 };
 
@@ -14,7 +21,5 @@ exports.sendMessageToBoth = (firstSocket, secondSocket, event, message) =>
 exports.sendMessageToOne = (socket, event, message) =>
   io.to(socket).emit(event, message);
 
-exports.isSocketActive = (socket) => {
-  const socketList = io.sockets.server.eio.clients;
-  return socketList[socket] !== undefined;
-};
+exports.isSocketActive = (socket) =>
+  io.sockets.sockets.get(socket) !== undefined;
