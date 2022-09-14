@@ -8,6 +8,7 @@ import { AuthLayout } from '../components/AuthLayout'
 import { Button } from '../components/Button'
 import { FormTextField } from '../components/Fields'
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 
 function Signup() {
   const [username, setUsername] = useState('')
@@ -66,6 +67,11 @@ function Signup() {
 
   return (
     <>
+      <Helmet>
+        <title>Signup | PeerPrep</title>
+        <meta charSet="utf-8" />
+        <meta name="description" content="PeerPrep help you prep" />
+      </Helmet>
       {success ? (
         <AuthLayout title="Sign up successful!">
           <div className="text-xl text-center">
