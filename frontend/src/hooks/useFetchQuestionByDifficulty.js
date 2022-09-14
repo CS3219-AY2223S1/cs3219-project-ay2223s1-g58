@@ -1,6 +1,6 @@
 import axios from '../api/axios';
 import {useState, useEffect} from 'react'
-import { URL_RETRIEVE_QUESTION_DIFFICULTY, URL_RETRIEVE_QUESTION_ID } from '../constants';
+import { URL_RETRIEVE_QUESTION_DIFFICULTY } from '../constants';
 
 const useFetchQuestionByDifficulty = (inputDifficulty) => {
     const [loading, setLoading] = useState(true);
