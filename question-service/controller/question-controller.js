@@ -37,7 +37,7 @@ async function getQuestionById(req, res) {
                 name: question.name,
                 content: question.content,
                 difficulty: category.difficulty,
-                types: category.types
+                types: category.types,
             })
         } else {
             return res.status(400).json({ message: 'Missing "id" field' })
@@ -56,9 +56,7 @@ async function getQuestionByDifficulty(req, res) {
             var questionId
             var questionDifficulty
             var types
-            await CategoryRepository.findByDifficulty(
-                difficulty
-            )
+            await CategoryRepository.findByDifficulty(difficulty)
                 .then((data) => {
                     questionId = String(data[0].questionId)
                     questionDifficulty = data[0].difficulty

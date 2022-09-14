@@ -1,6 +1,6 @@
 import { Text, Box, Badge, HStack, VStack, Heading, Divider } from '@chakra-ui/react'
 import { AuthLayout } from '../components/AuthLayout';
-import useFetchQuestion from '../hooks/useFetchQuestion';
+import useFetchQuestionByDifficulty from '../hooks/useFetchQuestionByDifficulty';
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
 import ReactMarkdown from 'react-markdown'
 
@@ -26,7 +26,7 @@ const QuestionPane = (difficulty) => {
     const {
         data,
         loading,
-      } = useFetchQuestion(difficulty);
+      } = useFetchQuestionByDifficulty(difficulty);
     
     const difficultyColor = difficultyColorMap.get(data.difficulty)
 

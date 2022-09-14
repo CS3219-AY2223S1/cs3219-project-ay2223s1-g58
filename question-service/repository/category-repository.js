@@ -20,10 +20,10 @@ const CategoryRepository = {
     findByQuestionId: function (id) {
         return db.Category.findOne({
             where: {
-                questionId: id
+                questionId: id,
             },
         })
-    }
+    },
 }
 
 module.exports = CategoryRepository

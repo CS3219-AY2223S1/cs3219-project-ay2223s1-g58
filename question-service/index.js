@@ -4,9 +4,12 @@ const cors = require('cors')
 const app = express()
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
-app.use(cors({
-    origin: "http://localhost:3000",
-    credentials: true})) // config cors so that front-end can use
+app.use(
+    cors({
+        origin: 'http://localhost:3000',
+        credentials: true,
+    })
+) // config cors so that front-end can use
 
 const {
     createQuestion,
@@ -21,7 +24,6 @@ const router = express.Router()
 router.get('/', (_, res) => {
     res.status(200).send('Hello World from question-service')
 })
-
 
 router.post('/id', getQuestionById)
 router.post('/difficulty', getQuestionByDifficulty)
