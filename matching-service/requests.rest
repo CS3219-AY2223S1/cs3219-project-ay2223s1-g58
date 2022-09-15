@@ -1,0 +1,6 @@
+### GET ROOM
+GET http://localhost:8001/api/v1/matching/room/MUdekW1LM87Ouq0SAAAC|Ex7jLTZLxXKGW6wXAAAF
+
+### DELETE Room
+DELETE http://localhost:8001/api/v1/matching/room/MUdekW1LM87Ouq0SAAAC|Ex7jLTZLxXKGW6wXAAAF
+

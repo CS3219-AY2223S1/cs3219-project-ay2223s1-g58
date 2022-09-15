@@ -26,6 +26,11 @@ export const EMAIL_REGEX = /^\S+@\S+\.\S+$/
 export const URI_MATCHING_SERVICE =
   process.env.URI_MATCHING_SERVICE || 'http://localhost:8001'
 
+const PREFIX_MATCHING_SERVICE = '/api/v1/matching'
+export const URL_MATCHING_SERVICE =
+  URI_MATCHING_SERVICE + PREFIX_MATCHING_SERVICE
+export const URL_MATCHING_ROOM = URL_MATCHING_SERVICE + '/room'
+
 export const EVENT_LISTEN = {
   MATCHING: 'matching',
   MATCH_SUCCESS: 'matchSuccess',
