@@ -16,3 +16,19 @@ describe('GET /status', function () {
             )
     })
 })
+
+describe('GET /', function() {
+    it('Question retrieved succesfully', function (done) {
+        request(app)
+            .get('/api/v1/question?id=1')
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(
+                200,
+                {
+                    id: 1,
+                },
+                done
+            )
+    })
+})
