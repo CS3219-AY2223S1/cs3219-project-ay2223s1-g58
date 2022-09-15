@@ -101,8 +101,40 @@ async function deleteQuestionById(req, res) {
     }
 }
 
+async function updateQuestionById(req, res) {
+    try {
+        const { id, name, content, difficulty, types } = req.body
+        if (id && name && content) {
+            await QuestionRepository.updateQuestionNameContentById(name, content, id)
+        } else if (id && name) {
+            await QuestionRepository.updateQuestionNameById(name, id)
+        } else if (id && content) {
+            await QuestionRepository.updateQuestionContentById
+        } else {
+            if (!id || (!difficulty && !types && !name && !content)) {
+                return res.status(400).json({ message: 'Missing id or update contents!'})
+            }    
+        }
+
+        if (difficulty) {
+            await CategoryRepository.updateDifficultyByQuestionId(difficulty, id)
+        }
+
+        if (types) {
+            await CategoryRepository.updateTypesByQuestionId(types, id)
+        }
+
+        return res.status(200).json({message: 'Question updated succesfully'})
+    } catch (err) {
+        return res.status(500).json({
+            message: 'Database failure when retrieving the question! ' + err,
+        })
+    }
+}
+
 module.exports = {
     createQuestion,
     getQuestion,
     deleteQuestionById,
+    updateQuestionById
 }

@@ -19,3 +19,16 @@ GET http://localhost:8500/api/v1/question?difficulty=easy
 
 ### GET QUESTION By id
 GET http://localhost:8500/api/v1/question?id=1
+
+### UPDATE QUESTION
+PUT http://localhost:8500/api/v1/question
+Content-Type: application/json
+
+{   
+    "id": 1,
+    "name":"Updated question",
+    "difficulty":"medium"
+}
+
+### DELETE QUESTION By id
+DELETE http://localhost:8500/api/v1/question?id=2

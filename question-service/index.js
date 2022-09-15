@@ -15,6 +15,7 @@ const {
     createQuestion,
     getQuestion,
     deleteQuestionById,
+    updateQuestionById
 } = require('./controller/question-controller')
 const router = express.Router()
 
@@ -26,6 +27,7 @@ router.get('/status', (_, res) => {
 
 router.get('', getQuestion)
 router.post('/', createQuestion)
+router.put('/', updateQuestionById)
 router.delete('', deleteQuestionById)
 
 app.use('/api/v1/question', router).all((_, res) => {

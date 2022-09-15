@@ -24,6 +24,20 @@ const CategoryRepository = {
             },
         })
     },
+    updateDifficultyByQuestionId: function(difficulty, id) {
+        return db.Category.update({
+            difficulty: difficulty
+        }, {where: {
+            questionId: id
+        }})
+    },
+    updateTypesByQuestionId: function(types, id) {
+        return db.Category.update({
+            types: types
+        }, {where: {
+            questionId: id
+        }})
+    }
 }
 
 module.exports = CategoryRepository
