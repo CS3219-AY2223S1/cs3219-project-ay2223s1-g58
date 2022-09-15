@@ -8,7 +8,7 @@ import { AuthLayout } from '../components/AuthLayout'
 import { Button } from '../components/Button'
 import { FormTextField } from '../components/Fields'
 import { Link } from 'react-router-dom'
-import { Helmet } from 'react-helmet'
+import { Helmet } from 'react-helmet-async'
 
 function Signup() {
   const [username, setUsername] = useState('')

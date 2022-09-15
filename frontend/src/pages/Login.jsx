@@ -10,7 +10,7 @@ import {
   STATUS_CODE_BAD_REQUEST,
 } from '../constants'
 import useAuth from '../hooks/useAuth'
-import { Helmet } from 'react-helmet'
+import { Helmet } from 'react-helmet-async'
 
 function Login() {
   const { auth, setAuth, persist, setPersist } = useAuth()
