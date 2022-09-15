@@ -15,7 +15,7 @@ import getOtherSelectionDecor from './selectionDecor'
  * Returns the extension to manage the other person's selection.
  * @param uid The current user's id (NOT the other user!)
  */
-const getSelectionExt = (uid) => {
+const getSelectionExtension = (uid) => {
   return StateField.define({
     // Start with an empty set of decorations
     create() {
@@ -59,7 +59,6 @@ const getSelectionExt = (uid) => {
           })
         }
       }
-      // console.log("end cursors")
       return selections
     },
     // Indicate that this StateField obj provides a set of decorations
@@ -67,4 +66,4 @@ const getSelectionExt = (uid) => {
   })
 }
 
-export default getSelectionExt
+export default getSelectionExtension

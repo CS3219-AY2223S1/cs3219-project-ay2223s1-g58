@@ -32,7 +32,7 @@ class CursorListener {
     this.initUserData()
   }
 
-  /** 
+  /**
    * Registers callbacks for add-cursor and rm-cursor events.
    * For each event, the callback fn creates a corresponding Effect object
    * and dispatches this effect to update the CodeMirror view.
@@ -43,8 +43,8 @@ class CursorListener {
       if (isPresent(newCursor.from) && isPresent(newCursor.to)) {
         let toAdd = addCursor.of({
           uid: newCursor.uid,
-          from: newCursor.from,
-          to: newCursor.to,
+          from: Math.min(newCursor.from, this.view.state.doc.length),
+          to: Math.min(newCursor.to, this.view.state.doc.length),
         })
         this.view.dispatch({ effects: [toAdd] })
       }
@@ -92,8 +92,8 @@ class CursorListener {
     )
   }
 
-  /** 
-   * Called once when the CursorListener is initialized. 
+  /**
+   * Called once when the CursorListener is initialized.
    * Manually retrieves cursor data because Firebase listeners have not taken effect yet.
    */
   initUserData() {
@@ -112,7 +112,7 @@ class CursorListener {
       .catch(console.error)
   }
 
-  /** 
+  /**
    * Handles add- and remove-cursor events.
    * Invoked on Firebase change, or on init this object.
    * @param eventData an object `{uid, cursor}`, where `uid` is the owner of the cursor
@@ -142,16 +142,16 @@ class CursorListener {
   /** Executes all registered callbacks for Add-cursor event. */
   callbackOnAdd = (cursor) => {
     for (const fn of this.onAddCallbacks) {
-      fn(cursor);
+      fn(cursor)
     }
-  };
-  
+  }
+
   /** Executes all registered callbacks for Remove-cursor event. */
   callbackOnRemove = (cursor) => {
     for (const fn of this.onRemoveCallbacks) {
-      fn(cursor);
+      fn(cursor)
     }
-  };
+  }
 
   /** Deletes all callbacks registered with this object. */
   deregister = () => {

@@ -11,7 +11,7 @@ import { addCursor, rmCursor } from './cursorEffects'
  * Returns the extension to manage the other person's cursor.
  * @param uid The current user's id (NOT the other user!)
  */
-const getCursorExt = (uid) => {
+const getCursorExtension = (uid) => {
   return StateField.define({
     // Start with an empty array of cursors
     create() {
@@ -67,4 +67,4 @@ const getCursorExt = (uid) => {
   })
 }
 
-export default getCursorExt
+export default getCursorExtension

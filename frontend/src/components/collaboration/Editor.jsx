@@ -12,10 +12,10 @@ import { javascript } from '@codemirror/lang-javascript'
 import { java } from '@codemirror/lang-java'
 import { cpp } from '@codemirror/lang-cpp'
 import throttle from 'lodash.throttle'
-import getSelectionExt from './selectionExt'
-import { Select } from '@chakra-ui/react'
-import getCursorExt from './cursorExt'
+import getCursorExtension from './cursorExtension'
+import getSelectionExtension from './selectionExtension'
 import CursorListener from './cursorListener'
+import { Select } from '@chakra-ui/react'
 
 const indents = {
   2: '  ',
@@ -73,8 +73,8 @@ const Editor = () => {
           if (!update.selectionSet && !update.docChanged) return
           sendCursorData(update, docPath, uid) // send cursor data to Firebase
         }),
-        getSelectionExt(uid),
-        getCursorExt(uid),
+        getCursorExtension(uid),
+        getSelectionExtension(uid),
       ],
     })
 
