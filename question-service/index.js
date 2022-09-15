@@ -20,8 +20,8 @@ const router = express.Router()
 
 // Controller will contain all the User-defined Routes
 
-router.get("/status", (_, res) => {
-    res.status(200).send({ message: "Hello World from question-service" })
+router.get('/status', (_, res) => {
+    res.status(200).send({ message: 'Hello World from question-service' })
 })
 
 router.get('', getQuestion)
