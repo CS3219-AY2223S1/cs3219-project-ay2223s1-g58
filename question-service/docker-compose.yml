@@ -23,3 +23,4 @@ services:
             - 'postgres_db'
         env_file:
             - .env.prod
+

@@ -11,10 +11,8 @@ RUN npm install --quiet
 # Copy all files from project excluding node_modules (via .dockerignore)
 COPY . .
 
-RUN npx sequelize-cli db:migrate --env production
-RUN npx sequelize-cli db:seed:all --env production
-
 # Expose port 
 EXPOSE 8500
+ENTRYPOINT ["./entrypoint.sh"]
 # Exec form to avoid starting a shell session
 CMD ["npm", "start"]
