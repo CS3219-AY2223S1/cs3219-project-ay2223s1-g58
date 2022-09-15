@@ -11,7 +11,8 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { Tooltip } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useToast } from '@chakra-ui/react'
-import { Helmet } from 'react-helmet'
+import { Helmet } from 'react-helmet-async'
+import { getUserProfileUrl } from '../utils'
 
 const Profile = () => {
   const { auth, setAuth } = useAuth()
@@ -164,7 +165,7 @@ const Profile = () => {
           <div className="inline-flex items-center space-x-4">
             <img
               alt="profil"
-              src="/profile.svg"
+              src={getUserProfileUrl(auth.username)}
               className="object-cover w-16 h-16 mx-auto rounded-full "
             />
             <h1>User Profile</h1>
