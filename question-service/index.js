@@ -34,3 +34,5 @@ app.use('/api/v1/question', router).all((_, res) => {
 })
 
 app.listen(8500, () => console.log('question-service listening on port 8500'))
+
+export { app }
