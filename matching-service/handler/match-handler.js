@@ -29,12 +29,11 @@ exports.findMatch = async function (payload) {
       return;
     }
     // TODO additional validations
-    MatchService.deleteMatch(match.socketId);
-    console.log(EVENT_EMIT.MATCH_SUCCESS);
-    sendMessageToBoth(match.socketId, socket.id, EVENT_EMIT.MATCH_SUCCESS, {
-      status: EVENT_EMIT.MATCH_SUCCESS,
-      room: `${match.socketId}|${socket.id}`,
-    });
+    await MatchService.matchSuccess(
+      match.socketId,
+      socket.id,
+      value.difficulty
+    );
   } catch (e) {
     // TODO add custom error messages
     console.log(EVENT_EMIT.MATCH_FAIL);
