@@ -11,7 +11,7 @@ const Room = () => {
 
   useEffect(() => {
     getQuestionId()
-  }, [])
+  })
 
   const getQuestionId = async () => {
     const res = await axios
