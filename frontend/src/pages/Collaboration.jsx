@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
-import Editor from '../components/Editor'
+import Editor from '../components/collaboration/Editor'
 import { Button } from '../components/Button'
 import { db } from '../api/firebase'
 
