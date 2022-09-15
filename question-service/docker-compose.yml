@@ -24,5 +24,5 @@ services:
         env_file:
             - .env.prod
         links:
-            postgres_db
+            - postgres_db
 
