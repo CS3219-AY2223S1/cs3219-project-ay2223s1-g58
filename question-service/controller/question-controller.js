@@ -52,7 +52,7 @@ async function getQuestion(req, res) {
             console.log('Question id retrieved: ' + questionId)
             const question = await QuestionRepository.findById(questionId)
             console.log('Question retrieved: ' + question.name)
-            return res.status(201).json({
+            return res.status(200).json({
                 id: question.id,
                 name: question.name,
                 content: question.content,
@@ -62,7 +62,7 @@ async function getQuestion(req, res) {
         } else if (id) {
             const question = await QuestionRepository.findById(id)
             const category = await CategoryRepository.findByQuestionId(id)
-            return res.status(201).json({
+            return res.status(200).json({
                 id: question.id,
                 name: question.name,
                 content: question.content,
@@ -87,7 +87,7 @@ async function deleteQuestionById(req, res) {
         if (id) {
             await QuestionRepository.deleteById(id)
             return res
-                .status(201)
+                .status(200)
                 .json({ message: `Question deleted succesfully` })
         } else {
             return res

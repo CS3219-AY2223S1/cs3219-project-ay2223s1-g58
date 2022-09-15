@@ -7,7 +7,7 @@
         "dev": "npm run db:migrate:dev && npm run db:seed:dev && nodemon index.js",
         "start": "npm run db:migrate:prod && npm run db:seed:prod && node index.js",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "test:ci": "npm run lint:check && mocha ./test/*.spec.js --exit",
+        "test:ci": "npm run db:migrate:prod && npm run db:seed:prod && npm run lint:check && mocha ./test/*.spec.js --exit",
         "format:check": "prettier --check .",
         "format:write": "prettier --write .",
         "lint:check": "eslint .",

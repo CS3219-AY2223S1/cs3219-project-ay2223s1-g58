@@ -22,9 +22,7 @@ describe('GET /', function() {
         request(app)
             .get('/api/v1/question?id=1')
             .set('Accept', 'application/json')
-            .expect(200, {
-                id: 1
-            }, done)
+            .expect(200, done)
 
     })
 })
