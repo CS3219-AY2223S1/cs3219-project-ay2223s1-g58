@@ -4,15 +4,16 @@
     "description": "1. Rename .env.sample to .env\r 2. Install npm packages using `npm install`.\r 3. Run Question Service using `npm run dev`.",
     "main": "index.js",
     "scripts": {
+        "wait-for-db": "./node_modules/.bin/wait-port db:5432",
         "dev": "nodemon index.js",
-        "start": "node index.js",
+        "start": "npm run db:migrate && npm run db:seed && node index.js",
         "test": "echo \"Error: no test specified\" && exit 1",
         "format:check": "prettier --check .",
         "format:write": "prettier --write .",
         "lint:check": "eslint .",
         "lint:fix": "eslint --fix --ext .js .",
-        "db:migrate": "sequelize-cli db:migrate",
-        "db:seed": "sequelize-cli db:seed:all"
+        "db:migrate": "sequelize-cli db:migrate --env \"production\"",
+        "db:seed": "sequelize-cli db:seed:all --env \"production\""
     },
     "keywords": [],
     "author": "",
