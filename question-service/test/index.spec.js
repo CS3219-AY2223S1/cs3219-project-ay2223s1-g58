@@ -23,12 +23,9 @@ describe('GET /', function() {
             .get('/api/v1/question?id=1')
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
-            .expect(
-                200,
-                {
-                    id: 1,
-                },
-                done
-            )
+            .end(function(err, res) {
+                if (err) throw err;
+                console.log(res.body)
+            })
     })
 })
