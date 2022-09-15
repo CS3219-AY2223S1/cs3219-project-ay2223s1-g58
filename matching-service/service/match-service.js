@@ -1,7 +1,10 @@
 const schedule = require("node-schedule");
+const axios = require("axios").default;
+
 const MatchRepository = require("../repository/match-repository");
-const { sendMessageToOne } = require("../utils/socket-io");
-const { EVENT_EMIT } = require("../const/constants");
+const { sendMessageToOne, sendMessageToBoth } = require("../utils/socket-io");
+const { EVENT_EMIT, URL_QUESTION_DIFFICULTY } = require("../const/constants");
+const RoomService = require("./room-service");
 
 const MATCH_TIMEOUT_SECONDS = 30;
 const MATCH_TIMEOUT = MATCH_TIMEOUT_SECONDS * 1000;
@@ -32,6 +35,22 @@ const MatchService = {
   },
   deleteMatch: function (socketId) {
     return MatchRepository.delete(socketId);
+  },
+  matchSuccess: async function (sockerIdWaiting, socketIdNew, difficulty) {
+    await MatchService.deleteMatch(sockerIdWaiting);
+    console.log(EVENT_EMIT.MATCH_SUCCESS);
+    const roomId = `${sockerIdWaiting}|${socketIdNew}`;
+    // const response = await axios.get({
+    //   baseURL: URL_QUESTION_DIFFICULTY,
+    //   data: { difficulty: difficulty },
+    // });
+    // Currently question service cannot be run, so this will be a placeholder
+    const response = { id: Math.floor(Math.random() * 100) };
+    await RoomService.createRoom(roomId, response.id);
+    sendMessageToBoth(sockerIdWaiting, socketIdNew, EVENT_EMIT.MATCH_SUCCESS, {
+      status: EVENT_EMIT.MATCH_SUCCESS,
+      room: roomId,
+    });
   },
 };
 
