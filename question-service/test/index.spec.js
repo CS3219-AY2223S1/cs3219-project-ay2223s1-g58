@@ -21,11 +21,12 @@ describe('GET /', function() {
     it('Question retrieved succesfully', function (done) {
         request(app)
             .get('/api/v1/question?id=1')
+            .expect(200)
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
-            .end(function(err, res) {
-                if (err) throw err;
-                console.log(res.body)
-            })
+            .expect(function(res) {
+                if (!res.bodyhasOwnProperty('id')) throw new Error("Expected 'id' key!");
+            }, done)
+
     })
 })
