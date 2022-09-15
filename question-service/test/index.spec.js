@@ -18,14 +18,12 @@ describe('GET /status', function () {
 })
 
 describe('GET /', function() {
-    it('Question retrieved succesfully', function (done) {
+    it('Responds with retrieved question id', function (done) {
         request(app)
             .get('/api/v1/question?id=1')
-            .expect(200)
             .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
-            .expect(function(res) {
-                if (!res.bodyhasOwnProperty('id')) throw new Error("Expected 'id' key!");
+            .expect(200, {
+                id: 1
             }, done)
 
     })
