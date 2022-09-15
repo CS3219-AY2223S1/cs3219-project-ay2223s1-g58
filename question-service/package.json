@@ -1,19 +1,23 @@
 {
     "name": "question-service",
     "version": "1.0.0",
-    "description": "1. Rename .env.sample to .env\r 2. Install npm packages using `npm install`.\r 3. Run Question Service using `npm run dev`.",
+    "description": "",
     "main": "index.js",
     "scripts": {
-        "wait-for-db": "./node_modules/.bin/wait-port db:5432",
-        "dev": "nodemon index.js",
-        "start": "npm run db:migrate && npm run db:seed && node index.js",
+        "dev": "npm run db:migrate:dev && npm run db:seed:dev && nodemon index.js",
+        "start": "npm run db:migrate:prod && npm run db:seed:prod && node index.js",
         "test": "echo \"Error: no test specified\" && exit 1",
+        "test:ci": "npm run lint:check && mocha ./test/*.spec.js --exit",
         "format:check": "prettier --check .",
         "format:write": "prettier --write .",
         "lint:check": "eslint .",
         "lint:fix": "eslint --fix --ext .js .",
-        "db:migrate": "sequelize-cli db:migrate --env \"production\"",
-        "db:seed": "sequelize-cli db:seed:all --env \"production\""
+        "db:migrate:dev": "sequelize-cli db:migrate --env \"development\"",
+        "db:seed:dev": "sequelize-cli db:seed:all --env \"development\"",
+        "db:migrate:test": "sequelize-cli db:migrate --env \"test\"",
+        "db:seed:test": "sequelize-cli db:seed:all --env \"test\"",
+        "db:migrate:prod": "sequelize-cli db:migrate --env \"production\"",
+        "db:seed:prod": "sequelize-cli db:seed:all --env \"production\""
     },
     "keywords": [],
     "author": "",
@@ -23,7 +27,9 @@
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-vue": "^9.4.0",
         "nodemon": "^2.0.19",
-        "prettier": "^2.7.1"
+        "mocha": "^10.0.0",
+        "prettier": "^2.7.1",
+        "supertest": "^6.2.4"
     },
     "dependencies": {
         "cors": "^2.8.5",

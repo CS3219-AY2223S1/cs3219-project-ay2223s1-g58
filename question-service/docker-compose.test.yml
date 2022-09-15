@@ -28,7 +28,8 @@ services:
             postgres_db:
                 condition: service_healthy
         environment:
-            ENV: production
+            ENV: test
         links:
             - postgres_db
-        restart: on-failure    
+        restart: on-failure  
+        command: npm run test:ci  
