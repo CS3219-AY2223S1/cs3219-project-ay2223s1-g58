@@ -13,10 +13,12 @@ const useFetchQuestionByDifficulty = (inputDifficulty) => {
             const {data: response} = await axios.get(URL_QUESTION_SERVICE 
               + '?difficulty=' + (inputDifficulty ? inputDifficulty : 'medium'))
             setData(response);
-            setLoading(false);
+            
           } catch (error) {
+            //todo toast
             console.error(error);
           }
+          setLoading(false);
         }
     
         fetchData();

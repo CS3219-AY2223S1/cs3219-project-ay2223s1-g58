@@ -10,10 +10,9 @@ Content-Type: application/json
     "difficulty":"easy"
 }
 
+### GET QUESTION By difficulty
+GET http://localhost:8500/api/v1/question?difficulty=easy
 
-### GET QUESTION
-GET http://localhost:8500/api/v1/question/localhost:8500/api/question?difficulty=easy
 
-
-### DELETE QUESTION
-DELETE http://localhost:8500/api/v1/question/delete?id=1
+### GET QUESTION By id
+GET http://localhost:8500/api/v1/question?id=1
