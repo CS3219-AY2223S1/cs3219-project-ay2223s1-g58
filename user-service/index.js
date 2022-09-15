@@ -14,10 +14,10 @@ import {
     login,
     logout,
     token,
-    updateUser,
+    updateUser
 } from "./controller/user-controller.js"
-import { authenticateToken } from "./middleware.js"
-import logger from "./logger.js"
+import { authenticateToken } from './middleware.js'
+import logger from './logger.js'
 import { seedUsers } from "./model/repository.js"
 
 const API_PREFIX = "/api/v1/user"
@@ -27,10 +27,8 @@ const router = express.Router()
 
 let redisClient
 
-;(async () => {
-    redisClient = redis.createClient({
-        url: `redis://${process.env.REDIS_HOST}:6379`,
-    })
+(async () => {
+    redisClient = redis.createClient({ url: `redis://${process.env.REDIS_HOST}:6379` });
     redisClient.on("error", (error) => logger.error(`${error}`))
     redisClient.on("connect", () => logger.info("Connected to Redis"))
     await redisClient.connect()
@@ -38,12 +36,10 @@ let redisClient
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
-app.use(
-    cors({
-        origin: "http://localhost:3000",
-        credentials: true,
-    })
-)
+app.use(cors({
+    origin: "http://localhost:3000",
+    credentials: true
+}))
 app.use(cookieParser())
 app.use(morgan("dev"))
 app.use(helmet())
@@ -64,7 +60,7 @@ router.post("/", createUser)
 // LOGIN
 router.post("/login", login)
 // REFRESH TOKEN
-router.post("/token", token)
+router.post('/token', token)
 // UPDATE USER
 router.put("/", authenticateToken, updateUser)
 // GET USER
@@ -72,7 +68,7 @@ router.get("/", authenticateToken, getUser)
 // DELETE USER
 router.delete("/", authenticateToken, deleteUser)
 // LOGOUT
-router.post("/logout", authenticateToken, logout)
+router.post('/logout', authenticateToken, logout)
 
 // TEST TOKEN
 router.post("/testToken", authenticateToken, (req, res) => {
@@ -84,7 +80,7 @@ router.post("/testToken", authenticateToken, (req, res) => {
 app.use((err, _, res, next) => {
     logger.error(err)
     res.status(500).send({ message: "Server error" })
-    next(err)
+    next(err);
 })
 
 app.listen(8000, async () => {
