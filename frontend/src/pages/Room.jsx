@@ -1,4 +1,5 @@
 import useAuth from '../hooks/useAuth'
+import { Button } from '@chakra-ui/react'
 import { useSearchParams } from 'react-router-dom'
 import axios from '../api/axios'
 import { useEffect, useState } from 'react'
@@ -24,6 +25,16 @@ const Room = () => {
     }
   }
 
+  const handleCancel = async () => {
+    const res = await axios
+      .delete(`${URL_MATCHING_ROOM}/${searchParams.get('roomId')}`)
+      .catch((e) => {
+        console.log(e)
+      })
+    if (res && res.status === STATUS_CODE_SUCCESS) {
+    }
+  }
+
   return (
     <div>
       <main className="flex h-full flex-col items-center justify-center">
@@ -33,6 +44,7 @@ const Room = () => {
         <p>Room: {searchParams.get('roomId')}</p>
         <p>Quesiton: {questionId}</p>
         <br />
+        <Button onClick={handleCancel}>Quit</Button>
         <br />
       </main>
     </div>

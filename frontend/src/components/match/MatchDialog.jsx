@@ -11,7 +11,7 @@ import io from 'socket.io-client'
 import MatchTimer from './MatchTimer'
 import MatchTimeout from './MatchTimeout'
 import { useNavigate } from 'react-router-dom'
-import { URI_MATCHING_SERVICE, EVENT_EMIT, EVENT_LISTEN } from '../../constants'
+import { URL_MATCHING_SERVICE, EVENT_EMIT, EVENT_LISTEN } from '../../constants'
 import MatchError from './MatchError'
 
 const PHASES = {
@@ -29,7 +29,7 @@ const MatchDialog = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const newSocket = io(URI_MATCHING_SERVICE)
+    const newSocket = io(URL_MATCHING_SERVICE)
     setSocket(newSocket)
     newSocket.on(EVENT_LISTEN.MATCHING, () => console.log('matching'))
     newSocket.on(EVENT_LISTEN.MATCH_SUCCESS, (payload) => {

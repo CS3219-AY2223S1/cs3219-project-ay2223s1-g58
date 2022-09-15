@@ -4,9 +4,10 @@ export const STATUS_CODE_CONFLICT = 409
 export const STATUS_CODE_BAD_REQUEST = 400
 
 // USER SERVICE API
-const URI_USER_SERVICE = process.env.URI_USER_SERVICE || 'http://localhost:8000'
+const BASE_URL_USER_SERVICE =
+  process.env.URL_USER_SERVICE || 'http://localhost:8000'
 const PREFIX_USER_SERVICE = '/api/v1/user'
-export const URL_USER_SERVICE = URI_USER_SERVICE + PREFIX_USER_SERVICE
+export const URL_USER_SERVICE = BASE_URL_USER_SERVICE + PREFIX_USER_SERVICE
 export const URL_USER_LOGIN = URL_USER_SERVICE + '/login'
 export const URL_USER_LOGOUT = URL_USER_SERVICE + '/logout'
 export const URL_USER_SIGNUP = URL_USER_SERVICE + '/signup'
@@ -18,12 +19,12 @@ export const PASSWORD_REGEX =
 export const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/
 export const EMAIL_REGEX = /^\S+@\S+\.\S+$/
 
-export const URI_MATCHING_SERVICE =
-  process.env.URI_MATCHING_SERVICE || 'http://localhost:8001'
+export const BASE_URL_MATCHING_SERVICE =
+  process.env.URL_MATCHING_SERVICE || 'http://localhost:8001'
 
 const PREFIX_MATCHING_SERVICE = '/api/v1/matching'
 export const URL_MATCHING_SERVICE =
-  URI_MATCHING_SERVICE + PREFIX_MATCHING_SERVICE
+  BASE_URL_MATCHING_SERVICE + PREFIX_MATCHING_SERVICE
 export const URL_MATCHING_ROOM = URL_MATCHING_SERVICE + '/room'
 
 export const EVENT_LISTEN = {
