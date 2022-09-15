@@ -13,15 +13,22 @@ services:
             POSTGRES_USER: postgres
             POSTGRES_HOST: host.docker.internal
             POSTGRES_PORT: 5432
+        healthcheck :
+            test: [ "CMD", "pg_isready", "-q", "-d", "postgres_db", "-U", "postgres" ]
+            interval : 5s
+            timeout : 5s
+            retries : 5
     web:
         build:
             context: .
             dockerfile: Dockerfile
         ports:
             - '8500:8500'
-        depends_on:
-            - 'postgres_db'
+        depends_on: 
+            postgres_db:
+                condition: service_healthy
         env_file:
             - .env.prod
         links:
             - postgres_db
+        restart: on-failure    

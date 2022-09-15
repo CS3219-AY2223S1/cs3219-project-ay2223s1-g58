@@ -1,3 +1,6 @@
+### CHECK SERVER ALIVE
+GET http://localhost:8500/api/v1/question/status
+
 ### CREATE QUESTION
 POST http://localhost:8500/api/v1/question
 Content-Type: application/json
