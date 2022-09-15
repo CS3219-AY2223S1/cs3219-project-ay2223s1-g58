@@ -1,5 +1,5 @@
-import request from 'supertest'
-import { app } from '../index.js'
+const request = require('supertest')
+const app = require('../index.js')
 
 describe('GET /status', function () {
     it('responds successfully', function (done) {
