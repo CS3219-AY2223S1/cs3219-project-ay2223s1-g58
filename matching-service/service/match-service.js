@@ -40,10 +40,12 @@ const MatchService = {
     await MatchService.deleteMatch(sockerIdWaiting);
     console.log(EVENT_EMIT.MATCH_SUCCESS);
     const roomId = `${sockerIdWaiting}|${socketIdNew}`;
-    const response = await axios.get({
-      baseURL: URL_QUESTION_DIFFICULTY,
-      data: { difficulty: difficulty },
-    });
+    // const response = await axios.get({
+    //   baseURL: URL_QUESTION_DIFFICULTY,
+    //   data: { difficulty: difficulty },
+    // });
+    // Currently question service cannot be run, so this will be a placeholder
+    const response = { id: Math.floor(Math.random() * 100) };
     await RoomService.createRoom(roomId, response.id);
     sendMessageToBoth(sockerIdWaiting, socketIdNew, EVENT_EMIT.MATCH_SUCCESS, {
       status: EVENT_EMIT.MATCH_SUCCESS,

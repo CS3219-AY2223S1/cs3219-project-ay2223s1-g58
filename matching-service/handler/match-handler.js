@@ -1,5 +1,5 @@
 const MatchService = require("../service/match-service");
-const { sendMessageToBoth, isSocketActive } = require("../utils/socket-io");
+const { isSocketActive } = require("../utils/socket-io");
 const { EVENT_EMIT } = require("../const/constants");
 const { matchDto } = require("../dto/match-dto");
 
