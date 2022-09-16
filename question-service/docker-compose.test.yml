@@ -13,22 +13,34 @@ services:
             POSTGRES_USER: postgres
             POSTGRES_HOST: host.docker.internal
             POSTGRES_PORT: 5432
-        healthcheck :
-            test: [ "CMD", "pg_isready", "-q", "-d", "postgres_db", "-U", "postgres" ]
-            interval : 5s
-            timeout : 5s
-            retries : 5
+        healthcheck:
+            test:
+                [
+                    'CMD',
+                    'pg_isready',
+                    '-q',
+                    '-d',
+                    'postgres_db',
+                    '-U',
+                    'postgres',
+                ]
+            interval: 5s
+            timeout: 5s
+            retries: 5
     web:
         build:
             context: .
             dockerfile: Dockerfile
         ports:
             - '8500:8500'
-        depends_on: 
+        depends_on:
             postgres_db:
                 condition: service_healthy
+        extra_hosts:
+            - "host.docker.internal:host-gateway"        
         environment:
-            ENV: production
+            ENV: test
         links:
             - postgres_db
-        restart: on-failure    
+        restart: on-failure
+        command: npm run test:ci

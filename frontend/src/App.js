@@ -33,7 +33,6 @@ function App() {
                 <Route path="/room" element={<Room />} />
               </Route>
             </Route>
-
             {/* 404 */}
             <Route path="*" element={<PageNotFound />} />
           </Route>

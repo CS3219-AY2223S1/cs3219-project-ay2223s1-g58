@@ -12,7 +12,7 @@
         "username": "postgres",
         "password": "postgres",
         "database": "postgres_db",
-        "host": "127.0.0.1",
+        "host": "host.docker.internal",
         "dialect": "postgres",
         "storage": "./database.postgres"
     },

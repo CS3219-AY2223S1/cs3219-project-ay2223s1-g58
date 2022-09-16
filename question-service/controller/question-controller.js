@@ -26,36 +26,17 @@ async function createQuestion(req, res) {
     }
 }
 
-async function getQuestionById(req, res) {
+async function getQuestion(req, res) {
     try {
-        const { id } = req.body
-        if (id) {
-            const question = await QuestionRepository.findById(id)
-            return res.status(201).json({
-                id: question.id,
-                name: question.name,
-                content: question.content,
-            })
-        } else {
-            return res.status(400).json({ message: 'Missing "id" field' })
-        }
-    } catch (err) {
-        return res.status(500).json({
-            message: 'Database failure when retrieving the question! ' + err,
-        })
-    }
-}
+        // const { difficulty } = req.params
+        const { difficulty } = req.query
+        const { id } = req.query
 
-async function getQuestionByDifficulty(req, res) {
-    try {
-        const { difficulty } = req.body
         if (difficulty) {
             var questionId
             var questionDifficulty
             var types
-            await CategoryRepository.findByDifficulty(
-                difficulty
-            )
+            await CategoryRepository.findByDifficulty(difficulty)
                 .then((data) => {
                     questionId = String(data[0].questionId)
                     questionDifficulty = data[0].difficulty
@@ -71,15 +52,27 @@ async function getQuestionByDifficulty(req, res) {
             console.log('Question id retrieved: ' + questionId)
             const question = await QuestionRepository.findById(questionId)
             console.log('Question retrieved: ' + question.name)
-            return res.status(201).json({
+            return res.status(200).json({
                 id: question.id,
                 name: question.name,
                 content: question.content,
                 difficulty: questionDifficulty,
                 types: types[0],
             })
+        } else if (id) {
+            const question = await QuestionRepository.findById(id)
+            const category = await CategoryRepository.findByQuestionId(id)
+            return res.status(200).json({
+                id: question.id,
+                name: question.name,
+                content: question.content,
+                difficulty: category.difficulty,
+                types: category.types,
+            })
         } else {
-            return res.status(400).json({ message: `Difficulty is missing!` })
+            return res
+                .status(400)
+                .json({ message: `Difficulty/Question ID is missing!` })
         }
     } catch (err) {
         return res.status(500).json({
@@ -90,11 +83,11 @@ async function getQuestionByDifficulty(req, res) {
 
 async function deleteQuestionById(req, res) {
     try {
-        const { id } = req.body
+        const { id } = req.query
         if (id) {
             await QuestionRepository.deleteById(id)
             return res
-                .status(201)
+                .status(200)
                 .json({ message: `Question deleted succesfully` })
         } else {
             return res
@@ -108,9 +101,40 @@ async function deleteQuestionById(req, res) {
     }
 }
 
+async function updateQuestionById(req, res) {
+    try {
+        const { id, name, content, difficulty, types } = req.body
+        if (id && name && content) {
+            await QuestionRepository.updateQuestionNameContentById(name, content, id)
+        } else if (id && name) {
+            await QuestionRepository.updateQuestionNameById(name, id)
+        } else if (id && content) {
+            await QuestionRepository.updateQuestionContentById
+        } else {
+            if (!id || (!difficulty && !types && !name && !content)) {
+                return res.status(400).json({ message: 'Missing id or update contents!'})
+            }    
+        }
+
+        if (difficulty) {
+            await CategoryRepository.updateDifficultyByQuestionId(difficulty, id)
+        }
+
+        if (types) {
+            await CategoryRepository.updateTypesByQuestionId(types, id)
+        }
+
+        return res.status(200).json({message: 'Question updated succesfully'})
+    } catch (err) {
+        return res.status(500).json({
+            message: 'Database failure when retrieving the question! ' + err,
+        })
+    }
+}
+
 module.exports = {
     createQuestion,
-    getQuestionByDifficulty,
+    getQuestion,
     deleteQuestionById,
-    getQuestionById,
+    updateQuestionById
 }
