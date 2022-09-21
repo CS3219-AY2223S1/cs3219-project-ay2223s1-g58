@@ -39,7 +39,7 @@ Content-Type: application/json
     "password": "test"
 }
 
-### LOGOUT (Need to login to get the token from cookie)
+### LOGOUT (Need to login to get the access token from response object)
 POST http://localhost:8000/api/v1/user/logout
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2NjIzMDYzMzksImV4cCI6MTY2MjMwNzIzOX0.5r4boZMBQxnPlpCMrjl-v0FoR3gJwTKgWGRqa-SJKpQ
 
@@ -52,6 +52,15 @@ Cookie: jwt_refresh_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZS
 POST http://localhost:8000/api/v1/user/testToken
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2NjI1NjU5MzQsImV4cCI6MTY2MjU2NTk5NH0.UlW3Vw7RCkK_k-9Ky3WQA3pSLNXaBznSx-y32ChjHhg
 
+Content-Type: application/json
+
+{
+    "username": "test",
+    "password": "test"
+}
+
+### DELETE USER
+DELETE http://localhost:8000/api/v1/testDelete
 Content-Type: application/json
 
 {
