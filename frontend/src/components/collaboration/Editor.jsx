@@ -23,10 +23,10 @@ const indents = {
 }
 
 const languageExtensions = {
-  Python: python(),
-  Java: java(),
+  'Python': python(),
+  'Java': java(),
   'C++': cpp(),
-  JavaScript: javascript(),
+  'JavaScript': javascript(),
 }
 
 const sendCursorData = throttle((updatedEditor, docPath, uid) => {
@@ -34,7 +34,7 @@ const sendCursorData = throttle((updatedEditor, docPath, uid) => {
     from: updatedEditor.state.selection.main.anchor,
     to: updatedEditor.state.selection.main.head,
   })
-}, 100)
+}, 80)
 
 const Editor = () => {
   const { auth } = useAuth()

@@ -55,9 +55,9 @@ const getCursorExtension = (uid) => {
             create: () => {
               const dom = document.createElement('div')
               dom.style.borderColor = 'magenta'
-              dom.style.borderWidth = '2px'
-              dom.style.height = '20px'
-              const offset = { x: 0, y: -16.8 }
+              dom.style.borderWidth = '1px'
+              dom.style.height = '16px'
+              const offset = { x: 0, y: -16 }
               return { dom, offset }
             },
           }
