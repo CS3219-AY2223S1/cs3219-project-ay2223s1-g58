@@ -45,7 +45,6 @@ function App() {
                 <Route path="/room/:docID" element={<Collaboration questionText={veryLongText}/>} />
               </Route>
             </Route>
-
             {/* 404 */}
             <Route path="*" element={<PageNotFound />} />
           </Route>

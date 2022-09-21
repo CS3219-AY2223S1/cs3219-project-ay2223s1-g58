@@ -21,6 +21,22 @@ const QuestionRepository = {
             },
         })
     },
+    updateQuestionNameById: function(name, id) {
+        return db.Question.update({
+            name: name
+        }, {where: {id: id}})
+    },
+    updateQuestionContentById: function(content, id) {
+        return db.Question.update({
+            content: content
+        }, {where: {id: id}})
+    },
+    updateQuestionNameContentById: function(name, content, id) {
+        return db.Question.update({
+            name: name,
+            content: content
+        }, {where: {id: id}})
+    }
 }
 
 module.exports = QuestionRepository

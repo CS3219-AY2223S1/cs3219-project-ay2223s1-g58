@@ -4,32 +4,37 @@ const cors = require('cors')
 const app = express()
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
-app.use(cors()) // config cors so that front-end can use
-app.options('*', cors())
+app.use(
+    cors({
+        origin: 'http://localhost:3000',
+        credentials: true,
+    })
+) // config cors so that front-end can use
 
 const {
     createQuestion,
-    getQuestionByDifficulty,
+    getQuestion,
     deleteQuestionById,
-    getQuestionById,
+    updateQuestionById
 } = require('./controller/question-controller')
 const router = express.Router()
 
 // Controller will contain all the User-defined Routes
-// CHECK SERVER ALIVE
-router.get('/', (_, res) => {
-    res.status(200).send('Hello World from question-service')
+
+router.get('/status', (_, res) => {
+    res.status(200).send({ message: 'Hello World from question-service' })
 })
 
-router.post('/id', getQuestionById)
-router.post('/difficulty', getQuestionByDifficulty)
+router.get('', getQuestion)
 router.post('/', createQuestion)
-router.post('/delete', deleteQuestionById)
+router.put('/', updateQuestionById)
+router.delete('', deleteQuestionById)
 
-// CHECK SERVER ALIVE
 app.use('/api/v1/question', router).all((_, res) => {
     res.setHeader('content-type', 'application/json')
     res.setHeader('Access-Control-Allow-Origin', '*')
 })
 
 app.listen(8500, () => console.log('question-service listening on port 8500'))
+
+module.exports = app
