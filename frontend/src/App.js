@@ -10,6 +10,16 @@ import Profile from './pages/Profile'
 import PersistLogin from './components/PersistLogin'
 import Match from './pages/Match'
 import Room from './pages/Room'
+import MatchTest from './pages/MatchTest'
+import Collaboration from './pages/Collaboration'
+
+
+// Text to simulate question. This should be provided 
+// by the Question Service once it is ready. 
+let veryLongText = "Hello World "
+for (let i = 0; i < 1000; i++) {
+  veryLongText += "Hello World "
+}
 
 function App() {
   return (
@@ -31,6 +41,8 @@ function App() {
                 <Route path="/userTokenTest" element={<UserTokenTest />} />
                 <Route path="/match" element={<Match />} />
                 <Route path="/room" element={<Room />} />
+                <Route path="/match/test" element={<MatchTest />} />
+                <Route path="/room/:docID" element={<Collaboration questionText={veryLongText}/>} />
               </Route>
             </Route>
             {/* 404 */}

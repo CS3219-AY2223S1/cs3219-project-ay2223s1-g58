@@ -11,6 +11,7 @@ export function NavLinks() {
     ['Match', '/match'],
     ['Learning History', '/learning'],
     ['Question Bank', '/questions'],
+    ['Match Test', '/match/test'],
   ].map(([label, href], index) => (
     <Link
       key={label}
