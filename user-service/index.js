@@ -37,7 +37,7 @@ let redisClient
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: `http://localhost:${process.env.PORT || 3000}`,
     credentials: true
 }))
 app.use(cookieParser())
