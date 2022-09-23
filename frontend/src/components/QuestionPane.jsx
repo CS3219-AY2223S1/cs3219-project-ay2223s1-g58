@@ -11,16 +11,23 @@ const difficultyColorMap = new Map([
 ])
 
 const newTheme = {
-    p: props => {
-      const { children } = props;
-      return (
-        <Text mb={1} fontSize={'16px'}>
-          {children}
-        </Text>
-      );
-    },
-  };
+  p: props => {
+    const { children } = props;
+    return (
+      <Text className='text-sm'>
+        {children}
+      </Text>
+    );
+  },
+};
 
+  // Prettify the question text
+const parse = (text) => {
+  if (text.startsWith('## Description')) {
+    text = text.replace('## Description', '')
+  }
+  return text
+}
 
 const QuestionPane = ({ id }) => {
     const {
@@ -34,17 +41,21 @@ const QuestionPane = ({ id }) => {
         <>
             { !loading ?
             (
-                <Box borderWidth='1px' borderRadius='lg'>
-                    <VStack h = '100%'>
-                        <HStack spacing ='36px'>
-                            <Heading mb='6px' size='lg' fontWeight='semibold' color='gray 500'>{data.name}</Heading> 
-                            <Badge borderRadius='full' px='2' colorScheme={difficultyColor} >
+                <Box className='border rounded-lg'>
+                    <VStack h='100vh'>
+                        <HStack spacing='24px'>
+                            <Heading size='lg' fontWeight='semibold' color='gray 500'>
+                              {data.name}
+                            </Heading> 
+                            <Badge borderRadius='full' px='2' colorScheme={difficultyColor}>
                                 {data.difficulty}
                             </Badge>
                         </HStack>
+
                         <Divider orientation='horizontal' />
-                        <div className="mx-2 my-2 h-85v overflow-y-auto border-x-2 border-y-2">
-                            <ReactMarkdown components={ChakraUIRenderer(newTheme)} children={data.content} skipHtml/>;
+
+                        <div className="mx-2 px-2 max-h-full overflow-y-auto">
+                            <ReactMarkdown components={ChakraUIRenderer(newTheme)} children={parse(data.content)} skipHtml/>;
                         </div>
                     </VStack>
                 </Box>

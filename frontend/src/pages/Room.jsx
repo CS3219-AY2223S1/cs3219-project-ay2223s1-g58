@@ -1,4 +1,3 @@
-import useAuth from '../hooks/useAuth'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from '../api/axios'
 import { useEffect, useState } from 'react'
@@ -9,7 +8,6 @@ import { Button } from '../components/Button'
 
 const Room = () => {
   const navigate = useNavigate()
-  const { auth } = useAuth()
   const { roomId } = useParams()
   const [questionId, setQuestionId] = useState()
 
@@ -32,8 +30,6 @@ const Room = () => {
 
   return (
     <>
-      <h3 className="bg-red-400">Currently logged in: {auth.username}</h3>
-
       <div className="grid h-screen grid-cols-2 gap-4">
         <QuestionPane id={questionId} />
 
