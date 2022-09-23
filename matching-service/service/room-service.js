@@ -1,5 +1,5 @@
 const RoomRepository = require("../repository/room-repository");
-const { sendMessageToTwo } = require("../utils/socket-io");
+const { sendMessageToBoth } = require("../utils/socket-io");
 const { EVENT_EMIT } = require("../const/constants");
 
 const RoomService = {
@@ -14,7 +14,7 @@ const RoomService = {
     if (socketIds.length !== 2) {
       throw new Error("Invalid roomId");
     }
-    sendMessageToTwo(socketIds[0], socketIds[1], EVENT_EMIT.ROOM_END, {
+    sendMessageToBoth(socketIds[0], socketIds[1], EVENT_EMIT.ROOM_END, {
       status: EVENT_EMIT.ROOM_END,
       room: roomId,
     });

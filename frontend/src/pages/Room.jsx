@@ -24,6 +24,12 @@ const Room = () => {
     }
   }
 
+  const endSession = async () => {
+    await axios.delete(`${URL_MATCHING_ROOM}/${roomId}`).catch(console.log)
+    alert('End session! Going to Home...')
+    navigate('/')
+  }
+
   if (!questionId) {
     return <h2>Retrieving room...</h2>
   }
@@ -36,14 +42,7 @@ const Room = () => {
         <div className="flex flex-col justify-start">
           <Editor roomId={roomId} />
           <div className="flex flex-col items-center justify-start">
-            <Button
-              onClick={() => {
-                alert('clicked End session! Going to Home...')
-                navigate('/')
-              }}
-            >
-              End session
-            </Button>
+            <Button onClick={endSession}>End session</Button>
           </div>
         </div>
       </div>
