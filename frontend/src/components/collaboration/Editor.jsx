@@ -10,7 +10,6 @@ import { python } from '@codemirror/lang-python'
 import { javascript } from '@codemirror/lang-javascript'
 import { java } from '@codemirror/lang-java'
 import { cpp } from '@codemirror/lang-cpp'
-import throttle from 'lodash.throttle'
 import getCursorExtension from './cursorExtension'
 import getSelectionExtension from './selectionExtension'
 import CursorListener from './cursorListener'
@@ -28,13 +27,6 @@ const languageExtensions = {
   'JavaScript': javascript(),
 }
 
-const sendCursorData = throttle((updatedEditor, docPath, uid) => {
-  db.ref(`${docPath}/users/${uid}/cursor`).set({
-    from: updatedEditor.state.selection.main.anchor,
-    to: updatedEditor.state.selection.main.head,
-  })
-}, 80)
-
 const Editor = ({ roomId }) => {
   const { auth } = useAuth()
   const editorRef = useRef(null)
@@ -46,6 +38,23 @@ const Editor = ({ roomId }) => {
   const uid = auth.username
 
   useEffect(() => {
+    /** Timer ID returned by setTimeout, used for sending cursor data */
+    let timerId = null
+    const MIN_DELAY = 1, MAX_DELAY = 100 // Delay duration in milisec to send cursor data
+    let lastSend = 0 // Timestamp of last cursor update
+
+    // Delay to send cursor should be in the range [MIN_DELAY, MAX_DELAY]
+    const getDelay = () => {
+      const elapsed = Date.now() - lastSend
+      if (elapsed >= MAX_DELAY) {
+        return MIN_DELAY // waited too long already, send ASAP
+      }
+      if (MAX_DELAY - elapsed < MIN_DELAY) {
+        return MIN_DELAY // not deadline yet, but we still need to wait at least MIN_DELAY
+      }
+      return MAX_DELAY - elapsed // keep waiting the rest of the duration until the deadline
+    }
+
     const parentNode = editorRef.current
     const codeMirrorInstance = new EditorView({
       parent: editorRef.current,
@@ -55,8 +64,8 @@ const Editor = ({ roomId }) => {
         indentUnit.of(indents[tabSize]),
         languageExtensions[lang], // extension for language
         EditorView.lineWrapping, // extension to wrap line
+        // extension to customize editor style
         EditorView.theme({
-          // extension to change editor style
           '&': {
             height: '85vh',
             borderColor: 'd3d3d3',
@@ -67,10 +76,19 @@ const Editor = ({ roomId }) => {
             borderWidth: '1px',
           },
         }),
+        // extension to upload my own cursor data
         EditorView.updateListener.of((update) => {
           if (!update.selectionSet && !update.docChanged) return
-          sendCursorData(update, docPath, uid) // send cursor data to Firebase
+          clearTimeout(timerId)
+          timerId = setTimeout(() => { // send cursor data to Firebase
+            lastSend = Date.now()
+            db.ref(`${docPath}/users/${uid}/cursor`).set({
+              from: update.state.selection.main.anchor,
+              to: update.state.selection.main.head,
+            })
+          }, getDelay())
         }),
+        // extensions to manage the other person's cursor and selection
         getCursorExtension(uid),
         getSelectionExtension(uid),
       ],
@@ -116,6 +134,7 @@ const Editor = ({ roomId }) => {
             })}
           </Select>
 
+          {/* TODO tab selection: default value is 4, but displaying 2 */}
           <Select onChange={(event) => setTabSize(event.target.value)}>
             {Object.keys(indents).map((indent, i) => {
               return (
