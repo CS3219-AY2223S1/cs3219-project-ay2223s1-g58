@@ -1,6 +1,6 @@
 import { Text, Box, Badge, HStack, VStack, Heading, Divider } from '@chakra-ui/react'
 import { AuthLayout } from '../components/AuthLayout';
-import useFetchQuestionByDifficulty from '../hooks/useFetchQuestionByDifficulty';
+import useFetchQuestionById from '../hooks/useFetchQuestionById';
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
 import ReactMarkdown from 'react-markdown'
 
@@ -22,11 +22,11 @@ const newTheme = {
   };
 
 
-const QuestionPane = (difficulty) => {
+const QuestionPane = ({ id }) => {
     const {
         data,
         loading,
-      } = useFetchQuestionByDifficulty(difficulty);
+      } = useFetchQuestionById(id);
     
     const difficultyColor = difficultyColorMap.get(data.difficulty)
 
@@ -43,12 +43,12 @@ const QuestionPane = (difficulty) => {
                             </Badge>
                         </HStack>
                         <Divider orientation='horizontal' />
-                        <div className="mx-3 my-3 overflow-y-auto">
+                        <div className="mx-2 my-2 h-85v overflow-y-auto border-x-2 border-y-2">
                             <ReactMarkdown components={ChakraUIRenderer(newTheme)} children={data.content} skipHtml/>;
                         </div>
                     </VStack>
                 </Box>
-            ) : <AuthLayout title="Unable to retrieve question">
+            ) : <AuthLayout title="Retrieving question...">
             <div className="text-xl text-center">
             </div>
           </AuthLayout>}

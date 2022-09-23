@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
 import { db } from '../../api/firebase'
 import useAuth from '../../hooks/useAuth'
 import Firepad from './lib/firepad'
@@ -36,15 +35,14 @@ const sendCursorData = throttle((updatedEditor, docPath, uid) => {
   })
 }, 80)
 
-const Editor = () => {
+const Editor = ({ roomId }) => {
   const { auth } = useAuth()
-  const { docID } = useParams()
   const editorRef = useRef(null)
   const [ready, setReady] = useState(false)
   const [tabSize, setTabSize] = useState(4)
   const [lang, setLang] = useState('Python')
 
-  const docPath = 'docs/' + docID
+  const docPath = 'docs/' + roomId
   const uid = auth.username
 
   useEffect(() => {

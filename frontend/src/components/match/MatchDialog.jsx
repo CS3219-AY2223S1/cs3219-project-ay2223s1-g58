@@ -34,7 +34,7 @@ const MatchDialog = () => {
     newSocket.on(EVENT_LISTEN.MATCHING, () => console.log('matching'))
     newSocket.on(EVENT_LISTEN.MATCH_SUCCESS, (payload) => {
       console.log('match success')
-      navigate(`/room?roomId=${payload.room}`)
+      navigate(`/room/${payload.room}`)
     })
     newSocket.on(EVENT_LISTEN.MATCH_FAIL, () => {
       console.log('match error')
