@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import axios from '../api/axios'
 import { useEffect, useState } from 'react'
 import { URL_MATCHING_ROOM, STATUS_CODE_SUCCESS } from '../constants'
+import { useToast } from '@chakra-ui/react'
 import QuestionPane from '../components/QuestionPane'
 import Editor from '../components/collaboration/Editor'
 import { Button } from '../components/Button'
@@ -10,6 +11,7 @@ const Room = () => {
   const navigate = useNavigate()
   const { roomId } = useParams()
   const [questionId, setQuestionId] = useState()
+  const toast = useToast()
 
   useEffect(() => {
     getQuestionId()
@@ -25,8 +27,14 @@ const Room = () => {
   }
 
   const endSession = async () => {
+    toast({
+      title: 'Session ended!',
+      description: "Going to Home...",
+      status: 'success',
+      duration: 9000,
+      isClosable: true,
+    })
     await axios.delete(`${URL_MATCHING_ROOM}/${roomId}`).catch(console.log)
-    alert('End session! Going to Home...')
     navigate('/')
   }
 
