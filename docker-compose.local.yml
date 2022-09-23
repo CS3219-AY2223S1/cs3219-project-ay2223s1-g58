@@ -22,11 +22,15 @@ services:
       - redis
     env_file:
       - .env.local
+    environment:
+      - PORT=80
   matching-service:
     build:
       context: ./matching-service
     ports:
       - '8001:8001'
+    environment:
+      - PORT=80
   frontend:
     build:
       context: ./frontend
