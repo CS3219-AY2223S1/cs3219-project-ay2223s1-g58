@@ -38,15 +38,15 @@ const MatchService = {
   deleteMatch: function (socketId) {
     return MatchRepository.delete(socketId);
   },
-  matchSuccess: async function (sockerIdWaiting, socketIdNew, difficulty) {
-    await MatchService.deleteMatch(sockerIdWaiting);
+  matchSuccess: async function (socketIdWaiting, socketIdNew, difficulty) {
+    await MatchService.deleteMatch(socketIdWaiting);
     console.log(EVENT_EMIT.MATCH_SUCCESS);
-    const roomId = `${sockerIdWaiting}|${socketIdNew}`;
+    const roomId = `${socketIdWaiting}|${socketIdNew}`;
     const response = await axios.get(URL_QUESTION_SERVICE, {
       params: { difficulty: difficulty },
     });
     await RoomService.createRoom(roomId, response.data.id);
-    sendMessageToBoth(sockerIdWaiting, socketIdNew, EVENT_EMIT.MATCH_SUCCESS, {
+    sendMessageToBoth(socketIdWaiting, socketIdNew, EVENT_EMIT.MATCH_SUCCESS, {
       status: EVENT_EMIT.MATCH_SUCCESS,
       room: roomId,
     });
