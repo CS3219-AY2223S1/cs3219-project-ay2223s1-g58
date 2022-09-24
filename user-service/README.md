@@ -26,6 +26,8 @@ OR
    1. `docker-compose -f docker-compose.dev.yml up --build`
 1. Start the express server:
    1. `npm run dev`
+1. Shut down database services:
+   1. `docker-compose -f docker-compose.yml stop`
 
 OR
 

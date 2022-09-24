@@ -14,7 +14,8 @@ import {
     login,
     logout,
     token,
-    updateUser
+    updateUser,
+    deleteUserViaPassword
 } from "./controller/user-controller.js"
 import { authenticateToken } from './middleware.js'
 import logger from './logger.js'
@@ -75,6 +76,9 @@ router.post("/testToken", authenticateToken, (req, res) => {
     console.log(req)
     res.status(200).send("Hello World from user-service token test")
 })
+
+// TEST DELETE USER
+router.delete("/testDelete", deleteUserViaPassword)
 
 // Error handling
 app.use((err, _, res, next) => {
