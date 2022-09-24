@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { db } from '../../api/firebase'
 import useAuth from '../../hooks/useAuth'
+import useTabSize from '../../hooks/useTabSize'
+import useLanguage from '../../hooks/useLanguage'
 import Firepad from './lib/firepad'
 import { basicSetup } from 'codemirror'
 import { EditorView, keymap } from '@codemirror/view'
@@ -28,13 +30,14 @@ const languageExtensions = {
 }
 
 const Editor = ({ roomId }) => {
+  const docPath = 'docs/' + roomId
+  
   const { auth } = useAuth()
   const editorRef = useRef(null)
   const [ready, setReady] = useState(false)
-  const [tabSize, setTabSize] = useState(4)
-  const [lang, setLang] = useState('Python')
-
-  const docPath = 'docs/' + roomId
+  const [tabSize, setTabSize] = useTabSize(docPath)
+  const [lang, setLang] = useLanguage(docPath)
+  
   const uid = auth.username
 
   useEffect(() => {
@@ -116,7 +119,7 @@ const Editor = ({ roomId }) => {
       db.ref(`${docPath}/users/${uid}`).set(null)
       parentNode.removeChild(parentNode.children[0])
     }
-  }, [tabSize, lang, docPath, uid])
+  })
 
   return (
     <>
@@ -124,7 +127,7 @@ const Editor = ({ roomId }) => {
 
       {ready && (
         <div className="flex flex-row">
-          <Select onChange={(event) => setLang(event.target.value)}>
+          <Select value={lang} onChange={(event) => setLang(event.target.value)}>
             {Object.keys(languageExtensions).map((language, i) => {
               return (
                 <option key={i} value={language}>
@@ -134,8 +137,7 @@ const Editor = ({ roomId }) => {
             })}
           </Select>
 
-          {/* TODO tab selection: default value is 4, but displaying 2 */}
-          <Select onChange={(event) => setTabSize(event.target.value)}>
+          <Select value={tabSize} onChange={(event) => setTabSize(event.target.value)}>
             {Object.keys(indents).map((indent, i) => {
               return (
                 <option key={i} value={indent}>
