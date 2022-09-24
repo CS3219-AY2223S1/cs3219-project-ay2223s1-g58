@@ -31,11 +31,13 @@ const Room = () => {
       title: 'Session ended!',
       description: "Going to Home...",
       status: 'success',
-      duration: 9000,
+      duration: 4000,
       isClosable: true,
     })
     await axios.delete(`${URL_MATCHING_ROOM}/${roomId}`).catch(console.log)
-    navigate('/')
+    setTimeout(() => {
+      navigate('/')
+    }, 4000)
   }
 
   if (!questionId) {
