@@ -39,6 +39,7 @@ function ChevronUpIcon(props) {
 function MobileNavLink({ children, ...props }) {
   return (
     <Popover.Button
+      as={Link}
       className="block text-base leading-7 tracking-tight text-gray-700"
       {...props}
     >
@@ -103,15 +104,13 @@ export function Header() {
                           className="absolute inset-x-0 top-0 z-0 px-6 pt-32 pb-6 origin-top shadow-2xl rounded-b-2xl bg-gray-50 shadow-gray-900/20"
                         >
                           <div className="space-y-4">
-                            <MobileNavLink href="/">Home</MobileNavLink>
-                            <MobileNavLink href="/profile">
-                              Profile
-                            </MobileNavLink>
-                            <MobileNavLink href="#reviews">Match</MobileNavLink>
-                            <MobileNavLink href="#pricing">
+                            <MobileNavLink to="/">Home</MobileNavLink>
+                            <MobileNavLink to="/profile">Profile</MobileNavLink>
+                            <MobileNavLink to="/match">Match</MobileNavLink>
+                            <MobileNavLink to="/learning">
                               Learning History
                             </MobileNavLink>
-                            <MobileNavLink href="#faqs">
+                            <MobileNavLink to="/questions">
                               Question Bank
                             </MobileNavLink>
                           </div>
