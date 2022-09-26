@@ -18,9 +18,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             {/* public routes */}
+            <Route path="/login" element={<Login />} />
             <Route element={<PersistLogin />}>
               <Route path="/signup" element={<Signup />} />
-              <Route path="/login" element={<Login />} />
             </Route>
 
             {/* private routes */}
