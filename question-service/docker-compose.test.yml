@@ -37,7 +37,7 @@ services:
             postgres_db:
                 condition: service_healthy
         extra_hosts:
-            - "host.docker.internal:host-gateway"        
+            - 'host.docker.internal:host-gateway'
         environment:
             ENV: test
         links:

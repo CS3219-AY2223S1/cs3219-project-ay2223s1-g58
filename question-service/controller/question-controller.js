@@ -7,12 +7,10 @@ async function createQuestion(req, res) {
         if (name && content && difficulty) {
             difficulty.toLowerCase()
             const question = await QuestionRepository.create(name, content)
-            console.log('Question created succesfully with id: ' + question.id)
-            await CategoryRepository.create(question.id, difficulty, [type])
-            console.log('Category created succesfully for q_id: ' + question.id)
+            await CategoryRepository.create(question.id, difficulty, type)
             return res
                 .status(201)
-                .json({ message: `Create new question successfully!` })
+                .json({ message: 'Create new question successfully!' })
         } else {
             return res.status(400).json({
                 message:
@@ -26,54 +24,70 @@ async function createQuestion(req, res) {
     }
 }
 
+async function getNextQuestion(req, res) {
+    try {
+        var category, question
+        const { past_id, difficulty, types } = req.query
+        if (!types && !difficulty) {
+            return res
+                .status(400)
+                .json({ message: `The difficulty/types is missing!` })
+        } else if (types) {
+            category = await CategoryRepository.findNextQuestionOfSameTypes(
+                types,
+                past_id
+            )
+            question = await QuestionRepository.findById(category.questionId)
+        } else if (difficulty) {
+            category =
+                await CategoryRepository.findNextQuestionOfSameDifficulty(
+                    difficulty,
+                    past_id
+                )
+            question = await QuestionRepository.findById(category.questionId)
+        } else {
+            return res.status(400).json({ message: `Unexpected format` })
+        }
+        return res.status(200).json({
+            id: question.id,
+            name: question.name,
+            content: question.content,
+            difficulty: category.difficulty,
+            types: category.types,
+        })
+    } catch (err) {
+        return res.status(500).json({
+            message: 'Database failure when retrieving the question! ' + err,
+        })
+    }
+}
+
 async function getQuestion(req, res) {
     try {
-        // const { difficulty } = req.params
-        const { difficulty } = req.query
-        const { id } = req.query
-
+        const { difficulty, id, types } = req.query
+        var category, question
         if (difficulty) {
-            var questionId
-            var questionDifficulty
-            var types
-            await CategoryRepository.findByDifficulty(difficulty)
-                .then((data) => {
-                    questionId = String(data[0].questionId)
-                    questionDifficulty = data[0].difficulty
-                    types = data[0].types
-                })
-                .catch((err) => {
-                    return res.status(500).json({
-                        message:
-                            'Database failure when retrieving the category! ' +
-                            err,
-                    })
-                })
-            console.log('Question id retrieved: ' + questionId)
-            const question = await QuestionRepository.findById(questionId)
-            console.log('Question retrieved: ' + question.name)
-            return res.status(200).json({
-                id: question.id,
-                name: question.name,
-                content: question.content,
-                difficulty: questionDifficulty,
-                types: types[0],
-            })
+            category = await CategoryRepository.findByDifficulty(difficulty)
+            question = await QuestionRepository.findById(category.questionId)
+        } else if (types) {
+            category = await CategoryRepository.findByQuestionTypes(types)
+            question = await QuestionRepository.findById(category.questionId)
         } else if (id) {
-            const question = await QuestionRepository.findById(id)
-            const category = await CategoryRepository.findByQuestionId(id)
-            return res.status(200).json({
-                id: question.id,
-                name: question.name,
-                content: question.content,
-                difficulty: category.difficulty,
-                types: category.types,
-            })
+            question = await QuestionRepository.findById(id)
+            category = await CategoryRepository.findByQuestionId(id)
         } else {
             return res
                 .status(400)
                 .json({ message: `Difficulty/Question ID is missing!` })
         }
+
+        return res.status(200).json({
+            id: question.id,
+            name: question.name,
+            content: question.content,
+            difficulty: category.difficulty,
+            types: category.types,
+        })
     } catch (err) {
         return res.status(500).json({
             message: 'Database failure when retrieving the question! ' + err,
@@ -105,26 +119,35 @@ async function updateQuestionById(req, res) {
     try {
         const { id, name, content, difficulty, types } = req.body
         if (id && name && content) {
-            await QuestionRepository.updateQuestionNameContentById(name, content, id)
+            await QuestionRepository.updateQuestionNameContentById(
+                name,
+                content,
+                id
+            )
         } else if (id && name) {
             await QuestionRepository.updateQuestionNameById(name, id)
         } else if (id && content) {
             await QuestionRepository.updateQuestionContentById
         } else {
             if (!id || (!difficulty && !types && !name && !content)) {
-                return res.status(400).json({ message: 'Missing id or update contents!'})
-            }    
+                return res
+                    .status(400)
+                    .json({ message: 'Missing id or update contents!' })
+            }
         }
 
         if (difficulty) {
-            await CategoryRepository.updateDifficultyByQuestionId(difficulty, id)
+            await CategoryRepository.updateDifficultyByQuestionId(
+                difficulty,
+                id
+            )
         }
 
         if (types) {
             await CategoryRepository.updateTypesByQuestionId(types, id)
         }
 
-        return res.status(200).json({message: 'Question updated succesfully'})
+        return res.status(200).json({ message: 'Question updated succesfully' })
     } catch (err) {
         return res.status(500).json({
             message: 'Database failure when retrieving the question! ' + err,
@@ -136,5 +159,6 @@ module.exports = {
     createQuestion,
     getQuestion,
     deleteQuestionById,
-    updateQuestionById
+    updateQuestionById,
+    getNextQuestion,
 }

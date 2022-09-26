@@ -16,9 +16,17 @@ Content-Type: application/json
 ### GET QUESTION By difficulty
 GET http://localhost:8500/api/v1/question?difficulty=easy
 
+### GET QUESTION By types
+GET http://localhost:8500/api/v1/question?types=Array&types=Hash+Table
 
 ### GET QUESTION By id
 GET http://localhost:8500/api/v1/question?id=1
+
+### Get Next Question given a list of id by difficulty
+GET http://localhost:8500/api/v1/question/nextQuestion?past_id=1&difficulty=easy
+
+### Get Next Question given a list of id by types
+GET http://localhost:8500/api/v1/question/nextQuestion?past_id=1&past_id=4&types=String&types=Hash+Table
 
 ### UPDATE QUESTION
 PUT http://localhost:8500/api/v1/question
@@ -31,4 +39,4 @@ Content-Type: application/json
 }
 
 ### DELETE QUESTION By id
-DELETE http://localhost:8500/api/v1/question?id=2
+DELETE http://localhost:8500/api/v1/question?id=7
