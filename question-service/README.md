@@ -4,9 +4,8 @@
 
 1. Rename .env.sample to .env
 2. Install npm packages using `npm install`.
-3. Ensure postgresdb is available locally
-4. Run `npm run db:migrate`.
-5. Run Question Service using `npm run dev`.
+3. Ensure postgresdb is available locally.
+4. Run Question Service using `npm run dev`.
 
 ## Docker
 
