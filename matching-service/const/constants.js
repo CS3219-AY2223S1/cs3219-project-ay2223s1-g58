@@ -17,10 +17,14 @@ exports.DIFFICULTY = {
   HARD: "hard",
 };
 
+const questionServiceFallback =
+  process.env.ENV === "production" // production means using Docker
+    ? `http://${process.env.QUESTION_SERVICE_HOST}:8500`
+    : "http://localhost:8500";
+
 const URI_QUESTION_SERVICE =
-  process.env.URI_USER_SERVICE || "http://localhost:8500";
+  process.env.URI_QUESTION_SERVICE || questionServiceFallback;
+
 const PREFIX_QUESTION_SERVICE = "/api/v1/question";
 
-const URL_QUESTION_SERVICE = URI_QUESTION_SERVICE + PREFIX_QUESTION_SERVICE;
-
-exports.URL_QUESTION_DIFFICULTY = `${URL_QUESTION_SERVICE}/difficulty`;
+exports.URL_QUESTION_SERVICE = URI_QUESTION_SERVICE + PREFIX_QUESTION_SERVICE;

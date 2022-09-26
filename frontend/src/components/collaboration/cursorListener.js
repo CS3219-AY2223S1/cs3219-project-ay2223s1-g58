@@ -160,6 +160,7 @@ class CursorListener {
       return
     }
     this.deregistered = true
+    this.dbRef.off()
     this.onAddCallbacks = []
     this.onRemoveCallbacks = []
   }

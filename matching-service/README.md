@@ -3,7 +3,8 @@
 ## Usage
 
 1. Install npm packages using `npm install`.
-2. Run Matching Service using `npm run dev`.
+2. Set up SQLite database using `npm run db:migrate`.
+3. Run Matching Service using `npm run dev`.
 
 ## Docker
 
