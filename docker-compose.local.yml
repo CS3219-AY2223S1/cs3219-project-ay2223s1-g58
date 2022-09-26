@@ -63,7 +63,8 @@ services:
       postgres_db:
         condition: service_healthy
     environment:
-      ENV: production
+      - ENV=production
+      - PORT=80
     links:
       - postgres_db
     restart: on-failure
