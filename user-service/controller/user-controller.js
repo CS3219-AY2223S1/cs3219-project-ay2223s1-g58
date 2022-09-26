@@ -247,3 +247,29 @@ export async function token(req, res) {
     }
 }
 
+export async function deleteUserViaPassword(req, res) {
+    try {
+        const { username, password } = req.body
+        if (!(username && password)) {
+            return res.status(400).json({ message: "Username and/or Password are missing" })
+        }
+        const exist = await ormDoesUserExist(username)
+        if (!exist) {
+            return res.status(400).json({ message: "User does not exist" })
+        }
+        const user = await ormGetUser(username)
+        if (validatePassword(password, user.password)) {
+            const resp = await ormDeleteUser(username)
+            if (resp.err) {
+                logger.error(resp.err)
+                return res.status(400).json({ message: "Could not delete user" })
+            }
+            const msg = `Deleted user ${username} successfully`
+            return res.status(200).json({ message: msg })
+        }
+        return res.status(400).json({ message: `Username and/or Password are incorrect` })
+    } catch (err) {
+        logger.error(err)
+        return res.status(500).json({ message: "Test delete user failed" })
+    }
+}

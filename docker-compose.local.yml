@@ -5,10 +5,12 @@ services:
     image: mongo
     ports:
       - '27017:27017'
+
   redis:
     image: redis:alpine
     ports:
       - '6379:6379'
+
   user-service:
     build:
       context: ./user-service
@@ -24,6 +26,7 @@ services:
       - .env.local
     environment:
       - PORT=80
+
   matching-service:
     build:
       context: ./matching-service
@@ -31,6 +34,40 @@ services:
       - '8001:8001'
     environment:
       - PORT=80
+      - URI_QUESTION_SERVICE=http://question-service:8500
+
+  postgres_db:
+    image: postgres:latest
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      ENV: production
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres_db
+      POSTGRES_USER: postgres
+      POSTGRES_HOST: host.docker.internal
+      POSTGRES_PORT: 5432
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-q', '-d', 'postgres_db', '-U', 'postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  question-service:
+    build:
+      context: ./question-service
+    ports:
+      - '8500:8500'
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    environment:
+      ENV: production
+    links:
+      - postgres_db
+    restart: on-failure
+
   frontend:
     build:
       context: ./frontend
@@ -40,3 +77,4 @@ services:
     depends_on:
       - user-service
       - matching-service
+      - question-service
