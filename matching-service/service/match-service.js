@@ -42,10 +42,10 @@ const MatchService = {
     await MatchService.deleteMatch(socketIdWaiting);
     console.log(EVENT_EMIT.MATCH_SUCCESS);
     const roomId = `${socketIdWaiting}|${socketIdNew}`;
-    const response = await axios.get(URL_QUESTION_SERVICE, {
-      params: { difficulty: difficulty },
-    });
-    await RoomService.createRoom(roomId, response.data.id);
+    // const response = await axios.get(URL_QUESTION_SERVICE, {
+    //   params: { difficulty: difficulty },
+    // });
+    await RoomService.createRoom(roomId, "1"); // response.data.id);
     sendMessageToBoth(socketIdWaiting, socketIdNew, EVENT_EMIT.MATCH_SUCCESS, {
       status: EVENT_EMIT.MATCH_SUCCESS,
       room: roomId,

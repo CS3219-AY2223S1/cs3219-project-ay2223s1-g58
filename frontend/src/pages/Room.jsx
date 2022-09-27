@@ -11,17 +11,39 @@ import { Helmet } from 'react-helmet-async'
 import QuestionPane from '../components/QuestionPane'
 import Editor from '../components/collaboration/Editor'
 import { Button } from '../components/Button'
+import io from 'socket.io-client'
+import { URI_MATCHING_SERVICE, EVENT_EMIT, EVENT_LISTEN } from '../constants'
 
 const Room = () => {
   const navigate = useNavigate()
   const { roomId } = useParams()
   const [questionId, setQuestionId] = useState()
   const [isValid, setIsValid] = useState(true)
+  const [socket, setSocket] = useState()
   const toast = useToast()
 
   useEffect(() => {
     getQuestionId()
   })
+
+  useEffect(() => {
+    const newSocket = io(URI_MATCHING_SERVICE)
+    setSocket(newSocket)
+    newSocket.on(`${roomId}-${EVENT_LISTEN.ROOM_END}`, () => {
+      toast({
+        title: 'Session ended!',
+        description: 'Going to Home...',
+        status: 'success',
+        duration: 4000,
+        isClosable: true,
+      })
+      setTimeout(() => {
+        navigate('/')
+      }, 4000)
+    })
+
+    return () => newSocket.close()
+  }, [navigate, roomId, toast])
 
   const getQuestionId = async () => {
     const res = await axios.get(`${URL_MATCHING_ROOM}/${roomId}`).catch((e) => {
@@ -37,17 +59,7 @@ const Room = () => {
   }
 
   const endSession = async () => {
-    toast({
-      title: 'Session ended!',
-      description: 'Going to Home...',
-      status: 'success',
-      duration: 4000,
-      isClosable: true,
-    })
     await axios.delete(`${URL_MATCHING_ROOM}/${roomId}`).catch(console.log)
-    setTimeout(() => {
-      navigate('/')
-    }, 4000)
   }
 
   const getHelmet = () => {

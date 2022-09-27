@@ -21,5 +21,7 @@ exports.sendMessageToBoth = (firstSocket, secondSocket, event, message) =>
 exports.sendMessageToOne = (socket, event, message) =>
   io.to(socket).emit(event, message);
 
+exports.emit = (event, message) => io.emit(event, message);
+
 exports.isSocketActive = (socket) =>
   io.sockets.sockets.get(socket) !== undefined;
