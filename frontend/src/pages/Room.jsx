@@ -12,14 +12,13 @@ import QuestionPane from '../components/QuestionPane'
 import Editor from '../components/collaboration/Editor'
 import RoomEndDialog from '../components/room/RoomEndDialog'
 import io from 'socket.io-client'
-import { URI_MATCHING_SERVICE, EVENT_EMIT, EVENT_LISTEN } from '../constants'
+import { URI_MATCHING_SERVICE, EVENT_LISTEN } from '../constants'
 
 const Room = () => {
   const navigate = useNavigate()
   const { roomId } = useParams()
   const [questionId, setQuestionId] = useState()
   const [isValid, setIsValid] = useState(true)
-  const [socket, setSocket] = useState()
   const toast = useToast()
 
   useEffect(() => {
@@ -28,7 +27,6 @@ const Room = () => {
 
   useEffect(() => {
     const newSocket = io(URI_MATCHING_SERVICE)
-    setSocket(newSocket)
     newSocket.on(`${roomId}-${EVENT_LISTEN.ROOM_END}`, () => {
       toast({
         title: 'Session ended!',

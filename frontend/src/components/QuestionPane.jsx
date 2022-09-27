@@ -7,7 +7,6 @@ import {
   Heading,
   Divider,
 } from '@chakra-ui/react'
-import { AuthLayout } from '../components/AuthLayout'
 import useFetchQuestionById from '../hooks/useFetchQuestionById'
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer'
 import ReactMarkdown from 'react-markdown'
