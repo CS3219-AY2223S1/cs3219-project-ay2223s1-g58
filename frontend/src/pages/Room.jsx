@@ -1,7 +1,11 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from '../api/axios'
 import { useEffect, useState } from 'react'
-import { URL_MATCHING_ROOM, STATUS_CODE_SUCCESS, STATUS_CODE_BAD_REQUEST } from '../constants'
+import {
+  URL_MATCHING_ROOM,
+  STATUS_CODE_SUCCESS,
+  STATUS_CODE_BAD_REQUEST,
+} from '../constants'
 import { useToast } from '@chakra-ui/react'
 import { Helmet } from 'react-helmet-async'
 import QuestionPane from '../components/QuestionPane'
@@ -21,12 +25,14 @@ const Room = () => {
 
   const getQuestionId = async () => {
     const res = await axios.get(`${URL_MATCHING_ROOM}/${roomId}`).catch((e) => {
-      if (e.response.status === STATUS_CODE_BAD_REQUEST) { // Room not found
+      if (e.response.status === STATUS_CODE_BAD_REQUEST) {
+        // Room not found
         return setIsValid(false)
       }
     })
     if (res && res.status === STATUS_CODE_SUCCESS) {
       setQuestionId(res.data.data.questionId)
+      console.log(res.data.data.questionId)
     }
   }
 
@@ -54,41 +60,29 @@ const Room = () => {
     )
   }
 
-  if (!isValid) {
-    return (
-      <>
-        {getHelmet()}
-        <main className="flex h-full flex-col items-center justify-start">
-          <h1>Invalid Room... The session has ended.</h1>
-        </main>
-      </>
-    )
-  }
-
-  if (!questionId) {
-    return (
-      <>
-        {getHelmet()}
-        <main className="flex h-full flex-col items-center justify-start">
-          <h1>Retrieving room...</h1>
-        </main>
-      </>
-    )
-  }
-
   return (
     <>
       {getHelmet()}
-      <div className="grid h-screen grid-cols-2 gap-4">
-        <QuestionPane id={questionId} />
 
-        <div className="flex flex-col justify-start">
-          <Editor roomId={roomId} />
-          <div className="flex flex-col items-center justify-start">
-            <Button onClick={endSession}>End session</Button>
+      {!isValid || !questionId ? (
+        <main className="flex h-full flex-col items-center justify-start">
+          <h1>
+            {isValid
+              ? 'Retrieving room...'
+              : 'Invalid Room... The session has ended.'}
+          </h1>
+        </main>
+      ) : (
+        <div className="grid h-screen grid-cols-2 gap-4">
+          <QuestionPane id={questionId} />
+          <div className="flex flex-col justify-start">
+            <Editor roomId={roomId} />
+            <div className="flex flex-col items-center justify-start">
+              <Button onClick={endSession}>End session</Button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   )
 }
