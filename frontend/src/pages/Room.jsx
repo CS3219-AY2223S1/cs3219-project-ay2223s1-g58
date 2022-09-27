@@ -10,7 +10,7 @@ import { useToast } from '@chakra-ui/react'
 import { Helmet } from 'react-helmet-async'
 import QuestionPane from '../components/QuestionPane'
 import Editor from '../components/collaboration/Editor'
-import { Button } from '../components/Button'
+import RoomEndDialog from '../components/room/RoomEndDialog'
 import io from 'socket.io-client'
 import { URI_MATCHING_SERVICE, EVENT_EMIT, EVENT_LISTEN } from '../constants'
 
@@ -54,7 +54,6 @@ const Room = () => {
     })
     if (res && res.status === STATUS_CODE_SUCCESS) {
       setQuestionId(res.data.data.questionId)
-      console.log(res.data.data.questionId)
     }
   }
 
@@ -90,7 +89,7 @@ const Room = () => {
           <div className="flex flex-col justify-start">
             <Editor roomId={roomId} />
             <div className="flex flex-col items-center justify-start">
-              <Button onClick={endSession}>End session</Button>
+              <RoomEndDialog handleClick={endSession} />
             </div>
           </div>
         </div>
