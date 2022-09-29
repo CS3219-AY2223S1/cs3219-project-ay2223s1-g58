@@ -8,7 +8,7 @@ on:
   pull_request:
 
 jobs:
-  Test:
+  Test1:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -16,5 +16,19 @@ jobs:
         working-directory: question-service
     steps:
       - uses: actions/checkout@v2
+      - name: Run lint & test via docker-compose
+        run: docker-compose -f docker-compose.test.yml up --exit-code-from web --build
+  Test2:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: question-service
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+      - name: Build
+        run: dotnet build
       - name: Run lint & test via docker-compose
         run: docker-compose -f docker-compose.test.yml up --exit-code-from web --build
