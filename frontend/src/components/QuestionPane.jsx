@@ -36,25 +36,19 @@ const parse = (text) => {
 
 
 const QuestionPane = ({id}) => {
-  const [questionId, setQuestionId] = useState()
+  const [questionId, setQuestionId] = useState(id)
   const [questionData, setQuestionData] = useState([])
 
   useEffect(() => {
-    if (!questionId) {
-      setQuestionId(id)
-    } else {
-      const getQuestion = async () => {
-        await axios.get(URL_QUESTION_SERVICE + '?id=' + questionId)
-        .then((response) => {
-          var newData = response.data
-          setQuestionData(newData)
-        }).catch((e) => console.log(e))
-      }
-      getQuestion()
-    } 
-  }, [])
-
- 
+    const getQuestion = async () => {
+      await axios.get(URL_QUESTION_SERVICE + '?id=' + questionId)
+      .then((response) => {
+        var newData = response.data
+        setQuestionData(newData)
+      }).catch((e) => console.log(e))
+    }
+    getQuestion()
+  }, [questionId, questionData])
 
   const getNextQuestion = async () => {
     const {data: response} = await axios.get(URL_QUESTION_SERVICE + '?id=' + questionId).catch((e) => console.log(e))
