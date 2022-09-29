@@ -6,8 +6,6 @@ import { Button } from '../components/Button'
 import { URL_QUESTION_SERVICE } from '../constants'
 import axios from '../api/axios'
 import { useEffect, useState } from 'react'
-import { setDocument } from './collaboration/lib/document';
-
 
 const difficultyColorMap = new Map([
     ['easy', 'green'],
@@ -37,19 +35,24 @@ const parse = (text) => {
 
 
 
-const QuestionPane = ({questionId}) => {
+const QuestionPane = ({id}) => {
   const [questionId, setQuestionId] = useState()
   const [questionData, setQuestionData] = useState([])
 
   useEffect(() => {
-    if (questionData.length === 0) {
+    if (!questionId) {
+      setQuestionId(id)
+    } else {
       getQuestion()
     } 
-  }, [questionId])
+  }, [questionId, questionData])
 
   const getQuestion = async () => {
-    const {data: response} = await axios.get(URL_QUESTION_SERVICE + '?id=' + questionId).catch((e) => console.log(e))
-    setQuestionData(response.data)
+    await axios.get(URL_QUESTION_SERVICE + '?id=' + questionId)
+    .then((response) => {
+      var newData = response.data
+      setQuestionData(newData)
+    }).catch((e) => console.log(e))
   }
 
   const getNextQuestion = async () => {
@@ -61,7 +64,7 @@ const QuestionPane = ({questionId}) => {
     }).catch(console.log)
   }
 
-  if (!questionId || questionData.length === 0) {
+  if (typeof questionData === 'undefined' || questionData.length === 0) {
     return (
       <AuthLayout title="Retrieving question...">
             <div className="text-xl text-center">
