@@ -43,17 +43,18 @@ const QuestionPane = ({id}) => {
     if (!questionId) {
       setQuestionId(id)
     } else {
+      const getQuestion = async () => {
+        await axios.get(URL_QUESTION_SERVICE + '?id=' + questionId)
+        .then((response) => {
+          var newData = response.data
+          setQuestionData(newData)
+        }).catch((e) => console.log(e))
+      }
       getQuestion()
     } 
-  }, [questionId, questionData])
+  }, [])
 
-  const getQuestion = async () => {
-    await axios.get(URL_QUESTION_SERVICE + '?id=' + questionId)
-    .then((response) => {
-      var newData = response.data
-      setQuestionData(newData)
-    }).catch((e) => console.log(e))
-  }
+ 
 
   const getNextQuestion = async () => {
     const {data: response} = await axios.get(URL_QUESTION_SERVICE + '?id=' + questionId).catch((e) => console.log(e))
