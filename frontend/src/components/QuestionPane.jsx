@@ -1,12 +1,12 @@
 import { Text, Box, Badge, HStack, VStack, Heading, Divider } from '@chakra-ui/react'
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer'
 import { AuthLayout } from '../components/AuthLayout';
-import useFetchQuestionById from '../hooks/useFetchQuestionById';
 import ReactMarkdown from 'react-markdown'
 import { Button } from '../components/Button'
 import { URL_QUESTION_SERVICE } from '../constants'
 import axios from '../api/axios'
 import { useEffect, useState } from 'react'
+import { setDocument } from './collaboration/lib/document';
 
 
 const difficultyColorMap = new Map([
@@ -37,38 +37,31 @@ const parse = (text) => {
 
 
 
-const QuestionPane = ({id, setQuestionId}) => {
+const QuestionPane = ({questionId}) => {
+  const [questionId, setQuestionId] = useState()
   const [questionData, setQuestionData] = useState([])
 
   useEffect(() => {
-    if (questionData.length == 0) {
-      const fetchData = async () => {
-        try {
-          const {data: response} = await axios.get(URL_QUESTION_SERVICE + '?id=' + id).then((response) => {
-            setQuestionData(response.data)
-          })
-        } catch (error) {
-          //todo toast
-          console.error(error);
-        }
-      }
-      fetchData()
-    }
-  }, [questionData])
+    if (questionData.length === 0) {
+      getQuestion()
+    } 
+  }, [questionId])
 
+  const getQuestion = async () => {
+    const {data: response} = await axios.get(URL_QUESTION_SERVICE + '?id=' + questionId).catch((e) => console.log(e))
+    setQuestionData(response.data)
+  }
 
   const getNextQuestion = async () => {
-    const {data: response} = await axios.get(URL_QUESTION_SERVICE + '?id=' + questionData.id).catch(console.log)
+    const {data: response} = await axios.get(URL_QUESTION_SERVICE + '?id=' + questionId).catch((e) => console.log(e))
     await axios.get(URL_QUESTION_SERVICE + '/nextQuestion' 
     + '?difficulty=' + response.difficulty  + '&past_id=' + questionData.id).then((response) => {
       var newData = response.data
-      setQuestionData(newData)
-      console.log("After: " + newData.id)
       setQuestionId(newData.id)
     }).catch(console.log)
   }
 
-  if (questionData.length == 0) {
+  if (!questionId || questionData.length === 0) {
     return (
       <AuthLayout title="Retrieving question...">
             <div className="text-xl text-center">
@@ -76,6 +69,9 @@ const QuestionPane = ({id, setQuestionId}) => {
           </AuthLayout>
     )
   }
+
+  const difficultyColor = (difficulty) => difficultyColorMap.get(difficulty)
+
 
   return (
       <>
@@ -87,7 +83,7 @@ const QuestionPane = ({id, setQuestionId}) => {
                           <Heading size='lg' fontWeight='semibold' color='gray 500'>
                             {questionData.name}
                           </Heading> 
-                          <Badge borderRadius='full' px='2' colorScheme={() => {difficultyColorMap.get(questionData.difficulty)}}>
+                          <Badge borderRadius='full' px='2' colorScheme={difficultyColor(questionData.difficulty)}>
                               {questionData.difficulty}
                           </Badge>
                           <Button onClick={getNextQuestion} variant="outline">Next Question</Button>
