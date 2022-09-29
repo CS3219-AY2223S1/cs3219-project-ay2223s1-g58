@@ -80,7 +80,7 @@ const Room = () => {
     <>
       {getHelmet()}
       <div className="grid h-screen grid-cols-2 gap-4">
-        <QuestionPane id={questionId} />
+        <QuestionPane id={questionId} setQuestionId = {setQuestionId} />
 
         <div className="flex flex-col justify-start">
           <Editor roomId={roomId} />
