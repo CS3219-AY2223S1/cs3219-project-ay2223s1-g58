@@ -67,7 +67,7 @@ describe('GET Next Question of same difficulty', function () {
 })
 
 describe('Delete a question', function () {
-    it('responds successfully for delete', async function () {
+    it('responds successfully for delete', function (done) {
         request(app)
             .delete('/api/v1/question?id=7')
             .set('Accept', 'application/json')
