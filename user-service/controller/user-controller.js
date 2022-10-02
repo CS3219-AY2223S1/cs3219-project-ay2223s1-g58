@@ -112,6 +112,10 @@ export async function createUser(req, res) {
         }
 
         const exist = await ormDoesUserExist(username)
+        if (exist?.err) {
+            logger.error(exist.err)
+            return res.status(500).json({ message: "Database failure when checking user existence" })
+        }
         if (exist) {
             return res.status(409).json({ message: "Username has been taken" })
         }
