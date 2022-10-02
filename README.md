@@ -10,7 +10,7 @@ Spin up all the services for local manual testing
 docker-compose -f docker-compose.local.yml up --build -d
 ```
 
-Visit the frontend at http://localhost:3000
+Visit the frontend at http://localhost:80
 
 To stop the services
 
