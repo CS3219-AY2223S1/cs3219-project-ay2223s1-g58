@@ -27,7 +27,7 @@ const newTheme = {
 // Prettify the question text
 // TODO: fix the root issue when storing questions in DB
 const parse = (text) => {
-  if (text.startsWith('## Description')) {
+  if (text?.startsWith('## Description')) {
     text = text.replace('## Description', '')
   }
   return text

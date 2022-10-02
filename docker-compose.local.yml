@@ -1,19 +1,19 @@
-version: '3.3'
+version: "3.3"
 
 services:
   mongo:
     image: mongo
     ports:
-      - '27017:27017'
+      - "27017:27017"
   redis:
     image: redis:alpine
     ports:
-      - '6379:6379'
+      - "6379:6379"
   user-service:
     build:
       context: ./user-service
     ports:
-      - '8000:8000'
+      - "8000:8000"
     links:
       - mongo
       - redis
@@ -22,52 +22,56 @@ services:
       - redis
     env_file:
       - .env.local
-  
+    environment:
+      - PORT=80
+
   matching-service:
     build:
       context: ./matching-service
     ports:
-      - '8001:8001'
+      - "8001:8001"
     environment:
-      URI_QUESTION_SERVICE: http://question-service:8500
-  
+      - PORT=80
+      - URI_QUESTION_SERVICE=http://question-service:8500
+
   postgres_db:
     image: postgres:latest
     restart: always
     ports:
-      - '5432:5432'
+      - "5432:5432"
     environment:
       ENV: production
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres_db
       POSTGRES_USER: postgres
-      POSTGRES_HOST: host.docker.internal
+      POSTGRES_HOST: postgres_db
       POSTGRES_PORT: 5432
-    healthcheck :
-      test: [ "CMD", "pg_isready", "-q", "-d", "postgres_db", "-U", "postgres" ]
-      interval : 5s
-      timeout : 5s
-      retries : 5
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "postgres_db", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
   question-service:
     build:
       context: ./question-service
     ports:
-        - '8500:8500'
-    depends_on: 
+      - "8500:8500"
+    depends_on:
       postgres_db:
         condition: service_healthy
     environment:
-      ENV: production
+      - ENV=production
+      - PORT=80
     links:
       - postgres_db
-    restart: on-failure    
+    restart: on-failure
 
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     ports:
-      - '3000:3000'
+      - "80:80"
     depends_on:
       - user-service
       - matching-service
