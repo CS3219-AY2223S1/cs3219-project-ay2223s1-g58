@@ -22,6 +22,8 @@ services:
       - redis
     env_file:
       - .env.local
+    environment:
+      - PORT=80
 
   matching-service:
     build:
@@ -29,7 +31,8 @@ services:
     ports:
       - "8001:8001"
     environment:
-      URI_QUESTION_SERVICE: http://question-service:8500
+      - PORT=80
+      - URI_QUESTION_SERVICE=http://question-service:8500
 
   postgres_db:
     image: postgres:latest
@@ -57,7 +60,8 @@ services:
       postgres_db:
         condition: service_healthy
     environment:
-      ENV: production
+      - ENV=production
+      - PORT=80
     links:
       - postgres_db
     restart: on-failure
@@ -65,9 +69,9 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "80:80"
     depends_on:
       - user-service
       - matching-service
