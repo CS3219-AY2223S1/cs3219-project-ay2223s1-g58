@@ -7,7 +7,6 @@ import {
   Heading,
   Divider,
 } from '@chakra-ui/react'
-import { AuthLayout } from '../components/AuthLayout'
 import useFetchQuestionById from '../hooks/useFetchQuestionById'
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer'
 import ReactMarkdown from 'react-markdown'
@@ -37,39 +36,42 @@ const parse = (text) => {
 const QuestionPane = ({ id }) => {
   const { data, loading } = useFetchQuestionById(id)
 
-  const difficultyColor = difficultyColorMap.get(data.difficulty)
+  const difficultyColor = (difficulty) => difficultyColorMap.get(difficulty)
 
   return (
     <>
-      {!loading ? (
-        <Box className="border rounded-lg">
-          <VStack h="100vh">
-            <HStack spacing="24px">
-              <Heading size="lg" fontWeight="semibold" color="gray 500">
-                {data.name}
-              </Heading>
-              <Badge borderRadius="full" px="2" colorScheme={difficultyColor}>
-                {data.difficulty}
-              </Badge>
-            </HStack>
+      <Box className="rounded-lg border">
+        <VStack h="100vh">
+          {loading || !data ? (
+            <div className="text-center text-xl">Retrieving Question</div>
+          ) : (
+            <>
+              <HStack spacing="24px">
+                <Heading size="lg" fontWeight="semibold" color="gray 500">
+                  {data.name}
+                </Heading>
+                <Badge
+                  borderRadius="full"
+                  px="2"
+                  colorScheme={difficultyColor(data.difficulty)}
+                >
+                  {data.difficulty}
+                </Badge>
+              </HStack>
 
-            <Divider orientation="horizontal" />
+              <Divider orientation="horizontal" />
 
-            <div className="max-h-full px-2 mx-2 overflow-y-auto">
-              <ReactMarkdown
-                components={ChakraUIRenderer(newTheme)}
-                children={parse(data.content)}
-                skipHtml
-              />
-              ;
-            </div>
-          </VStack>
-        </Box>
-      ) : (
-        <AuthLayout title="Retrieving question...">
-          <div className="text-xl text-center"></div>
-        </AuthLayout>
-      )}
+              <div className="mx-2 max-h-full overflow-y-auto px-2">
+                <ReactMarkdown
+                  components={ChakraUIRenderer(newTheme)}
+                  children={parse(data.content)}
+                  skipHtml
+                />
+              </div>
+            </>
+          )}
+        </VStack>
+      </Box>
     </>
   )
 }

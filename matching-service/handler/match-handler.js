@@ -36,6 +36,7 @@ exports.findMatch = async function (payload) {
     );
   } catch (e) {
     // TODO add custom error messages
+    console.error(e);
     console.log(EVENT_EMIT.MATCH_FAIL);
     socket.emit(EVENT_EMIT.MATCH_FAIL, {
       status: EVENT_EMIT.MATCH_FAIL,
