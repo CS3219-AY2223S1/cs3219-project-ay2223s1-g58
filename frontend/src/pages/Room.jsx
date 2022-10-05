@@ -1,12 +1,18 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from '../api/axios'
 import { useEffect, useState } from 'react'
-import { URL_MATCHING_ROOM, STATUS_CODE_SUCCESS, STATUS_CODE_BAD_REQUEST } from '../constants'
+import {
+  URL_MATCHING_ROOM,
+  STATUS_CODE_SUCCESS,
+  STATUS_CODE_BAD_REQUEST,
+} from '../constants'
 import { useToast } from '@chakra-ui/react'
 import { Helmet } from 'react-helmet-async'
 import QuestionPane from '../components/QuestionPane'
 import Editor from '../components/collaboration/Editor'
-import { Button } from '../components/Button'
+import RoomEndDialog from '../components/room/RoomEndDialog'
+import io from 'socket.io-client'
+import { URI_MATCHING_SERVICE, EVENT_LISTEN } from '../constants'
 
 const Room = () => {
   const navigate = useNavigate()
@@ -19,9 +25,28 @@ const Room = () => {
     getQuestionId()
   })
 
+  useEffect(() => {
+    const newSocket = io(URI_MATCHING_SERVICE)
+    newSocket.on(`${roomId}-${EVENT_LISTEN.ROOM_END}`, () => {
+      toast({
+        title: 'Session ended!',
+        description: 'Going to Home...',
+        status: 'success',
+        duration: 4000,
+        isClosable: true,
+      })
+      setTimeout(() => {
+        navigate('/')
+      }, 4000)
+    })
+
+    return () => newSocket.close()
+  }, [navigate, roomId, toast])
+
   const getQuestionId = async () => {
     const res = await axios.get(`${URL_MATCHING_ROOM}/${roomId}`).catch((e) => {
-      if (e.response.status === STATUS_CODE_BAD_REQUEST) { // Room not found
+      if (e.response.status === STATUS_CODE_BAD_REQUEST) {
+        // Room not found
         return setIsValid(false)
       }
     })
@@ -31,17 +56,7 @@ const Room = () => {
   }
 
   const endSession = async () => {
-    toast({
-      title: 'Session ended!',
-      description: 'Going to Home...',
-      status: 'success',
-      duration: 4000,
-      isClosable: true,
-    })
     await axios.delete(`${URL_MATCHING_ROOM}/${roomId}`).catch(console.log)
-    setTimeout(() => {
-      navigate('/')
-    }, 4000)
   }
 
   const getHelmet = () => {
@@ -54,41 +69,29 @@ const Room = () => {
     )
   }
 
-  if (!isValid) {
-    return (
-      <>
-        {getHelmet()}
-        <main className="flex h-full flex-col items-center justify-start">
-          <h1>Invalid Room... The session has ended.</h1>
-        </main>
-      </>
-    )
-  }
-
-  if (!questionId) {
-    return (
-      <>
-        {getHelmet()}
-        <main className="flex h-full flex-col items-center justify-start">
-          <h1>Retrieving room...</h1>
-        </main>
-      </>
-    )
-  }
-
   return (
     <>
       {getHelmet()}
-      <div className="grid h-screen grid-cols-2 gap-4">
-        <QuestionPane id={questionId} />
 
-        <div className="flex flex-col justify-start">
-          <Editor roomId={roomId} />
-          <div className="flex flex-col items-center justify-start">
-            <Button onClick={endSession}>End session</Button>
+      {!isValid || !questionId ? (
+        <main className="flex h-full flex-col items-center justify-start">
+          <h1>
+            {isValid
+              ? 'Retrieving room...'
+              : 'Invalid Room... The session has ended.'}
+          </h1>
+        </main>
+      ) : (
+        <div className="grid h-screen grid-cols-2 gap-4">
+          <QuestionPane id={questionId} />
+          <div className="flex flex-col justify-start">
+            <Editor roomId={roomId} />
+            <div className="flex flex-col items-center justify-start">
+              <RoomEndDialog handleClick={endSession} />
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   )
 }

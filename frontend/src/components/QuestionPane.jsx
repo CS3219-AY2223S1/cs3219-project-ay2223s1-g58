@@ -8,31 +8,26 @@ import axios from '../api/axios'
 import { useEffect, useState } from 'react'
 
 const difficultyColorMap = new Map([
-    ['easy', 'green'],
-    ['medium', 'orange'],
-    ['hard', 'red']
+  ['easy', 'green'],
+  ['medium', 'orange'],
+  ['hard', 'red'],
 ])
 
 const newTheme = {
-  p: props => {
-    const { children } = props;
-    return (
-      <Text className='text-sm'>
-        {children}
-      </Text>
-    );
+  p: (props) => {
+    const { children } = props
+    return <Text className="text-sm">{children}</Text>
   },
-};
+}
 
 // Prettify the question text
 // TODO: fix the root issue when storing questions in DB
 const parse = (text) => {
-  if (text.startsWith('## Description')) {
+  if (text?.startsWith('## Description')) {
     text = text.replace('## Description', '')
   }
   return text
 }
-
 
 
 const QuestionPane = ({id}) => {
@@ -75,7 +70,7 @@ const QuestionPane = ({id}) => {
       <>
           {
           (
-              <Box className='border rounded-lg'>
+              <Box className='rounded-lg border'>
                   <VStack h='100vh'>
                       <HStack spacing='30px'>
                           <Heading size='lg' fontWeight='semibold' color='gray 500'>
@@ -96,6 +91,7 @@ const QuestionPane = ({id}) => {
               </Box>
           )}
       </>
+
 
   )
 }
