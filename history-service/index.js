@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
-import { getHistory, addHistory } from "./handler/handler.js"
+import { getHistory, createHistory, updateHistory } from './handler/handler.js'
+import 'dotenv/config'
 
 const app = express()
 app.use(express.urlencoded({ extended: true }))
@@ -14,8 +15,9 @@ app.use(
 // app.options('*', cors())
 
 const router = express.Router()
-router.get('/:uid', getHistory)
-router.post('/:roomId', addHistory)
+router.get('/user/:uid', getHistory)
+router.post('/room/', createHistory)
+router.put('/room/:roomId', updateHistory)
 
 const URL_PREFIX = '/api/v1/history'
 app.use(URL_PREFIX, router).all((_, res) => {
@@ -23,7 +25,11 @@ app.use(URL_PREFIX, router).all((_, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
 })
 
-// Test server
-app.get('/', (req, res) => {
+// Test server alive
+app.get('/', (_, res) => {
   res.send('Hello World from history-service')
 })
+
+app.listen(8080, () => console.log('history-service listening on port 8080'))
+
+export { app }
