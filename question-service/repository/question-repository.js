@@ -52,6 +52,14 @@ const QuestionRepository = {
             limit: 1,
         })
     },
+    getAllQuestion: function () {
+        return db.Question.findAll(
+            {   
+                distinct: true,
+                include: [db.Category]
+            }
+        )
+    },
 }
 
 module.exports = QuestionRepository

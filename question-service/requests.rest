@@ -13,6 +13,9 @@ Content-Type: application/json
     "difficulty":"easy"
 }
 
+### GET ALL QUESTIONS
+GET http://localhost:8500/api/v1/question/allQuestions
+
 ### GET QUESTION By difficulty
 GET http://localhost:8500/api/v1/question?difficulty=easy
 

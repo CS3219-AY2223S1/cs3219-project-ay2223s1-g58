@@ -24,6 +24,20 @@ async function createQuestion(req, res) {
     }
 }
 
+async function getAllQuestions(req, res) {
+    try {
+        const questions = await QuestionRepository.getAllQuestion()
+        return res.status(200).json({
+            message: 'All questions retrieved!',
+            questions: questions
+        })
+    } catch (err) {
+        return res.status(500).json({
+            message: 'Database failure when retriving all questions! ' + err,
+        })
+    }
+}
+
 async function getNextQuestion(req, res) {
     try {
         var category, question
@@ -157,6 +171,7 @@ async function updateQuestionById(req, res) {
 
 module.exports = {
     createQuestion,
+    getAllQuestions,
     getQuestion,
     deleteQuestionById,
     updateQuestionById,
