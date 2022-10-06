@@ -8,14 +8,24 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      roomId: {
+      room_id: {
         type: Sequelize.STRING,
         unique: true,
         allowNull: false,
       },
-      questionId: {
+      question_id: {
         type: Sequelize.NUMBER,
         allowNull: false,
+      },
+      user_id_1: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      user_id_2: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
       },
       createdAt: {
         allowNull: false,

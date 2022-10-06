@@ -19,8 +19,8 @@ const MatchRepository = {
       },
     });
   },
-  create: function (socketId, difficulty) {
-    return db.Match.create({ socketId: socketId, difficulty });
+  create: function (socketId, difficulty, userId) {
+    return db.Match.create({ socketId, difficulty, userId });
   },
   delete: function (socketId) {
     return db.Match.destroy({

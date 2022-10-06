@@ -16,6 +16,11 @@ module.exports = {
       difficulty: {
         type: Sequelize.STRING,
       },
+      user_id: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

@@ -13,6 +13,7 @@ import Editor from '../components/collaboration/Editor'
 import RoomEndDialog from '../components/room/RoomEndDialog'
 import io from 'socket.io-client'
 import { URI_MATCHING_SERVICE, EVENT_LISTEN } from '../constants'
+import useAuth from '../hooks/useAuth'
 
 const Room = () => {
   const navigate = useNavigate()
@@ -20,13 +21,18 @@ const Room = () => {
   const [questionId, setQuestionId] = useState()
   const [isValid, setIsValid] = useState(true)
   const toast = useToast()
+  const auth = useAuth()
 
   useEffect(() => {
     getQuestionId()
   })
 
   useEffect(() => {
-    const newSocket = io(URI_MATCHING_SERVICE)
+    const newSocket = io(URI_MATCHING_SERVICE, {
+      auth: {
+        token: auth.accessToken,
+      },
+    })
     newSocket.on(`${roomId}-${EVENT_LISTEN.ROOM_END}`, () => {
       toast({
         title: 'Session ended!',
@@ -41,7 +47,7 @@ const Room = () => {
     })
 
     return () => newSocket.close()
-  }, [navigate, roomId, toast])
+  }, [auth.accessToken, navigate, roomId, toast])
 
   const getQuestionId = async () => {
     const res = await axios.get(`${URL_MATCHING_ROOM}/${roomId}`).catch((e) => {
