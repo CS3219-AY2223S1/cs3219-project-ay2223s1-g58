@@ -1,12 +1,11 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import axios from '../api/axios'
 import { useEffect, useState } from 'react'
 import {
   URL_MATCHING_ROOM,
   STATUS_CODE_SUCCESS,
   STATUS_CODE_BAD_REQUEST,
 } from '../constants'
-import { useToast } from '@chakra-ui/react'
+import { Button, useToast, Stack, Text } from '@chakra-ui/react'
 import { Helmet } from 'react-helmet-async'
 import QuestionPane from '../components/QuestionPane'
 import Editor from '../components/collaboration/Editor'
@@ -14,6 +13,7 @@ import RoomEndDialog from '../components/room/RoomEndDialog'
 import io from 'socket.io-client'
 import { URI_MATCHING_SERVICE, EVENT_LISTEN } from '../constants'
 import useAuth from '../hooks/useAuth'
+import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
 const Room = () => {
   const navigate = useNavigate()
@@ -22,6 +22,7 @@ const Room = () => {
   const [isValid, setIsValid] = useState(true)
   const toast = useToast()
   const auth = useAuth()
+  const axiosPrivate = useAxiosPrivate()
 
   useEffect(() => {
     getQuestionId()
@@ -50,19 +51,23 @@ const Room = () => {
   }, [auth.accessToken, navigate, roomId, toast])
 
   const getQuestionId = async () => {
-    const res = await axios.get(`${URL_MATCHING_ROOM}/${roomId}`).catch((e) => {
-      if (e.response.status === STATUS_CODE_BAD_REQUEST) {
-        // Room not found
-        return setIsValid(false)
-      }
-    })
+    const res = await axiosPrivate
+      .get(`${URL_MATCHING_ROOM}/${roomId}`)
+      .catch((e) => {
+        if (e.response.status === STATUS_CODE_BAD_REQUEST) {
+          // Room not found
+          return setIsValid(false)
+        }
+      })
     if (res && res.status === STATUS_CODE_SUCCESS) {
       setQuestionId(res.data.data.questionId)
     }
   }
 
   const endSession = async () => {
-    await axios.delete(`${URL_MATCHING_ROOM}/${roomId}`).catch(console.log)
+    await axiosPrivate
+      .delete(`${URL_MATCHING_ROOM}/${roomId}`)
+      .catch(console.log)
   }
 
   const getHelmet = () => {
@@ -82,9 +87,21 @@ const Room = () => {
       {!isValid || !questionId ? (
         <main className="flex h-full flex-col items-center justify-start">
           <h1>
-            {isValid
-              ? 'Retrieving room...'
-              : 'Invalid Room... The session has ended.'}
+            {isValid ? (
+              'Retrieving room...'
+            ) : (
+              <>
+                <Stack spacing={10} textAlign="center">
+                  <Text fontSize="2xl">Invalid Room</Text>
+                  <Text>
+                    The session has ended or you are not a valid participant.
+                  </Text>
+                  <Button as="a" href="/">
+                    Return Home
+                  </Button>
+                </Stack>
+              </>
+            )}
           </h1>
         </main>
       ) : (
