@@ -10,13 +10,11 @@ export async function getHistory(req, res) {
     if (resp.err) {
       const msg = `Could not get history for user ${uid}`
       console.log(`${msg}: ${resp.err}`)
-      return res
-        .status(400)
-        .json({ message: msg })
+      return res.status(400).json({ message: msg })
     }
     return res.status(200).json({
       message: 'Get history successfully',
-      data: resp,   // TODO check resp structure
+      data: resp,
     })
   } catch (err) {
     console.log(err)
@@ -28,7 +26,7 @@ export async function createHistory(req, res) {
   try {
     const { roomId } = req.body
     if (!roomId) {
-      return res.status(400).json({ message: 'roomId is missing'})
+      return res.status(400).json({ message: 'roomId is missing' })
     }
     const resp = await HistoryService.createRoomHistory(roomId)
     if (resp?.err) {
