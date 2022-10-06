@@ -1,0 +1,59 @@
+### TEST SERVER ALIVE
+GET http://localhost:8080/
+
+### CREATE ROOM HISTORY
+### expect: Success if roomId is not missing
+POST http://localhost:8080/api/v1/history/room
+Content-Type: application/json
+
+{
+    "roomId": "room1"
+}
+
+### CREATE ANOTHER ROOM
+POST http://localhost:8080/api/v1/history/room
+Content-Type: application/json
+
+{
+    "roomId": "room2"
+}
+
+### GET HISTORY OF USER qwe
+### expect: array of qwe's rooms
+GET http://localhost:8080/api/v1/history/user/qwe
+
+### GET HISTORY OF USER asd
+GET http://localhost:8080/api/v1/history/user/asd
+
+### GET HISTORY OF USER zxc
+GET http://localhost:8080/api/v1/history/user/zxc
+
+
+### UPDATE ROOM HISTORY room1 (ADD COMPLETED QUESTIONS)
+PUT http://localhost:8080/api/v1/history/room/room1
+Content-Type: application/json
+
+{
+    "questionId": "two sum",
+    "answer": "test"
+}
+
+### UPDATE ROOM HISTORY room2
+PUT http://localhost:8080/api/v1/history/room/room2
+Content-Type: application/json
+
+{
+    "questionId": "longest substring",
+    "answer": "test"
+}
+
+### UPDATE ROOM HISTORY room3
+### expect: 400 roomId not exist (room3 has not been created)
+PUT http://localhost:8080/api/v1/history/room/room3
+Content-Type: application/json
+
+{
+    "questionId": "palindrome",
+    "answer": "nil"
+}
+
