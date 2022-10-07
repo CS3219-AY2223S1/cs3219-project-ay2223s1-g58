@@ -8,10 +8,12 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { HelmetProvider } from 'react-helmet-async'
 
 import { AuthProvider } from './context/AuthProvider'
+import theme from './theme'
+
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <HelmetProvider>
         <AuthProvider>
           <App />

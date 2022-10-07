@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom'
 import useLogout from '../hooks/useLogout'
 import useAuth from '../hooks/useAuth'
 import { UserAvatar } from './UserAvatar'
+import DarkModeToggle from './DarkModeToggle'
 
 function MenuIcon(props) {
   return (
@@ -150,6 +151,7 @@ export function Header() {
               </>
             ) : (
               <>
+                <DarkModeToggle />
                 <Button
                   href="/login"
                   variant="outline"
