@@ -68,7 +68,7 @@ const QuestionPane = ({ id }) => {
           questionData.id
       )
       .then((response) => {
-        var newData = response.data
+        const newData = response.data
         setQuestionId(newData.id)
       })
       .catch(console.log)
