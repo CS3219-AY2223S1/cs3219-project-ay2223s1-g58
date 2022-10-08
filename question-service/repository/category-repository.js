@@ -43,7 +43,7 @@ const CategoryRepository = {
         return db.Category.update(
             {
                 difficulty: category.difficulty,
-                types: category.types
+                types: category.types,
             },
             {
                 where: {

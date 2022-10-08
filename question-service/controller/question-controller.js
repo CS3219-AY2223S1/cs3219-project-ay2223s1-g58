@@ -117,7 +117,7 @@ async function deleteQuestionById(req, res) {
 
 async function updateQuestion(req, res) {
     try {
-        const id  = req.body.id
+        const id = req.body.id
         const question = await QuestionRepository.findById(id)
         const category = await CategoryRepository.findByQuestionId(id)
 
@@ -140,12 +140,12 @@ async function updateQuestion(req, res) {
         await QuestionRepository.update(question)
         await CategoryRepository.update(category)
 
-        return res.status(200).json({ 
+        return res.status(200).json({
             message: 'Question updated succesfully',
             id: question.id,
             name: question.name,
             difficulty: category.difficulty,
-            types: category.types
+            types: category.types,
         })
     } catch (err) {
         return res.status(500).json({

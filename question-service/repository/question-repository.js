@@ -25,7 +25,7 @@ const QuestionRepository = {
         return db.Question.update(
             {
                 name: question.name,
-                content: question.content
+                content: question.content,
             },
             { where: { id: question.id } }
         )
