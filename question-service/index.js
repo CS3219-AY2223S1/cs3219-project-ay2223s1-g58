@@ -15,7 +15,7 @@ const {
     createQuestion,
     getQuestion,
     deleteQuestionById,
-    updateQuestionById,
+    updateQuestion,
     getNextQuestion,
     getAllQuestions
 } = require('./controller/question-controller')
@@ -31,7 +31,7 @@ router.get('', getQuestion)
 router.get('/nextQuestion', getNextQuestion)
 router.get('/allQuestions', getAllQuestions)
 router.post('/', createQuestion)
-router.put('/', updateQuestionById)
+router.put('/', updateQuestion)
 router.delete('', deleteQuestionById)
 
 app.use('/api/v1/question', router).all((_, res) => {

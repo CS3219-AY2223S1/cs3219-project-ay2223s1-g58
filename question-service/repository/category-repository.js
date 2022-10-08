@@ -39,33 +39,22 @@ const CategoryRepository = {
             limit: 1,
         })
     },
-    updateDifficultyByQuestionId: function (difficulty, id) {
+    update: function (category) {
         return db.Category.update(
             {
-                difficulty: difficulty,
+                difficulty: category.difficulty,
+                types: category.types,
             },
             {
                 where: {
-                    questionId: id,
-                },
-            }
-        )
-    },
-    updateTypesByQuestionId: function (types, id) {
-        return db.Category.update(
-            {
-                types: types,
-            },
-            {
-                where: {
-                    questionId: id,
+                    questionId: category.questionId,
                 },
             }
         )
     },
     findNextQuestionOfSameDifficulty: function (difficulty, id) {
         // filter out questions in id
-        var numberIds = []
+        const numberIds = []
         console.log(id)
         for (var i = 0; i < id.length; i++) {
             numberIds.push(parseInt(id[i]))
@@ -83,7 +72,7 @@ const CategoryRepository = {
         })
     },
     findNextQuestionOfSameTypes: function (types, id) {
-        var numberIds = []
+        const numberIds = []
         for (var i = 0; i < id.length; i++) {
             numberIds.push(parseInt(id[i]))
         }
