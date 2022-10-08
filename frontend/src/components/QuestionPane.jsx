@@ -46,7 +46,7 @@ const QuestionPane = ({ id }) => {
       await axios
         .get(URL_QUESTION_SERVICE + '?id=' + questionId)
         .then((response) => {
-          var newData = response.data
+          const newData = response.data
           setQuestionData(newData)
         })
         .catch((e) => console.log(e))
