@@ -65,7 +65,7 @@ const CategoryRepository = {
     },
     findNextQuestionOfSameDifficulty: function (difficulty, id) {
         // filter out questions in id
-        var numberIds = []
+        const numberIds = []
         console.log(id)
         for (var i = 0; i < id.length; i++) {
             numberIds.push(parseInt(id[i]))
