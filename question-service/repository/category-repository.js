@@ -83,7 +83,7 @@ const CategoryRepository = {
         })
     },
     findNextQuestionOfSameTypes: function (types, id) {
-        var numberIds = []
+        const numberIds = []
         for (var i = 0; i < id.length; i++) {
             numberIds.push(parseInt(id[i]))
         }
