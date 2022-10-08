@@ -86,38 +86,35 @@ const QuestionPane = ({ id }) => {
 
   return (
     <>
-      {
-        <Box className="rounded-lg border">
-          <VStack h="100vh">
-            <HStack spacing="30px">
-              <Heading size="lg" fontWeight="semibold" color="gray 500">
-                {questionData.name}
-              </Heading>
-              <Badge
-                borderRadius="full"
-                px="2"
-                colorScheme={difficultyColor(questionData.difficulty)}
-              >
-                {questionData.difficulty}
-              </Badge>
-              <Button onClick={getNextQuestion} variant="outline">
-                Next Question
-              </Button>
-            </HStack>
+      <Box className="rounded-lg border">
+        <VStack h="100vh">
+          <HStack spacing="30px">
+            <Heading size="lg" fontWeight="semibold" color="gray 500">
+              {questionData.name}
+            </Heading>
+            <Badge
+              borderRadius="full"
+              px="2"
+              colorScheme={difficultyColor(questionData.difficulty)}
+            >
+              {questionData.difficulty}
+            </Badge>
+            <Button onClick={getNextQuestion} variant="outline">
+              Next Question
+            </Button>
+          </HStack>
 
-            <Divider orientation="horizontal" />
+          <Divider orientation="horizontal" />
 
-            <div className="mx-2 max-h-full overflow-y-auto px-2">
-              <ReactMarkdown
-                components={ChakraUIRenderer(newTheme)}
-                children={parse(questionData.content)}
-                skipHtml
-              />
-              ;
-            </div>
-          </VStack>
-        </Box>
-      }
+          <div className="mx-2 max-h-full overflow-y-auto px-2">
+            <ReactMarkdown
+              components={ChakraUIRenderer(newTheme)}
+              children={parse(questionData.content)}
+              skipHtml
+            />
+          </div>
+        </VStack>
+      </Box>
     </>
   )
 }

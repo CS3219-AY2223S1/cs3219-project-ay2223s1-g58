@@ -21,29 +21,13 @@ const QuestionRepository = {
             },
         })
     },
-    updateQuestionNameById: function (name, id) {
+    update: function (question) {
         return db.Question.update(
             {
-                name: name,
+                name: question.name,
+                content: question.content
             },
-            { where: { id: id } }
-        )
-    },
-    updateQuestionContentById: function (content, id) {
-        return db.Question.update(
-            {
-                content: content,
-            },
-            { where: { id: id } }
-        )
-    },
-    updateQuestionNameContentById: function (name, content, id) {
-        return db.Question.update(
-            {
-                name: name,
-                content: content,
-            },
-            { where: { id: id } }
+            { where: { id: question.id } }
         )
     },
     getRandomQuestion: function () {

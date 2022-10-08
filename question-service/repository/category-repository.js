@@ -39,26 +39,15 @@ const CategoryRepository = {
             limit: 1,
         })
     },
-    updateDifficultyByQuestionId: function (difficulty, id) {
+    update: function (category) {
         return db.Category.update(
             {
-                difficulty: difficulty,
+                difficulty: category.difficulty,
+                types: category.types
             },
             {
                 where: {
-                    questionId: id,
-                },
-            }
-        )
-    },
-    updateTypesByQuestionId: function (types, id) {
-        return db.Category.update(
-            {
-                types: types,
-            },
-            {
-                where: {
-                    questionId: id,
+                    questionId: category.questionId,
                 },
             }
         )

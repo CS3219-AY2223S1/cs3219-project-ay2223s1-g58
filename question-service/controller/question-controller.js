@@ -115,39 +115,38 @@ async function deleteQuestionById(req, res) {
     }
 }
 
-async function updateQuestionById(req, res) {
+async function updateQuestion(req, res) {
     try {
-        const { id, name, content, difficulty, types } = req.body
-        if (id && name && content) {
-            await QuestionRepository.updateQuestionNameContentById(
-                name,
-                content,
-                id
-            )
-        } else if (id && name) {
-            await QuestionRepository.updateQuestionNameById(name, id)
-        } else if (id && content) {
-            await QuestionRepository.updateQuestionContentById
-        } else {
-            if (!id || (!difficulty && !types && !name && !content)) {
-                return res
-                    .status(400)
-                    .json({ message: 'Missing id or update contents!' })
-            }
+        const id  = req.body.id
+        const question = await QuestionRepository.findById(id)
+        const category = await CategoryRepository.findByQuestionId(id)
+
+        if (req.body?.name) {
+            question.name = req.body.name
         }
 
-        if (difficulty) {
-            await CategoryRepository.updateDifficultyByQuestionId(
-                difficulty,
-                id
-            )
+        if (req.body?.content) {
+            question.content = req.body.content
         }
 
-        if (types) {
-            await CategoryRepository.updateTypesByQuestionId(types, id)
+        if (req.body?.difficulty) {
+            category.difficulty = req.body.difficulty
         }
 
-        return res.status(200).json({ message: 'Question updated succesfully' })
+        if (req.body?.types) {
+            category.types = req.body.types
+        }
+
+        await QuestionRepository.update(question)
+        await CategoryRepository.update(category)
+
+        return res.status(200).json({ 
+            message: 'Question updated succesfully',
+            id: question.id,
+            name: question.name,
+            difficulty: category.difficulty,
+            types: category.types
+        })
     } catch (err) {
         return res.status(500).json({
             message: 'Database failure when retrieving the question! ' + err,
@@ -159,6 +158,6 @@ module.exports = {
     createQuestion,
     getQuestion,
     deleteQuestionById,
-    updateQuestionById,
+    updateQuestion,
     getNextQuestion,
 }
