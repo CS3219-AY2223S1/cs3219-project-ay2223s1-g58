@@ -19,7 +19,7 @@ Start other services
 docker-compose -f docker-compose.frontend.yml up --build -d
 ```
 
-Run `npm run dev` in the `frontend` directory.
+Run `npm run start` in the `frontend` directory.
 
 Visit the frontend at http://localhost:3000
 
