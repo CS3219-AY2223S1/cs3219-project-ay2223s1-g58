@@ -2,8 +2,12 @@
 
 module.exports = {
     async up(queryInterface, Sequelize) {
-        const questions = await queryInterface.rawSelect('Questions', {plain : false}, ['id'])
-            
+        const questions = await queryInterface.rawSelect(
+            'Questions',
+            { plain: false },
+            ['id']
+        )
+
         if (questions.length == 0) {
             await queryInterface.bulkInsert('Questions', [
                 {
@@ -50,11 +54,13 @@ module.exports = {
                 },
             ])
         }
-        
-        
-            
-        const categories = await queryInterface.rawSelect('Categories', {plain : false}, ['id'])
-        
+
+        const categories = await queryInterface.rawSelect(
+            'Categories',
+            { plain: false },
+            ['id']
+        )
+
         if (categories.length == 0) {
             queryInterface.bulkInsert('Categories', [
                 {
@@ -101,8 +107,6 @@ module.exports = {
                 },
             ])
         }
-        
-    
     },
 
     async down(queryInterface, Sequelize) {

@@ -4,8 +4,8 @@ module.exports = (sequelize, DataTypes) => {
     class Question extends Model {
         static associate(models) {
             Question.hasOne(models.Category, {
-                foreignKey: "questionId"
-            });
+                foreignKey: 'questionId',
+            })
         }
     }
     Question.init(

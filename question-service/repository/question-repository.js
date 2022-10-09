@@ -37,12 +37,10 @@ const QuestionRepository = {
         })
     },
     getAllQuestion: function () {
-        return db.Question.findAll(
-            {   
-                distinct: true,
-                include: [db.Category]
-            }
-        )
+        return db.Question.findAll({
+            distinct: true,
+            include: [db.Category],
+        })
     },
 }
 

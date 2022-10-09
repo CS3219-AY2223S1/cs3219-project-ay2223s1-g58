@@ -17,7 +17,7 @@ const {
     deleteQuestionById,
     updateQuestion,
     getNextQuestion,
-    getAllQuestions
+    getAllQuestions,
 } = require('./controller/question-controller')
 const router = express.Router()
 

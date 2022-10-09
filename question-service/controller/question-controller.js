@@ -29,7 +29,7 @@ async function getAllQuestions(req, res) {
         const questions = await QuestionRepository.getAllQuestion()
         return res.status(200).json({
             message: 'All questions retrieved!',
-            questions: questions
+            questions: questions,
         })
     } catch (err) {
         return res.status(500).json({
