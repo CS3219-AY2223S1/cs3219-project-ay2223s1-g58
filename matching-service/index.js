@@ -4,6 +4,7 @@ const { createServer } = require("http");
 const { initSocket } = require("./utils/socket-io");
 const { findMatch, cancelMatch } = require("./handler/match-handler");
 const roomRoutes = require("./routes/RoomRoutes");
+require("dotenv").config();
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));

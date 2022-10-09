@@ -14,8 +14,22 @@ module.exports = (sequelize, DataTypes) => {
   }
   Room.init(
     {
-      roomId: DataTypes.STRING,
-      questionId: DataTypes.NUMBER,
+      roomId: {
+        type: DataTypes.STRING,
+        field: "room_id",
+      },
+      questionId: {
+        type: DataTypes.NUMBER,
+        field: "question_id",
+      },
+      userId1: {
+        type: DataTypes.STRING,
+        field: "user_id_1",
+      },
+      userId2: {
+        type: DataTypes.STRING,
+        field: "user_id_2",
+      },
     },
     {
       sequelize,

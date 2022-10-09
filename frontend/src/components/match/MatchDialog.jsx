@@ -13,6 +13,7 @@ import MatchTimeout from './MatchTimeout'
 import { useNavigate } from 'react-router-dom'
 import { URI_MATCHING_SERVICE, EVENT_EMIT, EVENT_LISTEN } from '../../constants'
 import MatchError from './MatchError'
+import useAuth from '../../hooks/useAuth'
 
 const PHASES = {
   SELECT: 'SELECT',
@@ -27,9 +28,14 @@ const MatchDialog = () => {
   const [phase, setPhase] = useState(PHASES.SELECT)
   const [socket, setSocket] = useState()
   const navigate = useNavigate()
+  const { auth } = useAuth()
 
   useEffect(() => {
-    const newSocket = io(URI_MATCHING_SERVICE)
+    const newSocket = io(URI_MATCHING_SERVICE, {
+      auth: {
+        token: auth.accessToken,
+      },
+    })
     setSocket(newSocket)
     newSocket.on(EVENT_LISTEN.MATCHING, () => console.log('matching'))
     newSocket.on(EVENT_LISTEN.MATCH_SUCCESS, (payload) => {
@@ -45,7 +51,7 @@ const MatchDialog = () => {
       setPhase(PHASES.TIMEOUT)
     })
     return () => newSocket.close()
-  }, [navigate])
+  }, [auth.accessToken, navigate])
 
   const handleSubmit = (e) => {
     e.preventDefault()

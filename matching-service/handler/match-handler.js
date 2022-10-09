@@ -21,7 +21,11 @@ exports.findMatch = async function (payload) {
         console.log("Inactive user found");
         MatchService.deleteMatch(match.socketId);
       }
-      await MatchService.createMatch(socket.id, value.difficulty);
+      await MatchService.createMatch(
+        socket.id,
+        value.difficulty,
+        socket.userId
+      );
       console.log(EVENT_EMIT.MATCHING);
       socket.emit(EVENT_EMIT.MATCHING, {
         status: EVENT_EMIT.MATCHING,
@@ -31,7 +35,9 @@ exports.findMatch = async function (payload) {
     // TODO additional validations
     await MatchService.matchSuccess(
       match.socketId,
+      match.userId,
       socket.id,
+      socket.userId,
       value.difficulty
     );
   } catch (e) {
