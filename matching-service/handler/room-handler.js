@@ -3,13 +3,17 @@ const RoomService = require("../service/room-service");
 exports.getRoomById = async function (req, res) {
   try {
     const room = await RoomService.findByRoomId(req.params.roomId);
-    if (!room) {
+    // room not found or user does not belong to room
+    const userId = req.user.username;
+    if (!room || (room.userId1 !== userId && room.userId2 !== userId)) {
       return res.status(400).json({ message: "Could not get Room info" });
     }
     return res.status(200).json({
       message: "Get Room info successfully",
       data: {
         roomId: room.roomId,
+        userId1: room.userId1,
+        userId2: room.userId2,
         questionId: room.questionId,
       },
     });
@@ -19,6 +23,7 @@ exports.getRoomById = async function (req, res) {
   }
 };
 
+// For testing purposes, not used in production
 exports.deleteRoom = async function (req, res) {
   try {
     await RoomService.deleteRoom(req.params.roomId);

@@ -1,4 +1,6 @@
+/* eslint-disable no-param-reassign */
 const { Server } = require("socket.io");
+const jwt = require("jsonwebtoken");
 const { EVENT_LISTEN } = require("../const/constants");
 
 let io;
@@ -8,6 +10,18 @@ exports.initSocket = (httpServer, matchHandler, cancelHandler) => {
       origin: "*",
       methods: ["GET", "POST"],
     },
+  });
+  io.use((socket, next) => {
+    try {
+      const { token } = socket.handshake.auth;
+      const payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+      console.log("middleware payload", payload);
+      socket.userId = payload.username;
+      next();
+    } catch (e) {
+      console.log(e);
+      next(e);
+    }
   });
   io.on("connection", (socket) => {
     socket.on(EVENT_LISTEN.MATCH_FIND, matchHandler);

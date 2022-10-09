@@ -6,14 +6,10 @@ const RoomService = {
   findByRoomId: function (roomId) {
     return RoomRepository.findByRoomId(roomId);
   },
-  createRoom: function (roomId, questionId) {
-    return RoomRepository.create(roomId, questionId);
+  createRoom: function (roomId, questionId, userId1, userId2) {
+    return RoomRepository.create(roomId, questionId, userId1, userId2);
   },
   deleteRoom: function (roomId) {
-    const socketIds = roomId.split("|");
-    if (socketIds.length !== 2) {
-      throw new Error("Invalid roomId");
-    }
     emit(`${roomId}-${EVENT_EMIT.ROOM_END}`, {
       status: EVENT_EMIT.ROOM_END,
       room: roomId,

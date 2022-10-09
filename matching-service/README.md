@@ -1,5 +1,9 @@
 # Matching Service
 
+# Setup environment variables
+
+1. Rename `.env.example` to `.env`
+
 ## Usage
 
 1. Install npm packages using `npm install`.
