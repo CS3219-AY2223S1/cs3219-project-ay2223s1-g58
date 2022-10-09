@@ -7,7 +7,6 @@ module.exports = {
             { plain: false },
             ['id']
         )
-
         if (questions.length == 0) {
             await queryInterface.bulkInsert('Questions', [
                 {
