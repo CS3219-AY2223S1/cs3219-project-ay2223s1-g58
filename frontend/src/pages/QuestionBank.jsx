@@ -75,7 +75,7 @@ const QuestionBank = () => {
         ),
       },
     ],
-    []
+    [navigate]
   )
 
   return !loading ? (

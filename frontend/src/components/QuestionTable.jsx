@@ -21,10 +21,6 @@ export default function QuestionTable({ columns, data }) {
     data
   }, useSortBy);
 
-  const handleSortingChange = (accessor) => {
-    console.log(accessor);
-   };
-
   return (
     <Table variant='striped' {...getTableProps()}>
       <Thead>

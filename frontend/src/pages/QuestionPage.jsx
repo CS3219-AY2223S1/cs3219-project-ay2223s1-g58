@@ -63,7 +63,7 @@ const QuestionPage = () => {
         })
     }
     getQuestion()
-  }, [questionData, end])
+  }, [questionData, end, questionId, toast])
 
   const nextQuestion = async () => {
     if (!end) {
