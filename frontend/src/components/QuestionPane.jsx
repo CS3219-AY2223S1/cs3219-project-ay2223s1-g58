@@ -5,7 +5,6 @@ import {
   HStack,
   VStack,
   Heading,
-  Divider,
   StackDivider,
 } from '@chakra-ui/react'
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer'
