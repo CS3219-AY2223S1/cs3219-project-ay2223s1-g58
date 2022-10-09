@@ -11,7 +11,7 @@ services:
             POSTGRES_PASSWORD: postgres
             POSTGRES_DB: postgres_db
             POSTGRES_USER: postgres
-            POSTGRES_HOST: host.docker.internal
+            POSTGRES_HOST: postgres_db
             POSTGRES_PORT: 5432
         healthcheck:
             test:
@@ -37,7 +37,7 @@ services:
             postgres_db:
                 condition: service_healthy
         extra_hosts:
-            - "host.docker.internal:host-gateway"        
+            - 'host.docker.internal:host-gateway'
         environment:
             ENV: test
         links:
