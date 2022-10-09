@@ -182,11 +182,11 @@ const Profile = () => {
               label="Username cannot be modified"
               aria-label="Username cannot be modified"
             >
-              <div className="relative ">
+              <div className="relative">
                 <input
                   type="text"
                   disabled={true}
-                  className="flex-1 w-full px-4 py-2 text-base text-gray-700 placeholder-gray-400 bg-white border border-transparent border-gray-300 rounded-lg appearance-none hadow-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600"
+                  className="flex-1 w-full px-4 py-2 text-base text-gray-700 placeholder-gray-400 bg-white border border-transparent border-gray-300 rounded-lg shadow-sm appearance-none focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600"
                   placeholder={auth.username}
                 />
               </div>
