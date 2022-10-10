@@ -5,8 +5,8 @@ import 'dotenv/config'
 
 const uri =
   process.env.ENV == 'PROD'
-    ? process.env.DB_CLOUD_URI
-    : process.env.DB_LOCAL_URI
+    ? process.env.DB_URI_PROD
+    : process.env.DB_URI_DEV
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 const db = mongoose.connection
