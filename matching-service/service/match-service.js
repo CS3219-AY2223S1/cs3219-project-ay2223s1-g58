@@ -30,22 +30,34 @@ const MatchService = {
   findByDifficulty: function (difficulty, socketId) {
     return MatchRepository.findByDifficulty(difficulty, socketId);
   },
-  createMatch: async function (socketId, difficulty) {
-    const created = await MatchRepository.create(socketId, difficulty);
+  createMatch: async function (socketId, difficulty, userId) {
+    const created = await MatchRepository.create(socketId, difficulty, userId);
     scheduleTimeout(socketId);
     return created;
   },
   deleteMatch: function (socketId) {
     return MatchRepository.delete(socketId);
   },
-  matchSuccess: async function (socketIdWaiting, socketIdNew, difficulty) {
+  matchSuccess: async function (
+    socketIdWaiting,
+    userWaiting,
+    socketIdNew,
+    userNew,
+    difficulty
+  ) {
     await MatchService.deleteMatch(socketIdWaiting);
     console.log(EVENT_EMIT.MATCH_SUCCESS);
-    const roomId = `${socketIdWaiting}|${socketIdNew}`;
+    const roomId = `${socketIdWaiting}-${socketIdNew}`;
     const response = await axios.get(URL_QUESTION_SERVICE, {
       params: { difficulty: difficulty },
     });
-    await RoomService.createRoom(roomId, response.data.id);
+    console.log(`Creating room ${roomId} for ${userWaiting} and ${userNew}`);
+    await RoomService.createRoom(
+      roomId,
+      response.data.id,
+      userWaiting,
+      userNew
+    );
     sendMessageToBoth(socketIdWaiting, socketIdNew, EVENT_EMIT.MATCH_SUCCESS, {
       status: EVENT_EMIT.MATCH_SUCCESS,
       room: roomId,

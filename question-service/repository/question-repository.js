@@ -21,22 +21,21 @@ const QuestionRepository = {
             },
         })
     },
-    updateQuestionNameById: function(name, id) {
-        return db.Question.update({
-            name: name
-        }, {where: {id: id}})
+    update: function (question) {
+        return db.Question.update(
+            {
+                name: question.name,
+                content: question.content,
+            },
+            { where: { id: question.id } }
+        )
     },
-    updateQuestionContentById: function(content, id) {
-        return db.Question.update({
-            content: content
-        }, {where: {id: id}})
+    getRandomQuestion: function () {
+        return db.Question.findAll({
+            order: db.sequelize.random(),
+            limit: 1,
+        })
     },
-    updateQuestionNameContentById: function(name, content, id) {
-        return db.Question.update({
-            name: name,
-            content: content
-        }, {where: {id: id}})
-    }
 }
 
 module.exports = QuestionRepository
