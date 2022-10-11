@@ -53,3 +53,13 @@ export const EVENT_EMIT = {
 }
 
 export const RANDOM_AVATAR_URL = 'https://avatars.dicebear.com/api/bottts/'
+
+// HISTORY SERVICE API
+
+const URI_HISTORY_SERVICE =
+  process.env.NODE_ENV === 'production'
+    ? 'http://localhost:80'
+    : 'http://localhost:8080'
+const PREFIX_HISTORY_SERVICE = '/api/v1/history'
+export const URL_USER_HISTORY =
+  URI_HISTORY_SERVICE + PREFIX_HISTORY_SERVICE + '/user'
