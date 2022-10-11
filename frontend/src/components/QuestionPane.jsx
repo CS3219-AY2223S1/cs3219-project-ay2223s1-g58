@@ -52,7 +52,7 @@ const QuestionPane = ({ id }) => {
         .catch((e) => console.log(e))
     }
     getQuestion()
-  }, [questionId, questionData])
+  }, [questionId])
 
   const getNextQuestion = async () => {
     const { data: response } = await axios

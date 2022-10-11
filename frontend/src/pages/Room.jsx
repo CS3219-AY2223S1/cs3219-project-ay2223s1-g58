@@ -25,8 +25,22 @@ const Room = () => {
   const axiosPrivate = useAxiosPrivate()
 
   useEffect(() => {
+    const getQuestionId = async () => {
+      const res = await axiosPrivate
+        .get(`${URL_MATCHING_ROOM}/${roomId}`)
+        .catch((e) => {
+          if (e.response.status === STATUS_CODE_BAD_REQUEST) {
+            // Room not found
+            return setIsValid(false)
+          }
+        })
+      if (res && res.status === STATUS_CODE_SUCCESS) {
+        setQuestionId(res.data.data.questionId)
+      }
+    }  
     getQuestionId()
-  })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     const newSocket = io(URI_MATCHING_SERVICE, {
@@ -49,20 +63,6 @@ const Room = () => {
 
     return () => newSocket.close()
   }, [auth.accessToken, navigate, roomId, toast])
-
-  const getQuestionId = async () => {
-    const res = await axiosPrivate
-      .get(`${URL_MATCHING_ROOM}/${roomId}`)
-      .catch((e) => {
-        if (e.response.status === STATUS_CODE_BAD_REQUEST) {
-          // Room not found
-          return setIsValid(false)
-        }
-      })
-    if (res && res.status === STATUS_CODE_SUCCESS) {
-      setQuestionId(res.data.data.questionId)
-    }
-  }
 
   const endSession = async () => {
     await axiosPrivate
