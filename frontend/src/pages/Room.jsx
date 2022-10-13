@@ -70,7 +70,6 @@ const Room = () => {
         duration: 4000,
         isClosable: true,
       })
-      console.log(payload)
       setQuestionId(payload.question)
     })
 

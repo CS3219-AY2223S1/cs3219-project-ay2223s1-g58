@@ -30,7 +30,7 @@ const RoomService = {
       params: { difficulty: room.difficulty, past_id: room.questionId },
     });
     // TODO append it to array instead of replacing when update to Postgres
-    RoomRepository.update({ ...room, questionId: response.data.id });
+    RoomRepository.update(roomId, { ...room, questionId: response.data.id });
     emit(`${roomId}-${EVENT_EMIT.ROOM_UPDATE}`, {
       status: EVENT_EMIT.ROOM_UPDATE,
       room: roomId,
