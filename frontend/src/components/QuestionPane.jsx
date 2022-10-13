@@ -6,14 +6,20 @@ import {
   VStack,
   Heading,
   Divider,
+  useToast,
 } from '@chakra-ui/react'
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer'
 import { AuthLayout } from '../components/AuthLayout'
 import ReactMarkdown from 'react-markdown'
 import { Button } from '../components/Button'
-import { URL_QUESTION_SERVICE } from '../constants'
+import {
+  URL_QUESTION_SERVICE,
+  URL_ROOM_SERVICE,
+  STATUS_CODE_SUCCESS,
+} from '../constants'
 import axios from '../api/axios'
 import { useEffect, useState } from 'react'
+import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
 const difficultyColorMap = new Map([
   ['easy', 'green'],
@@ -37,8 +43,10 @@ const parse = (text) => {
   return text
 }
 
-const QuestionPane = ({ questionId }) => {
+const QuestionPane = ({ questionId, roomId }) => {
   const [questionData, setQuestionData] = useState([])
+  const toast = useToast()
+  const axiosPrivate = useAxiosPrivate()
 
   useEffect(() => {
     const getQuestion = async () => {
@@ -54,24 +62,20 @@ const QuestionPane = ({ questionId }) => {
   }, [questionId])
 
   const getNextQuestion = async () => {
-    // const { data: response } = await axios
-    //   .get(URL_QUESTION_SERVICE + '?id=' + questionId)
-    //   .catch((e) => console.log(e))
-    // await axios
-    //   .get(
-    //     URL_QUESTION_SERVICE +
-    //       '/nextQuestion' +
-    //       '?difficulty=' +
-    //       response.difficulty +
-    //       '&past_id=' +
-    //       questionData.id
-    //   )
-    //   .then((response) => {
-    //     const newData = response.data
-    //     setQuestionId(newData.id)
-    //   })
-    //   .catch(console.log)
-    console.log('clicked')
+    await axiosPrivate
+      .put(`${URL_ROOM_SERVICE}/${roomId}`)
+      .then((res) => {
+        if (res && res.status !== STATUS_CODE_SUCCESS) {
+          toast({
+            title: 'Something went wrong',
+            description: 'Please try again',
+            status: 'error',
+            duration: 4000,
+            isClosable: true,
+          })
+        }
+      })
+      .catch(console.log)
   }
 
   if (typeof questionData === 'undefined' || questionData.length === 0) {

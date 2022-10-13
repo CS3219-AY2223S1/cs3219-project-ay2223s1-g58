@@ -1,4 +1,5 @@
 exports.EVENT_EMIT = {
+  ROOM_UPDATE: "roomUpdate",
   ROOM_END: "roomEnd",
 };
 
@@ -19,3 +20,5 @@ const URI_QUESTION_SERVICE =
 const PREFIX_QUESTION_SERVICE = "/api/v1/question";
 
 exports.URL_QUESTION_SERVICE = URI_QUESTION_SERVICE + PREFIX_QUESTION_SERVICE;
+
+exports.URL_QUESTION_SERVICE_NEXT_QUESTION = `${this.URL_QUESTION_SERVICE}/nextQuestion`;

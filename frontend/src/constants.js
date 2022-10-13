@@ -54,6 +54,7 @@ export const EVENT_LISTEN = {
   MATCH_FAIL: 'matchFail',
   MATCH_TIMEOUT: 'matchTimeout',
   ROOM_END: 'roomEnd',
+  ROOM_UPDATE: 'roomUpdate',
 }
 
 export const EVENT_EMIT = {

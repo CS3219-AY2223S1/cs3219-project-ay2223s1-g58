@@ -26,12 +26,13 @@ exports.getRoomById = async function (req, res) {
 
 exports.updateRoomQuestionId = async function (req, res) {
   try {
-    const room = await RoomService.updateRoomQuestionId(req.params.roomId);
+    const room = await RoomService.findByRoomId(req.params.roomId);
     // room not found or user does not belong to room
     const userId = req.user.username;
     if (!room || (room.userId1 !== userId && room.userId2 !== userId)) {
       return res.status(400).json({ message: "Could not update Room info" });
     }
+    await RoomService.updateRoomQuestionId(req.params.roomId);
     return res.status(200).json({
       message: "Update Room questionId successfully",
     });

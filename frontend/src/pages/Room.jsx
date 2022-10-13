@@ -62,6 +62,18 @@ const Room = () => {
       }, 4000)
     })
 
+    newSocket.on(`${roomId}-${EVENT_LISTEN.ROOM_UPDATE}`, (payload) => {
+      toast({
+        title: 'Next Question',
+        description: 'Fetched new question',
+        status: 'success',
+        duration: 4000,
+        isClosable: true,
+      })
+      console.log(payload)
+      setQuestionId(payload.question)
+    })
+
     return () => newSocket.close()
   }, [auth.accessToken, navigate, roomId, toast])
 
@@ -107,7 +119,7 @@ const Room = () => {
         </main>
       ) : (
         <div className="grid h-screen grid-cols-2 gap-4">
-          <QuestionPane questionId={questionId} />
+          <QuestionPane questionId={questionId} roomId={roomId} />
           <div className="flex flex-col justify-start">
             <Editor roomId={roomId} />
             <div className="flex flex-col items-center justify-start">
