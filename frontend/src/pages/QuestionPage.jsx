@@ -83,7 +83,7 @@ const QuestionPage = () => {
     }
     if (
       typeof questionData.id === 'undefined' ||
-      parseInt(questionData.id) != questionId
+      Number(questionData.id) !== Number(questionId)
     ) {
       getQuestion()
     }
