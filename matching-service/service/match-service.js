@@ -5,11 +5,7 @@ axios.defaults.withCredentials = true;
 
 const MatchRepository = require("../repository/match-repository");
 const { sendMessageToOne, sendMessageToBoth } = require("../utils/socket-io");
-const {
-  EVENT_EMIT,
-  URL_QUESTION_SERVICE,
-  URL_ROOM_SERVICE,
-} = require("../const/constants");
+const { EVENT_EMIT, URL_ROOM_SERVICE } = require("../const/constants");
 
 const MATCH_TIMEOUT_SECONDS = 30;
 const MATCH_TIMEOUT = MATCH_TIMEOUT_SECONDS * 1000;
@@ -51,12 +47,8 @@ const MatchService = {
     await MatchService.deleteMatch(socketIdWaiting);
     console.log(EVENT_EMIT.MATCH_SUCCESS);
     const roomId = `${socketIdWaiting}-${socketIdNew}`;
-    const response = await axios.get(URL_QUESTION_SERVICE, {
-      params: { difficulty: difficulty },
-    });
     await axios.post(URL_ROOM_SERVICE, {
       roomId,
-      questionId: response.data.id,
       userId1: userWaiting,
       userId2: userNew,
       difficulty,

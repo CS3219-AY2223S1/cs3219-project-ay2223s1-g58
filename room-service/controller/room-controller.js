@@ -24,6 +24,23 @@ exports.getRoomById = async function (req, res) {
   }
 };
 
+exports.updateRoomQuestionId = async function (req, res) {
+  try {
+    const room = await RoomService.updateRoomQuestionId(req.params.roomId);
+    // room not found or user does not belong to room
+    const userId = req.user.username;
+    if (!room || (room.userId1 !== userId && room.userId2 !== userId)) {
+      return res.status(400).json({ message: "Could not update Room info" });
+    }
+    return res.status(200).json({
+      message: "Update Room questionId successfully",
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: err.message });
+  }
+};
+
 exports.createRoom = async function (req, res) {
   try {
     console.log("body", req.body);
@@ -31,14 +48,8 @@ exports.createRoom = async function (req, res) {
     if (error) {
       throw error;
     }
-    const { roomId, questionId, userId1, userId2, difficulty } = value;
-    await RoomService.createRoom(
-      roomId,
-      questionId,
-      userId1,
-      userId2,
-      difficulty
-    );
+    const { roomId, userId1, userId2, difficulty } = value;
+    await RoomService.createRoom(roomId, userId1, userId2, difficulty);
     return res.status(200).json({
       message: "Created Room successfully",
       data: {

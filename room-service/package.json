@@ -1,6 +1,9 @@
 {
   "name": "matching-service",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=14"
+  },
   "description": "Match users based on critera set by the user",
   "main": "index.js",
   "scripts": {
