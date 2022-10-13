@@ -32,7 +32,7 @@ const QuestionBank = () => {
       }
       setLoading(false)
     }
-    if (!data) {
+    if (!data || data.length === 0) {
       fetchData()
     }
   })

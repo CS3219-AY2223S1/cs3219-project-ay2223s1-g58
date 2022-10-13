@@ -1,4 +1,5 @@
 import {
+  Divider,
   Text,
   useToast,
   Grid,
@@ -25,14 +26,13 @@ const difficultyColorMap = new Map([
 const newTheme = {
   p: (props) => {
     const { children } = props
-    return <Text className="text-sm">{children}</Text>
+    return <Text className="text-md">{children}</Text>
   },
 }
 
 const parse = (text) => {
-  if (text?.startsWith('## Description')) {
-    text = text.replace('## Description', '')
-  }
+  console.log(text)
+  text = text.replace('\n', '\n\n')
   return text
 }
 
@@ -53,7 +53,7 @@ const QuestionPage = () => {
         })
         .catch((error) => {
           toast({
-            title: '  You have reached the end of the questions!',
+            title: 'You have reached the end of the questions!',
             position: 'top',
             status: 'warning',
             duration: 3000,
@@ -62,12 +62,31 @@ const QuestionPage = () => {
           setEnd(true)
         })
     }
-    getQuestion()
+    if (
+      typeof questionData.id === 'undefined' ||
+      questionData.id != questionId
+    ) {
+      getQuestion()
+    }
   }, [questionData, end, questionId, toast])
 
   const nextQuestion = async () => {
     if (!end) {
       navigate('/question/' + (parseInt(questionId) + 1))
+    }
+  }
+
+  const previousQuestion = async () => {
+    if (questionId > 1) {
+      navigate('/question/' + (parseInt(questionId) + 1))
+    } else {
+      toast({
+        title: 'You are at the beginning of the question!',
+        position: 'top',
+        status: 'warning',
+        duration: 3000,
+        isClosable: true,
+      })
     }
   }
 
@@ -90,13 +109,14 @@ const QuestionPage = () => {
       {
         <Grid
           maxHeight="100%"
-          autoRows="repeat(2, 1fr)"
+          autoRows="repeat(3, 1fr)"
           autoColumns="repeat(4,1fr)"
+          gap={6}
         >
           <GridItem colSpan={1} align="center">
             <IconButton
               w={10}
-              onClick={() => navigate('/questions')}
+              onClick={previousQuestion}
               aria-label="Back"
               icon={<ArrowBackIcon />}
             ></IconButton>
@@ -122,6 +142,9 @@ const QuestionPage = () => {
               aria-label="Back"
               icon={<ArrowForwardIcon />}
             ></IconButton>
+          </GridItem>
+          <GridItem colSpan={4}>
+            <Divider orientation='horizontal' />
           </GridItem>
           <GridItem colSpan={4} ml="5px" mr="5px">
             <div className="mx-2 max-h-full max-w-full overflow-y-auto px-2">

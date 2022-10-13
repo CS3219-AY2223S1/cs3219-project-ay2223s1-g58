@@ -31,9 +31,9 @@ module.exports = {
             ['id']
         )
 
-        if (categories.length == 0) {
+        if (categories.length === 0) {
             const data = JSON.parse(fs.readFileSync(categoryPath))
-            queryInterface.bulkInsert('Categories', data)
+            await queryInterface.bulkInsert('Categories', data)
         }
     },
 
