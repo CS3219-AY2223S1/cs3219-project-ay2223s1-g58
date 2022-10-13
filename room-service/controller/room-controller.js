@@ -1,3 +1,4 @@
+const { createRoomDto } = require("../dto/room-dto");
 const RoomService = require("../service/room-service");
 
 exports.getRoomById = async function (req, res) {
@@ -23,7 +24,33 @@ exports.getRoomById = async function (req, res) {
   }
 };
 
-// For testing purposes, not used in production
+exports.createRoom = async function (req, res) {
+  try {
+    console.log("body", req.body);
+    const { value, error } = createRoomDto.validate(req.body);
+    if (error) {
+      throw error;
+    }
+    const { roomId, questionId, userId1, userId2, difficulty } = value;
+    await RoomService.createRoom(
+      roomId,
+      questionId,
+      userId1,
+      userId2,
+      difficulty
+    );
+    return res.status(200).json({
+      message: "Created Room successfully",
+      data: {
+        roomId: roomId,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: err.message });
+  }
+};
+
 exports.deleteRoom = async function (req, res) {
   try {
     await RoomService.deleteRoom(req.params.roomId);

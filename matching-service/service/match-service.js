@@ -5,8 +5,11 @@ axios.defaults.withCredentials = true;
 
 const MatchRepository = require("../repository/match-repository");
 const { sendMessageToOne, sendMessageToBoth } = require("../utils/socket-io");
-const { EVENT_EMIT, URL_QUESTION_SERVICE } = require("../const/constants");
-const RoomService = require("./room-service");
+const {
+  EVENT_EMIT,
+  URL_QUESTION_SERVICE,
+  URL_ROOM_SERVICE,
+} = require("../const/constants");
 
 const MATCH_TIMEOUT_SECONDS = 30;
 const MATCH_TIMEOUT = MATCH_TIMEOUT_SECONDS * 1000;
@@ -51,13 +54,14 @@ const MatchService = {
     const response = await axios.get(URL_QUESTION_SERVICE, {
       params: { difficulty: difficulty },
     });
-    console.log(`Creating room ${roomId} for ${userWaiting} and ${userNew}`);
-    await RoomService.createRoom(
+    await axios.post(URL_ROOM_SERVICE, {
       roomId,
-      response.data.id,
-      userWaiting,
-      userNew
-    );
+      questionId: response.data.id,
+      userId1: userWaiting,
+      userId2: userNew,
+      difficulty,
+    });
+    console.log(`Created room ${roomId} for ${userWaiting} and ${userNew}`);
     sendMessageToBoth(socketIdWaiting, socketIdNew, EVENT_EMIT.MATCH_SUCCESS, {
       status: EVENT_EMIT.MATCH_SUCCESS,
       room: roomId,

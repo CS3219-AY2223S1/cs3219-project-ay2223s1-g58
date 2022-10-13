@@ -6,8 +6,14 @@ const RoomService = {
   findByRoomId: function (roomId) {
     return RoomRepository.findByRoomId(roomId);
   },
-  createRoom: function (roomId, questionId, userId1, userId2) {
-    return RoomRepository.create(roomId, questionId, userId1, userId2);
+  createRoom: function (roomId, questionId, userId1, userId2, difficulty) {
+    return RoomRepository.create(
+      roomId,
+      questionId,
+      userId1,
+      userId2,
+      difficulty
+    );
   },
   deleteRoom: function (roomId) {
     emit(`${roomId}-${EVENT_EMIT.ROOM_END}`, {

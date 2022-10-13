@@ -34,10 +34,19 @@ export const URI_MATCHING_SERVICE =
     ? 'http://localhost:80'
     : 'http://localhost:8001'
 
+export const URI_MATCHING_SERVICE_SOCKET_PATH = '/socket.io/matching'
 const PREFIX_MATCHING_SERVICE = '/api/v1/matching'
 export const URL_MATCHING_SERVICE =
   URI_MATCHING_SERVICE + PREFIX_MATCHING_SERVICE
-export const URL_MATCHING_ROOM = URL_MATCHING_SERVICE + '/room'
+
+export const URI_ROOM_SERVICE =
+  process.env.NODE_ENV === 'production'
+    ? 'http://localhost:80'
+    : 'http://localhost:8022'
+
+export const URI_ROOM_SERVICE_SOCKET_PATH = '/socket.io/room'
+const PREFIX_ROOM_SERVICE = '/api/v1/room'
+export const URL_ROOM_SERVICE = URI_ROOM_SERVICE + PREFIX_ROOM_SERVICE
 
 export const EVENT_LISTEN = {
   MATCHING: 'matching',

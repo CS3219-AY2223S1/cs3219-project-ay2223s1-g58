@@ -1,9 +1,12 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import {
-  URL_MATCHING_ROOM,
+  URL_ROOM_SERVICE,
   STATUS_CODE_SUCCESS,
   STATUS_CODE_BAD_REQUEST,
+  URI_ROOM_SERVICE_SOCKET_PATH,
+  EVENT_LISTEN,
+  URI_ROOM_SERVICE,
 } from '../constants'
 import { Button, useToast, Stack, Text } from '@chakra-ui/react'
 import { Helmet } from 'react-helmet-async'
@@ -11,7 +14,6 @@ import QuestionPane from '../components/QuestionPane'
 import Editor from '../components/collaboration/Editor'
 import RoomEndDialog from '../components/room/RoomEndDialog'
 import io from 'socket.io-client'
-import { URI_MATCHING_SERVICE, EVENT_LISTEN } from '../constants'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
@@ -21,15 +23,28 @@ const Room = () => {
   const [questionId, setQuestionId] = useState()
   const [isValid, setIsValid] = useState(true)
   const toast = useToast()
-  const auth = useAuth()
+  const { auth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
 
   useEffect(() => {
-    getQuestionId()
-  })
+    axiosPrivate
+      .get(`${URL_ROOM_SERVICE}/${roomId}`)
+      .then((res) => {
+        if (res && res.status === STATUS_CODE_SUCCESS) {
+          setQuestionId(res.data.data.questionId)
+        }
+      })
+      .catch((e) => {
+        if (e.response.status === STATUS_CODE_BAD_REQUEST) {
+          // Room not found
+          setIsValid(false)
+        }
+      })
+  }, [axiosPrivate, roomId])
 
   useEffect(() => {
-    const newSocket = io(URI_MATCHING_SERVICE, {
+    const newSocket = io(URI_ROOM_SERVICE, {
+      path: URI_ROOM_SERVICE_SOCKET_PATH,
       auth: {
         token: auth.accessToken,
       },
@@ -50,23 +65,9 @@ const Room = () => {
     return () => newSocket.close()
   }, [auth.accessToken, navigate, roomId, toast])
 
-  const getQuestionId = async () => {
-    const res = await axiosPrivate
-      .get(`${URL_MATCHING_ROOM}/${roomId}`)
-      .catch((e) => {
-        if (e.response.status === STATUS_CODE_BAD_REQUEST) {
-          // Room not found
-          return setIsValid(false)
-        }
-      })
-    if (res && res.status === STATUS_CODE_SUCCESS) {
-      setQuestionId(res.data.data.questionId)
-    }
-  }
-
   const endSession = async () => {
     await axiosPrivate
-      .delete(`${URL_MATCHING_ROOM}/${roomId}`)
+      .delete(`${URL_ROOM_SERVICE}/${roomId}`)
       .catch(console.log)
   }
 
@@ -106,7 +107,7 @@ const Room = () => {
         </main>
       ) : (
         <div className="grid h-screen grid-cols-2 gap-4">
-          <QuestionPane id={questionId} />
+          <QuestionPane questionId={questionId} />
           <div className="flex flex-col justify-start">
             <Editor roomId={roomId} />
             <div className="flex flex-col items-center justify-start">
