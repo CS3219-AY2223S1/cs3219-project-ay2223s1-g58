@@ -43,6 +43,26 @@ const QuestionPage = () => {
   const navigate = useNavigate()
   const toast = useToast()
 
+  const nextQuestion = async () => {
+    if (!end) {
+      navigate('/question/' + (parseInt(questionId) + 1))
+    }
+  }
+
+  const previousQuestion = async () => {
+    if (questionId > 1) {
+      navigate('/question/' + (parseInt(questionId) - 1))
+    } else {
+      toast({
+        title: 'You have reached the start of the questions!',
+        position: 'top',
+        status: 'warning',
+        duration: 3000,
+        isClosable: true,
+      })
+    }
+  }
+
   useEffect(() => {
     const getQuestion = async () => {
       await axios
@@ -64,31 +84,11 @@ const QuestionPage = () => {
     }
     if (
       typeof questionData.id === 'undefined' ||
-      questionData.id != questionId
+      questionData.id !== questionId
     ) {
       getQuestion()
     }
   }, [questionData, end, questionId, toast])
-
-  const nextQuestion = async () => {
-    if (!end) {
-      navigate('/question/' + (parseInt(questionId) + 1))
-    }
-  }
-
-  const previousQuestion = async () => {
-    if (questionId > 1) {
-      navigate('/question/' + (parseInt(questionId) + 1))
-    } else {
-      toast({
-        title: 'You are at the beginning of the question!',
-        position: 'top',
-        status: 'warning',
-        duration: 3000,
-        isClosable: true,
-      })
-    }
-  }
 
   if (
     !questionData ||
@@ -126,10 +126,14 @@ const QuestionPage = () => {
               {questionData.name}
             </Heading>
           </GridItem>
-          <GridItem colSpan={1} align="center">
+          <GridItem
+            colSpan={1}
+            align={['center', 'left']}
+            verticalAlign="center"
+          >
             <Badge
               borderRadius="full"
-              px="2"
+              px="6"
               colorScheme={difficultyColor(questionData.difficulty)}
             >
               {questionData.difficulty}
@@ -144,7 +148,7 @@ const QuestionPage = () => {
             ></IconButton>
           </GridItem>
           <GridItem colSpan={4}>
-            <Divider orientation='horizontal' />
+            <Divider orientation="horizontal" />
           </GridItem>
           <GridItem colSpan={4} ml="5px" mr="5px">
             <div className="mx-2 max-h-full max-w-full overflow-y-auto px-2">
