@@ -14,7 +14,6 @@ const RoomService = {
       status: EVENT_EMIT.ROOM_END,
       room: roomId,
     });
-    // TODO add to match history
     return RoomRepository.delete(roomId);
   },
 };

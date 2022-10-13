@@ -24,11 +24,11 @@ export async function getHistory(req, res) {
 
 export async function createHistory(req, res) {
   try {
-    const { roomId } = req.body
+    const { roomId, u1, u2 } = req.body
     if (!roomId) {
       return res.status(400).json({ message: 'roomId is missing' })
     }
-    const resp = await HistoryService.createRoomHistory(roomId)
+    const resp = await HistoryService.createRoomHistory(roomId, u1, u2)
     if (resp?.err) {
       const msg = `Could not create room history for roomId ${roomId}`
       console.log(`${msg}: ${resp.err}`)

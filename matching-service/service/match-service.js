@@ -5,7 +5,11 @@ axios.defaults.withCredentials = true;
 
 const MatchRepository = require("../repository/match-repository");
 const { sendMessageToOne, sendMessageToBoth } = require("../utils/socket-io");
-const { EVENT_EMIT, URL_QUESTION_SERVICE } = require("../const/constants");
+const {
+  EVENT_EMIT,
+  URL_QUESTION_SERVICE,
+  URL_HISTORY_SERVICE_ROOM_PATH,
+} = require("../const/constants");
 const RoomService = require("./room-service");
 
 const MATCH_TIMEOUT_SECONDS = 30;
@@ -48,6 +52,13 @@ const MatchService = {
     await MatchService.deleteMatch(socketIdWaiting);
     console.log(EVENT_EMIT.MATCH_SUCCESS);
     const roomId = `${socketIdWaiting}-${socketIdNew}`;
+    // Record match history in History Service. Will throw an error (400 response) if the roomId is a duplicate
+    await axios.post(URL_HISTORY_SERVICE_ROOM_PATH, {
+      roomId: roomId,
+      u1: userWaiting,
+      u2: userNew,
+    });
+    // Obtain question from Question Service
     const response = await axios.get(URL_QUESTION_SERVICE, {
       params: { difficulty: difficulty },
     });

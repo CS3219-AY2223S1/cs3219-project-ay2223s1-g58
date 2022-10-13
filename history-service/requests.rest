@@ -7,7 +7,9 @@ POST http://localhost:8080/api/v1/history/room
 Content-Type: application/json
 
 {
-    "roomId": "room1"
+    "roomId": "room1",
+    "u1": "qwe",
+    "u2": "asd"
 }
 
 ### CREATE ANOTHER ROOM
@@ -15,7 +17,9 @@ POST http://localhost:8080/api/v1/history/room
 Content-Type: application/json
 
 {
-    "roomId": "room2"
+    "roomId": "room2",
+    "u1": "qwe",
+    "u2": "zxc"
 }
 
 ### GET HISTORY OF USER qwe
