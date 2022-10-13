@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend-deployment
+  name: matching-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: frontend
+      app: matching
   template:
     metadata:
       labels:
-        app: frontend
+        app: matching
     spec:
       containers:
-        - name: frontend
+        - name: matching
           image: # TODO: push to docker hub
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8001

@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend-deployment
+  name: user-deployment
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: frontend
+      app: user
   template:
     metadata:
       labels:
-        app: frontend
+        app: user
     spec:
       containers:
-        - name: frontend
+        - name: user
           image: # TODO: push to docker hub
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8000
