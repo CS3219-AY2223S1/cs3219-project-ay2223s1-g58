@@ -37,8 +37,7 @@ const parse = (text) => {
   return text
 }
 
-const QuestionPane = ({ id }) => {
-  const [questionId, setQuestionId] = useState(id)
+const QuestionPane = ({ questionId }) => {
   const [questionData, setQuestionData] = useState([])
 
   useEffect(() => {
@@ -52,26 +51,27 @@ const QuestionPane = ({ id }) => {
         .catch((e) => console.log(e))
     }
     getQuestion()
-  }, [questionId, questionData])
+  }, [questionId])
 
   const getNextQuestion = async () => {
-    const { data: response } = await axios
-      .get(URL_QUESTION_SERVICE + '?id=' + questionId)
-      .catch((e) => console.log(e))
-    await axios
-      .get(
-        URL_QUESTION_SERVICE +
-          '/nextQuestion' +
-          '?difficulty=' +
-          response.difficulty +
-          '&past_id=' +
-          questionData.id
-      )
-      .then((response) => {
-        const newData = response.data
-        setQuestionId(newData.id)
-      })
-      .catch(console.log)
+    // const { data: response } = await axios
+    //   .get(URL_QUESTION_SERVICE + '?id=' + questionId)
+    //   .catch((e) => console.log(e))
+    // await axios
+    //   .get(
+    //     URL_QUESTION_SERVICE +
+    //       '/nextQuestion' +
+    //       '?difficulty=' +
+    //       response.difficulty +
+    //       '&past_id=' +
+    //       questionData.id
+    //   )
+    //   .then((response) => {
+    //     const newData = response.data
+    //     setQuestionId(newData.id)
+    //   })
+    //   .catch(console.log)
+    console.log('clicked')
   }
 
   if (typeof questionData === 'undefined' || questionData.length === 0) {
