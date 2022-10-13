@@ -47,8 +47,8 @@ PUT http://localhost:8080/api/v1/history/room/room2
 Content-Type: application/json
 
 {
-    "questionId": "longest substring",
-    "answer": "test"
+    "questionId": "Shortest path",
+    "answer": "from queue import PriorityQueue\n\nclass Graph:\n    def __init__(self, num_of_vertices):\n        self.v = num_of_vertices\n        self.edges = [[-1 for i in range(num_of_vertices)] for j in range(num_of_vertices)]\n        self.visited = []\n\n    def add_edge(self, u, v, weight):\n        self.edges[u][v] = weight\n        self.edges[v][u] = weight\n\n# Dijkstra's algorithm for SSSP\ndef dijkstra(graph, start_vertex):\n    D = {v:float('inf') for v in range(graph.v)}\n    D[start_vertex] = 0\n\n    pq = PriorityQueue()\n    pq.put((0, start_vertex))\n\n    while not pq.empty():\n        (dist, current_vertex) = pq.get()\n        graph.visited.append(current_vertex)\n\n        for neighbor in range(graph.v):\n            if graph.edges[current_vertex][neighbor] != -1:\n                distance = graph.edges[current_vertex][neighbor]\n                if neighbor not in graph.visited:\n                    old_cost = D[neighbor]\n                    new_cost = D[current_vertex] + distance\n                    if new_cost < old_cost:\n                        pq.put((new_cost, neighbor))\n                        D[neighbor] = new_cost\n    return D\n"
 }
 
 ### UPDATE ROOM HISTORY room3
