@@ -31,7 +31,6 @@ const newTheme = {
 }
 
 const parse = (text) => {
-  console.log(text)
   text = text.replace('\n', '\n\n')
   return text
 }
@@ -84,7 +83,7 @@ const QuestionPage = () => {
     }
     if (
       typeof questionData.id === 'undefined' ||
-      questionData.id !== questionId
+      parseInt(questionData.id) != questionId
     ) {
       getQuestion()
     }
