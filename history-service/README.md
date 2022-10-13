@@ -16,5 +16,5 @@ For recording a user's matching history and the questions completed in each matc
 Provide your mongoDB URI in the docker run command. This **must** be a cloud URI (e.g. Atlas cluster). Recommended to encase the URL within quotes like `'your_URI'` to avoid any parsing error in the shell.
 ```bash
 docker build -t history-service .
-docker run -d -p 8080:8080 -e DB_LOCAL_URI=your_URI history-service
+docker run -d -p 8080:8080 -e DB_URI_DEV=your_URI history-service
 ```
