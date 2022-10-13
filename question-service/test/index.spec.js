@@ -54,13 +54,6 @@ describe('GET Next Question of same difficulty', function () {
             .expect('Content-Type', /json/)
             .expect(
                 200,
-                {
-                    id: 121,
-                    name: 'Best Time to Buy and Sell Stock',
-                    content: "You are given an array `prices` where `prices[i]` is the price of a given stock on the `ith` day.\n\n\nYou want to maximize your profit by choosing a **single day** to buy one stock and choosing a **different day in the future** to sell that stock.\n\n\nReturn *the maximum profit you can achieve from this transaction*. If you cannot achieve any profit, return `0`.\n\n\n\n**Example 1:**\n\n\n\n```\n**Input:** prices = [7,1,5,3,6,4]\n**Output:** 5\n**Explanation:** Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.\nNote that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.\n\n```\n\n**Example 2:**\n\n\n\n```\n**Input:** prices = [7,6,4,3,1]\n**Output:** 0\n**Explanation:** In this case, no transactions are done and the max profit = 0.\n\n```\n\n\n**Constraints:**\n\n\n* `1 <= prices.length <= 105`\n* `0 <= prices[i] <= 104`\n\n\n",
-                    difficulty: 'easy',
-                    types: ["Array", "Dynamic Programming"],
-                },
                 done
             )
     })
