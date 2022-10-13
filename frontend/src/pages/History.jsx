@@ -2,7 +2,7 @@ import useAuth from '../hooks/useAuth'
 import { Helmet } from 'react-helmet-async'
 import { useState, useEffect } from 'react'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
-import { URL_USER_HISTORY, STATUS_CODE_BAD_REQUEST, STATUS_CODE_SUCCESS } from '../constants'
+import { URL_HISTORY_USER, STATUS_CODE_BAD_REQUEST, STATUS_CODE_SUCCESS } from '../constants'
 import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, Spinner } from '@chakra-ui/react'
 
 const History = () => {
@@ -15,7 +15,7 @@ const History = () => {
   useEffect(() => {
     const fetchHist = async () => {
       const res = await axiosPrivate
-        .get(`${URL_USER_HISTORY}/${auth.username}`)
+        .get(`${URL_HISTORY_USER}/${auth.username}`)
         .catch((e) => {
           if (e.response.status === STATUS_CODE_BAD_REQUEST) {
             setIsValid(false) // no username given
@@ -83,7 +83,7 @@ function processData(uid, data) {
     }
     return room.completed.map(transformer)
   })
-  questions.sort((x, y) => new Date(x.completedAt) - new Date(y.completedAt))
+  questions.sort((x, y) => new Date(y.completedAt) - new Date(x.completedAt))
   return questions
 }
 
@@ -91,8 +91,8 @@ const HistTable = ({ uid, data }) => {
   const questions = processData(uid, data)
 
   return (
-    <TableContainer overflowY='auto' whiteSpace='pre-line' maxHeight='100vh'>
-      <Table variant='striped' className='max-w-full break-words table-fixed'>
+    <TableContainer overflowY='auto' whiteSpace='pre-wrap' maxHeight='100vh'>
+      <Table variant='striped' className='max-w-full table-fixed'>
         <Thead className='sticky top-0 bg-blue-300'>
           <Tr>
             <Th className='w-1/6'>Partner</Th>

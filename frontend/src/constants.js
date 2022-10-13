@@ -61,5 +61,7 @@ const URI_HISTORY_SERVICE =
     ? 'http://localhost:80'
     : 'http://localhost:8080'
 const PREFIX_HISTORY_SERVICE = '/api/v1/history'
-export const URL_USER_HISTORY =
+export const URL_HISTORY_USER =
   URI_HISTORY_SERVICE + PREFIX_HISTORY_SERVICE + '/user'
+export const URL_HISTORY_ROOM =
+  URI_HISTORY_SERVICE + PREFIX_HISTORY_SERVICE + '/room'

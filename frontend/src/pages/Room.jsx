@@ -1,7 +1,10 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import {
+  EVENT_LISTEN,
+  URI_MATCHING_SERVICE,
   URL_MATCHING_ROOM,
+  URL_HISTORY_ROOM,
   STATUS_CODE_SUCCESS,
   STATUS_CODE_BAD_REQUEST,
 } from '../constants'
@@ -11,7 +14,6 @@ import QuestionPane from '../components/QuestionPane'
 import Editor from '../components/collaboration/Editor'
 import RoomEndDialog from '../components/room/RoomEndDialog'
 import io from 'socket.io-client'
-import { URI_MATCHING_SERVICE, EVENT_LISTEN } from '../constants'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
@@ -19,6 +21,7 @@ const Room = () => {
   const navigate = useNavigate()
   const { roomId } = useParams()
   const [questionId, setQuestionId] = useState()
+  const [editor, setEditor] = useState()
   const [isValid, setIsValid] = useState(true)
   const toast = useToast()
   const auth = useAuth()
@@ -37,9 +40,9 @@ const Room = () => {
       if (res && res.status === STATUS_CODE_SUCCESS) {
         setQuestionId(res.data.data.questionId)
       }
-    }  
+    }
     getQuestionId()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -68,6 +71,32 @@ const Room = () => {
     await axiosPrivate
       .delete(`${URL_MATCHING_ROOM}/${roomId}`)
       .catch(console.log)
+  }
+
+  const markCompleted = async () => {
+    console.log(editor.getText());
+    await axiosPrivate
+      .put(`${URL_HISTORY_ROOM}/${roomId}`, {
+        questionId,
+        answer: editor.getText(),   // accessing Firepad
+      })
+      .then(() => {
+        toast({
+          title: 'Marked question as completed!',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        })
+      })
+      .catch((e) => {
+        toast({
+          title: "Couldn't mark as completed...",
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        })
+        return console.log(e)
+      })
   }
 
   const getHelmet = () => {
@@ -108,8 +137,9 @@ const Room = () => {
         <div className="grid h-screen grid-cols-2 gap-4">
           <QuestionPane id={questionId} />
           <div className="flex flex-col justify-start">
-            <Editor roomId={roomId} />
-            <div className="flex flex-col items-center justify-start">
+            <Editor roomId={roomId} setEditorComponent={setEditor} />
+            <div className="flex flex-row items-center justify-center">
+              <Button className='mx-2' onClick={markCompleted}>Mark completed</Button>
               <RoomEndDialog handleClick={endSession} />
             </div>
           </div>
