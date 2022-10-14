@@ -1,7 +1,7 @@
 const schedule = require("node-schedule");
 const axios = require("axios").default;
+const nanoid = require("nanoid");
 
-const base64id = require("base64id");
 const MatchRepository = require("../repository/match-repository");
 const { sendMessageToOne, sendMessageToBoth } = require("../utils/socket-io");
 const { EVENT_EMIT, URL_ROOM_SERVICE } = require("../const/constants");
@@ -45,7 +45,7 @@ const MatchService = {
   ) {
     await MatchService.deleteMatch(socketIdWaiting);
     console.log(EVENT_EMIT.MATCH_SUCCESS);
-    const roomId = base64id.generateId() + new Date().getTime();
+    const roomId = nanoid(7) + new Date().getTime();
     await axios.post(URL_ROOM_SERVICE, {
       roomId,
       userId1: userWaiting,
