@@ -54,10 +54,8 @@ const getCursorExtension = (uid) => {
             pos: x.pos,
             create: () => {
               const dom = document.createElement('div')
-              dom.style.borderColor = 'magenta'
-              dom.style.borderWidth = '1px'
-              dom.style.height = '16px'
-              const offset = { x: 0, y: -16 }
+              dom.className = 'cm-other-cursor'  // Styling handled by CodeMirror's theme (see Editor.jsx)
+              const offset = { x: 0, y: -15 }
               return { dom, offset }
             },
           }

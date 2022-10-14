@@ -15,7 +15,8 @@ import { cpp } from '@codemirror/lang-cpp'
 import getCursorExtension from './cursorExtension'
 import getSelectionExtension from './selectionExtension'
 import CursorListener from './cursorListener'
-import { Select } from '@chakra-ui/react'
+import { useColorMode, Select } from '@chakra-ui/react'
+import { oneDark, lightTheme } from './editorThemes'
 
 const indents = {
   2: '  ',
@@ -37,6 +38,7 @@ const Editor = ({ roomId, setEditorComponent }) => {
   const [ready, setReady] = useState(false)
   const [tabSize, setTabSize] = useTabSize(docPath)
   const [lang, setLang] = useLanguage(docPath)
+  const { colorMode } = useColorMode()
 
   const uid = auth.username
 
@@ -68,17 +70,9 @@ const Editor = ({ roomId, setEditorComponent }) => {
         languageExtensions[lang], // extension for language
         EditorView.lineWrapping, // extension to wrap line
         // extension to customize editor style
-        EditorView.theme({
-          '&': {
-            height: '85vh',
-            borderColor: 'd3d3d3',
-            borderWidth: '3px',
-          },
-          '.cm-cursor': {
-            borderColor: 'black',
-            borderWidth: '1px',
-          },
-        }),
+        colorMode === 'light'
+          ? lightTheme
+          : oneDark,
         // extension to upload my own cursor data
         EditorView.updateListener.of((update) => {
           if (!update.selectionSet && !update.docChanged) return

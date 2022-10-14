@@ -9,7 +9,7 @@ export function Footer() {
       <Container>
         <div className="flex flex-col items-start justify-between pt-16 pb-6 gap-y-12 lg:flex-row lg:items-center lg:py-16">
           <div>
-            <div className="flex items-center text-gray-900">
+            <div className="flex items-center text-gray-900 dark:text-gray-300">
               <div className="ml-4">
                 <p className="text-base font-semibold">PeerPrep</p>
                 <p className="mt-1 text-sm">Prepare with your peers</p>
@@ -19,18 +19,18 @@ export function Footer() {
               <NavLinks />
             </nav>
           </div>
-          <div className="relative flex items-center self-stretch p-4 -mx-4 transition-colors group hover:bg-gray-100 sm:self-auto sm:rounded-2xl lg:mx-0 lg:self-auto lg:p-6">
+          <div className="relative flex items-center self-stretch p-4 -mx-4 transition-colors group hover:bg-gray-100 dark:hover:bg-opacity-5 sm:self-auto sm:rounded-2xl lg:mx-0 lg:self-auto lg:p-6">
             <div className="relative flex items-center justify-center flex-none w-24 h-24">
               <Logo className="flex-none w-10 h-20 fill-cyan-500" />
             </div>
-            <div className="ml-8 lg:w-64">
-              <p className="text-base font-semibold text-gray-900">
+            <div className="ml-8 lg:w-64 ">
+              <p className="text-base font-semibold text-gray-900 dark:text-gray-300">
                 <Link to="/login">
                   <span className="absolute inset-0 sm:rounded-2xl" />
                   Login now
                 </Link>
               </p>
-              <p className="mt-1 text-sm text-gray-700">
+              <p className="mt-1 text-sm text-gray-700 dark:text-gray-300">
                 This is the best way to prepare for interviews
               </p>
             </div>
