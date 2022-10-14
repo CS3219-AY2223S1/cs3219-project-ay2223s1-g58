@@ -9,7 +9,6 @@ const getOtherSelectionDecor = (uid) => {
   return Decoration.mark({
     inclusiveStart: true,
     attributes: {
-      style: 'background-color: lightblue',
       class: 'cm-other-selection',
     },
     uid: uid,
