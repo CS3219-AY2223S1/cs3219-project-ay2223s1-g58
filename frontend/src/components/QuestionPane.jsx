@@ -5,7 +5,6 @@ import {
   HStack,
   VStack,
   Heading,
-  Divider,
   useToast,
   StackDivider,
 } from '@chakra-ui/react'
@@ -82,7 +81,7 @@ const QuestionPane = ({ questionId, roomId }) => {
   if (typeof questionData === 'undefined' || questionData.length === 0) {
     return (
       <AuthLayout title="Retrieving question...">
-        <div className="text-xl text-center"></div>
+        <div className="text-center text-xl"></div>
       </AuthLayout>
     )
   }
@@ -91,7 +90,7 @@ const QuestionPane = ({ questionId, roomId }) => {
 
   return (
     <>
-      <Box className="border rounded-lg">
+      <Box className="rounded-lg border">
         <VStack h="100vh" divider={<StackDivider borderColor="gray.200" />}>
           <HStack spacing="30px" className="mt-2">
             <Heading size="lg" fontWeight="semibold" color="gray 500">
@@ -112,7 +111,7 @@ const QuestionPane = ({ questionId, roomId }) => {
               Next Question
             </Button>
           </HStack>
-          <div className="max-h-full px-2 mx-2 overflow-y-auto">
+          <div className="mx-2 max-h-full overflow-y-auto px-2">
             <ReactMarkdown
               components={ChakraUIRenderer(newTheme)}
               children={parse(questionData.content)}
