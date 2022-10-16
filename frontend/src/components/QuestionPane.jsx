@@ -5,7 +5,7 @@ import {
   HStack,
   VStack,
   Heading,
-  Divider,
+  StackDivider,
 } from '@chakra-ui/react'
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer'
 import { AuthLayout } from '../components/AuthLayout'
@@ -77,7 +77,7 @@ const QuestionPane = ({ id }) => {
   if (typeof questionData === 'undefined' || questionData.length === 0) {
     return (
       <AuthLayout title="Retrieving question...">
-        <div className="text-center text-xl"></div>
+        <div className="text-xl text-center"></div>
       </AuthLayout>
     )
   }
@@ -86,9 +86,9 @@ const QuestionPane = ({ id }) => {
 
   return (
     <>
-      <Box className="rounded-lg border">
-        <VStack h="100vh">
-          <HStack spacing="30px">
+      <Box className="border rounded-lg">
+        <VStack h="100vh" divider={<StackDivider borderColor="gray.200" />}>
+          <HStack spacing="30px" className="mt-2">
             <Heading size="lg" fontWeight="semibold" color="gray 500">
               {questionData.name}
             </Heading>
@@ -99,14 +99,15 @@ const QuestionPane = ({ id }) => {
             >
               {questionData.difficulty}
             </Badge>
-            <Button onClick={getNextQuestion} variant="outline">
+            <Button
+              onClick={getNextQuestion}
+              variant="outline"
+              className=" dark:text-gray-300"
+            >
               Next Question
             </Button>
           </HStack>
-
-          <Divider orientation="horizontal" />
-
-          <div className="mx-2 max-h-full overflow-y-auto px-2">
+          <div className="max-h-full px-2 mx-2 overflow-y-auto">
             <ReactMarkdown
               components={ChakraUIRenderer(newTheme)}
               children={parse(questionData.content)}

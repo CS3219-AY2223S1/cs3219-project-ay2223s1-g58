@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom'
 import useLogout from '../hooks/useLogout'
 import useAuth from '../hooks/useAuth'
 import { UserAvatar } from './UserAvatar'
+import DarkModeToggle from './DarkModeToggle'
 
 function MenuIcon(props) {
   return (
@@ -69,7 +70,7 @@ export function Header() {
               {({ open }) => (
                 <>
                   <Popover.Button
-                    className="relative z-10 -m-2 inline-flex items-center rounded-lg stroke-gray-900 p-2 hover:bg-gray-200/50 hover:stroke-gray-600 active:stroke-gray-900 [&:not(:focus-visible)]:focus:outline-none"
+                    className="relative z-10 inline-flex items-center p-2 rounded-lg stroke-gray-900 hover:bg-gray-200/50 hover:stroke-gray-600 active:stroke-gray-900 dark:stroke-gray-300 "
                     aria-label="Toggle site navigation"
                   >
                     {({ open }) =>
@@ -124,7 +125,9 @@ export function Header() {
                                 <Button href="/login" variant="outline">
                                   Log in
                                 </Button>
-                                <Button href="/signup">Sign up</Button>
+                                <Button href="/signup" variant="outline">
+                                  Sign up
+                                </Button>
                               </>
                             )}
                           </div>
@@ -140,25 +143,31 @@ export function Header() {
                 <div className="hidden lg:block">
                   <UserAvatar username={auth.username} />
                 </div>
+                <DarkModeToggle />
                 <Button
                   onClick={logout}
                   variant="outline"
-                  className="hidden lg:block"
+                  className="hidden dark:text-gray-300 lg:block"
                 >
                   Logout
                 </Button>
               </>
             ) : (
               <>
+                <DarkModeToggle />
                 <Button
                   href="/login"
                   variant="outline"
-                  className="hidden lg:block"
+                  className="hidden dark:text-gray-300 lg:block"
                 >
                   Log in
                 </Button>
 
-                <Button href="/signup" className="hidden lg:block">
+                <Button
+                  href="/signup"
+                  variant="outline"
+                  className="hidden dark:text-gray-300 lg:block"
+                >
                   Sign up
                 </Button>
               </>
