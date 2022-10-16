@@ -38,6 +38,24 @@ async function getAllQuestions(req, res) {
     }
 }
 
+async function getAllTypes(req, res) {
+    try {
+        const allTypes = await CategoryRepository.getAllTypes()
+        let union = []
+        allTypes.map(arr => 
+         union = Array.from(new Set([...union, ...arr.types]))
+        )
+        return res.status(200).json({
+            message: 'All types retrieved!',
+            types: union
+        })
+    } catch (err) {
+        return res.status(500).json({
+            message: 'Database failure when retriving all questions! ' + err,
+        })
+    }
+}
+
 async function getNextQuestion(req, res) {
     try {
         var category, question
@@ -175,4 +193,5 @@ module.exports = {
     deleteQuestionById,
     updateQuestion,
     getNextQuestion,
+    getAllTypes,
 }

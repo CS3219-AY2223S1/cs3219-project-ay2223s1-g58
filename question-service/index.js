@@ -18,6 +18,7 @@ const {
     updateQuestion,
     getNextQuestion,
     getAllQuestions,
+    getAllTypes,
 } = require('./controller/question-controller')
 const router = express.Router()
 
@@ -30,6 +31,7 @@ router.get('/status', (_, res) => {
 router.get('', getQuestion)
 router.get('/nextQuestion', getNextQuestion)
 router.get('/allQuestions', getAllQuestions)
+router.get('/allTypes', getAllTypes)
 router.post('/', createQuestion)
 router.put('/', updateQuestion)
 router.delete('', deleteQuestionById)
