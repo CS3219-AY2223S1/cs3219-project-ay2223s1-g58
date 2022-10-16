@@ -1,23 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-deployment
+  name: question-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: user
+      app: question
   template:
     metadata:
       labels:
-        app: user
+        app: question
     spec:
       containers:
-        - name: user
+        - name: question
           image: # TODO: push to docker hub
           ports:
             - name: http
               containerPort: 8000
-          env:
-            - name: REDIS_HOST
-              value: redis-cluster-ip-service
