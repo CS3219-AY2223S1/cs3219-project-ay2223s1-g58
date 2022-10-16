@@ -102,18 +102,18 @@ function Login() {
                 sx={{ marginBottom: '2rem' }}
               />
             </div>
-            <div className="mt-2 flex items-center justify-center gap-2">
+            <div className="flex items-center justify-center gap-2 mt-2">
               <input
                 type="checkbox"
                 id="persist"
                 onChange={togglePersist}
                 checked={persist}
               />
-              <label htmlFor="persist">
+              <label htmlFor="persist" className="dark:text-black">
                 Trust This Device (Persist Sign In)
               </label>
             </div>
-            <Button color="cyan" className="mt-8 w-full" onClick={handleLogin}>
+            <Button color="cyan" className="w-full mt-8" onClick={handleLogin}>
               Sign In
             </Button>
             <div
