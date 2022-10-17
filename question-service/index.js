@@ -19,6 +19,7 @@ const {
     getNextQuestion,
     getAllQuestions,
     getAllTypes,
+    getQuestionNames,
 } = require('./controller/question-controller')
 const router = express.Router()
 
@@ -31,6 +32,7 @@ router.get('/status', (_, res) => {
 router.get('', getQuestion)
 router.get('/nextQuestion', getNextQuestion)
 router.get('/allQuestions', getAllQuestions)
+router.get('/questionNames', getQuestionNames)
 router.get('/allTypes', getAllTypes)
 router.post('/', createQuestion)
 router.put('/', updateQuestion)

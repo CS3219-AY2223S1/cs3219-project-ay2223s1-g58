@@ -24,6 +24,23 @@ async function createQuestion(req, res) {
     }
 }
 
+async function getQuestionNames(req, res) {
+    try {
+        const {id} = req.query
+        const questionArray = await QuestionRepository.findQuestionsById(id)
+        return res
+                .status(200)
+                .json({ 
+                    message: 'Question names successfully!',
+                    questions: questionArray,
+                 })
+    } catch (err) {
+        return res.status(500).json({
+            message: 'Database failure when retriving question names! ' + err,
+        })
+    }
+}
+
 async function getAllQuestions(req, res) {
     try {
         const questions = await QuestionRepository.getAllQuestion()
@@ -188,6 +205,7 @@ async function updateQuestion(req, res) {
 
 module.exports = {
     createQuestion,
+    getQuestionNames,
     getAllQuestions,
     getQuestion,
     deleteQuestionById,

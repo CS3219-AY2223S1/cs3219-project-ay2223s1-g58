@@ -1,4 +1,5 @@
 const db = require('../models')
+const { Op } = require('sequelize')
 
 const QuestionRepository = {
     findById: function (id) {
@@ -6,6 +7,16 @@ const QuestionRepository = {
             where: {
                 id: id,
             },
+        })
+    },
+    findQuestionsById: function(ids) {
+        return db.Question.findAll({
+            attributes: ['id', 'name'],
+            where: {
+                id: {
+                    [Op.in]: ids,
+                }
+            }
         })
     },
     create: function (name, content) {
