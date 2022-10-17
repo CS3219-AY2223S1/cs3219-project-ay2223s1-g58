@@ -26,11 +26,11 @@ spec:
             - name: POSTGRES_USER
               value: postgres
             - name: POSTGRES_HOST
-              value: postgres_db
+              value: postgres-cluster-ip-service
             - name: POSTGRES_PORT
-              value: 5432
+              value: '5432'
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: cs3219
+                  name: postgres-password
                   key: POSTGRES_PASSWORD

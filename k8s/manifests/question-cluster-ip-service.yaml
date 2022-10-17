@@ -8,5 +8,5 @@ spec:
     app: question
   ports:
     - name: http
-      port: 8000
-      targetPort: 8000
+      port: 8500
+      targetPort: 8500

@@ -14,23 +14,23 @@ spec:
     spec:
       containers:
         - name: question
-          image: # TODO: push to docker hub
+          image: b9jmthkk/question
           ports:
             - name: http
-              containerPort: 8000
+              containerPort: 8500
           env:
             - name: PORT
-              value: 80
+              value: '80'
             - name: ENV
               value: production
             - name: POSTGRES_USER
               value: postgres
             - name: POSTGRES_HOST
-              value: postgres_db
+              value: postgres-cluster-ip-service
             - name: POSTGRES_PORT
-              value: 5432
+              value: '5432'
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: cs3219
+                  name: postgres-password
                   key: POSTGRES_PASSWORD

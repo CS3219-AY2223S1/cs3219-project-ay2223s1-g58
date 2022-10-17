@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: matching-cluster-ip-service
+  name: room-cluster-ip-service
 spec:
   type: ClusterIP
   selector:
-    app: matching
+    app: room
   ports:
     - name: http
-      port: 8001
-      targetPort: 8001
+      port: 8022
+      targetPort: 8022

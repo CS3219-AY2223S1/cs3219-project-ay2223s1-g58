@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: # TODO: push to docker hub
+          image: b9jmthkk/frontend
           ports:
             - name: http
               containerPort: 3000

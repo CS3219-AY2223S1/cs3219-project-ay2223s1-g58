@@ -1,28 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: matching-deployment
+  name: room-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: matching
+      app: room
   template:
     metadata:
       labels:
-        app: matching
+        app: room
     spec:
       containers:
-        - name: matching
+        - name: room
           image: # TODO: push to docker hub
           ports:
             - name: http
-              containerPort: 8001
+              containerPort: 8022
           env:
             - name: PORT
               value: '80'
-            - name: URI_QUESTION_SERVICE
-              value: http://question-cluster-ip-service:8500
             - name: ACCESS_TOKEN_SECRET
               valueFrom:
                 secretKeyRef:
