@@ -16,11 +16,13 @@ import RoomEndDialog from '../components/room/RoomEndDialog'
 import io from 'socket.io-client'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import VideoChat from '../components/room/VideoChat'
 
 const Room = () => {
   const navigate = useNavigate()
   const { roomId } = useParams()
   const [questionId, setQuestionId] = useState()
+  const [socket, setSocket] = useState()
   const [isValid, setIsValid] = useState(true)
   const toast = useToast()
   const { auth } = useAuth()
@@ -72,7 +74,7 @@ const Room = () => {
       })
       setQuestionId(payload.question)
     })
-
+    setSocket(newSocket)
     return () => newSocket.close()
   }, [auth.accessToken, navigate, roomId, toast])
 
@@ -117,15 +119,18 @@ const Room = () => {
           </h1>
         </main>
       ) : (
-        <div className="grid h-screen grid-cols-2 gap-4">
-          <QuestionPane questionId={questionId} roomId={roomId} />
-          <div className="flex flex-col justify-start">
-            <Editor roomId={roomId} />
-            <div className="flex flex-col items-center justify-start">
-              <RoomEndDialog handleClick={endSession} />
+        <>
+          <VideoChat userId={auth.username} roomId={roomId} socket={socket} />
+          <div className="grid h-screen grid-cols-2 gap-4">
+            <QuestionPane questionId={questionId} roomId={roomId} />
+            <div className="flex flex-col justify-start">
+              <Editor roomId={roomId} />
+              <div className="flex flex-col items-center justify-start">
+                <RoomEndDialog handleClick={endSession} />
+              </div>
             </div>
           </div>
-        </div>
+        </>
       )}
     </>
   )
