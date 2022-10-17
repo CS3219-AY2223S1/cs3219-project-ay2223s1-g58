@@ -18,3 +18,19 @@ spec:
           ports:
             - name: http
               containerPort: 5432
+          env:
+            - name: ENV
+              value: production
+            - name: POSTGRES_DB
+              value: postgres_db
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_HOST
+              value: postgres_db
+            - name: POSTGRES_PORT
+              value: 5432
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cs3219
+                  key: POSTGRES_PASSWORD

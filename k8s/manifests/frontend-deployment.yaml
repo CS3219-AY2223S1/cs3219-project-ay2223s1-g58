@@ -17,4 +17,4 @@ spec:
           image: # TODO: push to docker hub
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 3000

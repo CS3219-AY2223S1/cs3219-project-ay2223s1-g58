@@ -18,3 +18,13 @@ spec:
           ports:
             - name: http
               containerPort: 8001
+          env:
+            - name: PORT
+              value: 80
+            - name: URI_QUESTION_SERVICE
+              value: http://question-cluster-ip-service:8500
+            - name: ACCESS_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: cs3219
+                  key: ACCESS_TOKEN_SECRET
