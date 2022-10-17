@@ -1,17 +1,16 @@
 /* eslint-disable no-param-reassign */
 const { Server } = require("socket.io");
 const jwt = require("jsonwebtoken");
-const { EVENT_LISTEN } = require("../const/constants");
 
 let io;
-exports.initSocket = (httpServer, matchHandler, cancelHandler) => {
+exports.initSocket = (httpServer) => {
   io = new Server(httpServer, {
     cors: {
       origin: "*",
       methods: ["GET", "POST"],
     },
   });
-  io.path("/socket.io/matching");
+  io.path("/socket.io/room");
   io.use((socket, next) => {
     try {
       const { token } = socket.handshake.auth;
@@ -24,10 +23,6 @@ exports.initSocket = (httpServer, matchHandler, cancelHandler) => {
       console.log(e);
       next(e);
     }
-  });
-  io.on("connection", (socket) => {
-    socket.on(EVENT_LISTEN.MATCH_FIND, matchHandler);
-    socket.on(EVENT_LISTEN.MATCH_CANCEL, cancelHandler);
   });
 };
 
