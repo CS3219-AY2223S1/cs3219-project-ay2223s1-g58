@@ -11,7 +11,12 @@ import io from 'socket.io-client'
 import MatchTimer from './MatchTimer'
 import MatchTimeout from './MatchTimeout'
 import { useNavigate } from 'react-router-dom'
-import { URI_MATCHING_SERVICE, EVENT_EMIT, EVENT_LISTEN } from '../../constants'
+import {
+  URI_MATCHING_SERVICE_SOCKET_PATH,
+  EVENT_EMIT,
+  EVENT_LISTEN,
+  URI_MATCHING_SERVICE,
+} from '../../constants'
 import MatchError from './MatchError'
 import useAuth from '../../hooks/useAuth'
 
@@ -32,6 +37,7 @@ const MatchDialog = () => {
 
   useEffect(() => {
     const newSocket = io(URI_MATCHING_SERVICE, {
+      path: URI_MATCHING_SERVICE_SOCKET_PATH,
       auth: {
         token: auth.accessToken,
       },

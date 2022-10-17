@@ -33,6 +33,17 @@ services:
     environment:
       - PORT=80
       - URI_QUESTION_SERVICE=http://question-service:8500
+      - URI_ROOM_SERVICE=http://room-service:8022
+      - ACCESS_TOKEN_SECRET=7c0dd92cafc2537595f48eca543a45e38e25b0322c558b8cb44907db49726b54a0809709c4491cbc086187009367ac4febfb8d5db310320c16d510818d833ad9
+
+  room-service:
+    build:
+      context: ./room-service
+    ports:
+      - "8022:8022"
+    environment:
+      - PORT=80
+      - URI_QUESTION_SERVICE=http://question-service:8500
       - ACCESS_TOKEN_SECRET=7c0dd92cafc2537595f48eca543a45e38e25b0322c558b8cb44907db49726b54a0809709c4491cbc086187009367ac4febfb8d5db310320c16d510818d833ad9
 
   postgres_db:
@@ -52,6 +63,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
   question-service:
     build:
       context: ./question-service
@@ -77,3 +89,4 @@ services:
       - user-service
       - matching-service
       - question-service
+      - room-service
