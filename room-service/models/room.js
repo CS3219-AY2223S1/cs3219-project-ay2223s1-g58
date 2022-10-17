@@ -30,6 +30,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         field: "user_id_2",
       },
+      difficulty: {
+        type: DataTypes.STRING,
+        field: "difficulty",
+      },
     },
     {
       sequelize,

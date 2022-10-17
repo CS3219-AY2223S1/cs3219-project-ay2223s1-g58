@@ -9,8 +9,15 @@ const RoomRepository = {
       },
     });
   },
-  create: function (roomId, questionId, userId1, userId2) {
-    return db.Room.create({ roomId, questionId, userId1, userId2 });
+  update: function (roomId, updatedRoom) {
+    return db.Room.update(updatedRoom, {
+      where: {
+        roomId: roomId,
+      },
+    });
+  },
+  create: function (roomId, questionId, userId1, userId2, difficulty) {
+    return db.Room.create({ roomId, questionId, userId1, userId2, difficulty });
   },
   delete: function (roomId) {
     return db.Room.destroy({

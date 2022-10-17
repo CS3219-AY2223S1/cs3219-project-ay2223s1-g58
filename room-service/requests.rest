@@ -1,0 +1,12 @@
+### GET ROOM
+GET http://localhost:8022/api/v1/room/MUdekW1LM87Ouq0SAAAC|Ex7jLTZLxXKGW6wXAAAF
+
+### CREATE ROOM
+POST http://localhost:8022/api/v1/room
+Content-Type: application/json
+
+{"roomId":"WvlfuCkjpslqHdaIAAAB-DHME9NS-fLSzEZX8AAAD","questionId":1,"userId1":"qwe","userId2":"asd","difficulty":"easy"}
+
+### DELETE Room
+DELETE http://localhost:8022/api/v1/room/MUdekW1LM87Ouq0SAAAC|Ex7jLTZLxXKGW6wXAAAF
+
