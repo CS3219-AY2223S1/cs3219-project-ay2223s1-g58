@@ -49,9 +49,15 @@ docker push b9jmthkk/user
 docker build -f Dockerfile -t b9jmthkk/matching .
 docker push b9jmthkk/matching
 
+docker build -f Dockerfile.production -t b9jmthkk/question .
+docker push b9jmthkk/question
+
 # local testing
 kind create cluster --name kind-1 --config k8s/kind/cluster-config.yaml
 
 # clean up
 kubectl delete -f k8s/manifests/question-deployment.yaml
 kind delete cluster --name kind-1
+
+# logs
+kubectl logs --selector=app=question
