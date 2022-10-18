@@ -28,7 +28,7 @@ const Match = () => {
           console.log(e)
         }
       })
-  }, [])
+  }, [axiosPrivate])
   return (
     <div>
       <Helmet>

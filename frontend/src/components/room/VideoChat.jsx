@@ -101,7 +101,7 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
         socket.emit('join-room', { roomId, userId })
       })
     }
-  }, [])
+  }, [isAudio, isVideo, otherUserId, peer, roomId, socket, userId])
 
   const setUpOtherStream = (stream, isShow) => {
     setOtherStream(stream)
