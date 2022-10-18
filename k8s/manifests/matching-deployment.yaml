@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: matching
-          image: # TODO: push to docker hub
+          image: b9jmthkk/matching
           ports:
             - name: http
               containerPort: 8001
@@ -23,6 +23,8 @@ spec:
               value: '80'
             - name: URI_QUESTION_SERVICE
               value: http://question-cluster-ip-service:8500
+            - name: URI_ROOM_SERVICE
+              value: http://room-cluster-ip-service:8022
             - name: ACCESS_TOKEN_SECRET
               valueFrom:
                 secretKeyRef:

@@ -12,6 +12,10 @@ spec:
       labels:
         app: postgres
     spec:
+      # volumes:
+      #   - name: postgres-storage
+      #     persistentVolumeClaim:
+      #       claimName: postgres-persistent-volume-claim
       containers:
         - name: postgres
           image: postgres
@@ -19,14 +23,12 @@ spec:
             - name: http
               containerPort: 5432
           env:
-            - name: ENV
-              value: production
             - name: POSTGRES_DB
               value: postgres_db
             - name: POSTGRES_USER
               value: postgres
             - name: POSTGRES_HOST
-              value: postgres-cluster-ip-service
+              value: localhost
             - name: POSTGRES_PORT
               value: '5432'
             - name: POSTGRES_PASSWORD
