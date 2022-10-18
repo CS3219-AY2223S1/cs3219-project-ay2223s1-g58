@@ -1,3 +1,5 @@
+## Note: this is for local testing and debugging only, refer to init.sh instead
+
 # apply all the yaml files in the directory
 kubectl apply manifests
 

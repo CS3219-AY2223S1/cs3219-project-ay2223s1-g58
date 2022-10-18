@@ -12,10 +12,10 @@ spec:
       labels:
         app: postgres
     spec:
-      # volumes:
-      #   - name: postgres-storage
-      #     persistentVolumeClaim:
-      #       claimName: postgres-persistent-volume-claim
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: postgres-persistent-volume-claim
       containers:
         - name: postgres
           image: postgres

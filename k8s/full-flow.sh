@@ -1,3 +1,4 @@
+## Note: this is for local testing and debugging only, refer to init.sh instead
 
 ## Frontend
 kubectl apply -f k8s/manifests/frontend-deployment.yaml
