@@ -85,6 +85,12 @@ services:
       dockerfile: Dockerfile
     ports:
       - "80:80"
+    environment:
+      WATCHPACK_POLLING: "true"
+      CHOKIDAR_USEPOLLING: "true"
+    volumes:
+      - /app/node_modules
+      - ./frontend:/app
     depends_on:
       - user-service
       - matching-service

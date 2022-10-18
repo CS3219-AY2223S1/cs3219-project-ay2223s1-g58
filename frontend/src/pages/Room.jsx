@@ -22,6 +22,7 @@ const Room = () => {
   const navigate = useNavigate()
   const { roomId } = useParams()
   const [questionId, setQuestionId] = useState()
+  const [room, setRoom] = useState()
   const [socket, setSocket] = useState()
   const [isValid, setIsValid] = useState(true)
   const toast = useToast()
@@ -34,6 +35,7 @@ const Room = () => {
       .then((res) => {
         if (res && res.status === STATUS_CODE_SUCCESS) {
           setQuestionId(res.data.data.questionId)
+          setRoom(res.data.data)
         }
       })
       .catch((e) => {
@@ -120,7 +122,14 @@ const Room = () => {
         </main>
       ) : (
         <>
-          <VideoChat userId={auth.username} roomId={roomId} socket={socket} />
+          <VideoChat
+            userId={auth.username}
+            otherUserId={
+              room.userId1 === auth.username ? room.userId2 : room.userId1
+            }
+            roomId={roomId}
+            socket={socket}
+          />
           <div className="grid h-screen grid-cols-2 gap-4">
             <QuestionPane questionId={questionId} roomId={roomId} />
             <div className="flex flex-col justify-start">
