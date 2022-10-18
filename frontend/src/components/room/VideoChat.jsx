@@ -5,6 +5,7 @@ import {
   Button,
   ButtonGroup,
   Stack,
+  useColorModeValue,
 } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useState } from 'react'
@@ -22,6 +23,7 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
   const [peer, setPeer] = useState()
   const [myStream, setMyStream] = useState()
   const [otherStream, setOtherStream] = useState()
+  const buttonColour = useColorModeValue('blackAlpha', 'gray')
   useEffect(() => {
     if (!peer) {
       console.log('userId: ', userId)
@@ -39,13 +41,13 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
         function (stream) {
           stream.getVideoTracks()[0].enabled = isVideo
           setMyStream(stream)
-          addVideoStream(selfVideo, stream)
+          selfVideo.srcObject = stream
           console.log('hi over here', stream.getVideoTracks())
           const call = newPeer.call(otherUserId, stream)
           call.on('stream', function (remoteStream) {
             // Show stream in some video/canvas element.
             setUpOtherStream(remoteStream, true)
-            addVideoStream(otherVideo, remoteStream)
+            otherVideo.srcObject = remoteStream
           })
           console.log('otheruser: ', otherUserId)
 
@@ -57,7 +59,7 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
               console.log('user connected and called back')
               setUpOtherStream(remoteStream, true)
               console.log(remoteStream)
-              addVideoStream(otherVideo, remoteStream)
+              otherVideo.srcObject = remoteStream
             })
           })
 
@@ -65,7 +67,7 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
             console.log('user-disconnected: peer', peer)
             console.log('otherUserId', otherUserId)
             setUpOtherStream(null, false)
-            addVideoStream(otherVideo, null)
+            otherVideo.srcObject = null
           })
         },
         function (err) {
@@ -82,8 +84,8 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
             call.on('stream', function (remoteStream) {
               // Show stream in some video/canvas element.
               console.log('remote stream from call', remoteStream)
+              otherVideo.srcObject = remoteStream
               setUpOtherStream(remoteStream, true)
-              addVideoStream(otherVideo, remoteStream)
             })
           },
           function (err) {
@@ -100,13 +102,6 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
       })
     }
   }, [])
-
-  const addVideoStream = (video, stream) => {
-    video.srcObject = stream
-    // video.addEventListener('loadedmetadata', () => {
-    //   video.play()
-    // })
-  }
 
   const setUpOtherStream = (stream, isShow) => {
     setOtherStream(stream)
@@ -128,7 +123,7 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
         console.log('toggleAudioVideo send new stream isVideo', isVideo)
         stream.getVideoTracks()[0].enabled = isVideo
         setMyStream(stream)
-        addVideoStream(selfVideo, stream)
+        selfVideo.srcObject = stream
         peer.call(otherUserId, stream)
       },
       function (err) {
@@ -145,7 +140,7 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
             <AspectRatio w="200px" ratio={4 / 3}>
               <video id="other" autoPlay={true} />
             </AspectRatio>
-            <ButtonGroup colorScheme="blackAlpha" spacing="0">
+            <ButtonGroup colorScheme={buttonColour} spacing="0">
               <Button width="full">
                 {otherStream && otherStream.getAudioTracks().length > 0 ? (
                   <FaMicrophone />
@@ -161,11 +156,10 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
           <AspectRatio w="200px" ratio={4 / 3}>
             <video id="self" muted={true} autoPlay={true} />
           </AspectRatio>
-          <ButtonGroup colorScheme="blackAlpha" spacing="0">
+          <ButtonGroup colorScheme={buttonColour} spacing="0">
             <Button
               width="full"
               onClick={() => {
-                // myStream.getAudioTracks()[0].enabled = !isAudio
                 toggleAudioVideo(!isAudio, isVideo)
               }}
             >
@@ -175,7 +169,6 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
               width="full"
               onClick={() => {
                 console.log(myStream)
-                // myStream.getVideoTracks()[0].enabled = !isVideo
                 toggleAudioVideo(isAudio, !isVideo)
               }}
             >
