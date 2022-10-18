@@ -6,9 +6,6 @@ import {
   URL_ROOM_SERVICE,
   STATUS_CODE_SUCCESS,
   STATUS_CODE_BAD_REQUEST,
-  URI_ROOM_SERVICE_SOCKET_PATH,
-  EVENT_LISTEN,
-  URI_ROOM_SERVICE,
 } from '../constants'
 import { Button } from '@chakra-ui/react'
 
