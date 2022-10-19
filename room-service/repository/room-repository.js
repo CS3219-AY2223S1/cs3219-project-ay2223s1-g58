@@ -9,6 +9,13 @@ const RoomRepository = {
       },
     });
   },
+  findByUserId: function (userId) {
+    return db.Room.findOne({
+      where: {
+        [Sequelize.Op.or]: [{ userId1: userId }, { userId2: userId }],
+      },
+    });
+  },
   update: function (roomId, updatedRoom) {
     return db.Room.update(updatedRoom, {
       where: {

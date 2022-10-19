@@ -27,9 +27,10 @@ const PHASES = {
   ERROR: 'ERROR',
 }
 
+const MatchDialog = ({ isDisabled }) => {
+
 const difficultyList = ['easy', 'medium', 'hard']
 
-const MatchDialog = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [difficulty, setDifficulty] = useState('')
   const [type, setType] = useState('')
@@ -120,7 +121,9 @@ const MatchDialog = () => {
 
   return (
     <>
-      <Button onClick={handleOpen}>Find Match</Button>
+      <Button onClick={handleOpen} disabled={isDisabled}>
+        Find Match
+      </Button>
 
       <Modal isOpen={isOpen} onClose={handleClose}>
         <ModalOverlay />

@@ -5,11 +5,14 @@ const {
   deleteRoom,
   createRoom,
   updateRoomQuestionId,
+  getRoomByUserId,
 } = require("../controller/room-controller");
 
 const router = express.Router();
 
 router.get("/:roomId", authenticationMiddleware, getRoomById);
+
+router.get("/", authenticationMiddleware, getRoomByUserId);
 
 // no authentication for createRoom, since it is used by internally
 router.post("/", createRoom);

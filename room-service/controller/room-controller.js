@@ -24,6 +24,25 @@ exports.getRoomById = async function (req, res) {
   }
 };
 
+exports.getRoomByUserId = async function (req, res) {
+  try {
+    const room = await RoomService.findByUserId(req.user.username);
+    const data = {
+      isInRoom: room !== null,
+    };
+    if (room) {
+      data.roomId = room.roomId;
+    }
+    return res.status(200).json({
+      message: "Get Room info successfully",
+      data,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: err.message });
+  }
+};
+
 exports.updateRoomQuestionId = async function (req, res) {
   try {
     const room = await RoomService.findByRoomId(req.params.roomId);

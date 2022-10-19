@@ -12,6 +12,6 @@ COPY . .
 # Create sqlite3 database tables
 RUN npm run db:migrate
 # Expose port 
-EXPOSE 8001
+EXPOSE 8022
 # Exec form to avoid starting a shell session
 CMD ["npm", "start"]
