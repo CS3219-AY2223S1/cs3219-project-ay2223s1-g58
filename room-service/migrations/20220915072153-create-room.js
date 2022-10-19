@@ -27,6 +27,9 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
+      difficulty: {
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

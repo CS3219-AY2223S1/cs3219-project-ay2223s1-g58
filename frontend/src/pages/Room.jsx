@@ -2,11 +2,12 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import {
   EVENT_LISTEN,
-  URI_MATCHING_SERVICE,
-  URL_MATCHING_ROOM,
-  URL_HISTORY_ROOM,
+  URL_ROOM_SERVICE,
   STATUS_CODE_SUCCESS,
   STATUS_CODE_BAD_REQUEST,
+  URI_ROOM_SERVICE_SOCKET_PATH,
+  URI_ROOM_SERVICE,
+  URL_HISTORY_ROOM,
 } from '../constants'
 import { Button, useToast, Stack, Text } from '@chakra-ui/react'
 import { Helmet } from 'react-helmet-async'
@@ -24,29 +25,28 @@ const Room = () => {
   const [editor, setEditor] = useState()
   const [isValid, setIsValid] = useState(true)
   const toast = useToast()
-  const auth = useAuth()
+  const { auth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
 
   useEffect(() => {
-    const getQuestionId = async () => {
-      const res = await axiosPrivate
-        .get(`${URL_MATCHING_ROOM}/${roomId}`)
-        .catch((e) => {
-          if (e.response.status === STATUS_CODE_BAD_REQUEST) {
-            // Room not found
-            return setIsValid(false)
-          }
-        })
-      if (res && res.status === STATUS_CODE_SUCCESS) {
-        setQuestionId(res.data.data.questionId)
-      }
-    }
-    getQuestionId()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    axiosPrivate
+      .get(`${URL_ROOM_SERVICE}/${roomId}`)
+      .then((res) => {
+        if (res && res.status === STATUS_CODE_SUCCESS) {
+          setQuestionId(res.data.data.questionId)
+        }
+      })
+      .catch((e) => {
+        if (e.response.status === STATUS_CODE_BAD_REQUEST) {
+          // Room not found
+          setIsValid(false)
+        }
+      })
+  }, [axiosPrivate, roomId])
 
   useEffect(() => {
-    const newSocket = io(URI_MATCHING_SERVICE, {
+    const newSocket = io(URI_ROOM_SERVICE, {
+      path: URI_ROOM_SERVICE_SOCKET_PATH,
       auth: {
         token: auth.accessToken,
       },
@@ -64,12 +64,23 @@ const Room = () => {
       }, 4000)
     })
 
+    newSocket.on(`${roomId}-${EVENT_LISTEN.ROOM_UPDATE}`, (payload) => {
+      toast({
+        title: 'Next Question',
+        description: 'Fetched new question',
+        status: 'success',
+        duration: 4000,
+        isClosable: true,
+      })
+      setQuestionId(payload.question)
+    })
+
     return () => newSocket.close()
   }, [auth.accessToken, navigate, roomId, toast])
 
   const endSession = async () => {
     await axiosPrivate
-      .delete(`${URL_MATCHING_ROOM}/${roomId}`)
+      .delete(`${URL_ROOM_SERVICE}/${roomId}`)
       .catch(console.log)
   }
 
@@ -135,7 +146,7 @@ const Room = () => {
         </main>
       ) : (
         <div className="grid h-screen grid-cols-2 gap-4">
-          <QuestionPane id={questionId} />
+          <QuestionPane questionId={questionId} roomId={roomId} />
           <div className="flex flex-col justify-start">
             <Editor roomId={roomId} setEditorComponent={setEditor} />
             <div className="flex flex-row items-center justify-center">

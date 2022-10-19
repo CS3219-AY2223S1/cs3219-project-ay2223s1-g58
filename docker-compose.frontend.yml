@@ -41,7 +41,6 @@ services:
     ports:
       - '5432:5432'
     environment:
-      ENV: production
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres_db
       POSTGRES_USER: postgres
@@ -61,8 +60,9 @@ services:
       postgres_db:
         condition: service_healthy
     environment:
-      - ENV=production
       - PORT=3000
+    env_file:
+      - .env.local
     links:
       - postgres_db
     restart: on-failure

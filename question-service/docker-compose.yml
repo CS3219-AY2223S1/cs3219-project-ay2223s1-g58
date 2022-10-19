@@ -37,6 +37,8 @@ services:
                 condition: service_healthy
         environment:
             ENV: production
+        env_file:
+            - .env.prod
         links:
             - postgres_db
         restart: on-failure
