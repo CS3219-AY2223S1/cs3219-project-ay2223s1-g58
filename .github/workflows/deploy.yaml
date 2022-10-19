@@ -36,10 +36,10 @@ jobs:
       - name: Build new Docker image
         run: |-
           docker build -t b9jmthkk/frontend:latest -t b9jmthkk/frontend:${{ env.SHA }} -f ./frontend/Dockerfile.production ./frontend
-          docker build -t b9jmthkk/user:latest -t b9jmthkk/user:${{ env.SHA }} -f ./user-service/Dockerfile.production ./user-service
-          docker build -t b9jmthkk/question:latest -t b9jmthkk/question:${{ env.SHA }} -f ./question-service/Dockerfile.production ./question-service
-          docker build -t b9jmthkk/matching:latest -t b9jmthkk/matching:${{ env.SHA }} -f ./matching-service/Dockerfile.production ./matching-service
-          docker build -t b9jmthkk/room:latest -t b9jmthkk/room:${{ env.SHA }} -f ./room-service/Dockerfile.production ./room-service
+          docker build -t b9jmthkk/user:latest -t b9jmthkk/user:${{ env.SHA }} -f ./user-service/Dockerfile ./user-service
+          docker build -t b9jmthkk/question:latest -t b9jmthkk/question:${{ env.SHA }} -f ./question-service/Dockerfile ./question-service
+          docker build -t b9jmthkk/matching:latest -t b9jmthkk/matching:${{ env.SHA }} -f ./matching-service/Dockerfile ./matching-service
+          docker build -t b9jmthkk/room:latest -t b9jmthkk/room:${{ env.SHA }} -f ./room-service/Dockerfile ./room-service
 
       - name: Push to Docker Hub
         run: |-
