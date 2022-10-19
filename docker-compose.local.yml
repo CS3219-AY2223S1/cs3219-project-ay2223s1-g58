@@ -92,6 +92,7 @@ services:
       - .env.local
     environment:
       - PORT=80
+      - URI_QUESTION_SERVICE=http://question-service:8500
 
   frontend:
     build:

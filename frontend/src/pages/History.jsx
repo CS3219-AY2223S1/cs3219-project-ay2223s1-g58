@@ -3,7 +3,8 @@ import { Helmet } from 'react-helmet-async'
 import { useState, useEffect } from 'react'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { URL_HISTORY_USER, STATUS_CODE_BAD_REQUEST, STATUS_CODE_SUCCESS } from '../constants'
-import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, Spinner } from '@chakra-ui/react'
+import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, Spinner, Button } from '@chakra-ui/react'
+import { useNavigate } from 'react-router-dom'
 
 const History = () => {
   const { auth } = useAuth()
@@ -59,41 +60,19 @@ const History = () => {
         {!isLoading && !isValid ? (
           <h1>Unable to retrieve your learning history</h1>
         ) : (
-          <HistTable uid={auth.username} data={hist} />
+          <HistTable questions={hist} />
         )}
       </main>
     </>
   )
 }
 
-/**
- * History data is a list of room documents; within each room is a list of question documents.
- * We flatten it into a list of question objects, where each question consists of a partner,
- * question details, and a key property for React child.
- */
-function processData(uid, data) {
-  const questions = data.flatMap((room) => {
-    const partner = room.u1 === uid ? room.u2 : room.u1
-    function transformer(question, idx) {
-      return {
-        partner,
-        ...question,
-        key: room.roomId + question.Id + idx,
-      }
-    }
-    return room.completed.map(transformer)
-  })
-  questions.sort((x, y) => new Date(y.completedAt) - new Date(x.completedAt))
-  return questions
-}
-
-const HistTable = ({ uid, data }) => {
-  const questions = processData(uid, data)
-
+const HistTable = ({ questions }) => {
+  const navigate = useNavigate()
   return (
     <TableContainer overflowY='auto' whiteSpace='pre-wrap' maxHeight='100vh'>
       <Table variant='striped' className='max-w-full table-fixed'>
-        <Thead className='sticky top-0 bg-blue-300'>
+        <Thead className='sticky top-0 bg-blue-200 dark:bg-blue-900'>
           <Tr>
             <Th className='w-1/6'>Partner</Th>
             <Th className='w-1/5'>Question id</Th>
@@ -102,12 +81,20 @@ const HistTable = ({ uid, data }) => {
           </Tr>
         </Thead>
         <Tbody>
-          {questions.map((q) => {
+          {questions.map((q, idx) => {
             return (
-              <Tr key={q.key}>
+              <Tr key={q.roomId + q.id + idx} className='text-gray-700 dark:text-gray-300'>
                 <Td>{q.partner}</Td>
-                <Td>{q.id}</Td>
-                <Td>{q.answer}</Td>
+                <Td>
+                  <Button
+                    variant='link'
+                    onClick={() => navigate(`/question/${q.id}`)}
+                    className='dark:text-gray-500'
+                  >
+                      {q.name}
+                  </Button>
+                </Td>
+                <Td className='font-mono text-sm'>{q.answer}</Td>
                 <Td>
                   {new Date(q.completedAt).toLocaleString('en-GB', {
                     hour12: 'true',

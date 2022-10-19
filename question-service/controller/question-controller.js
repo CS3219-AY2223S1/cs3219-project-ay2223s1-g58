@@ -28,11 +28,13 @@ async function getQuestionNames(req, res) {
     try {
         const {id} = req.query
         const questionArray = await QuestionRepository.findQuestionsById(id)
+        const id2name = {}
+        questionArray.forEach(q => id2name[q.id] = q.name)
         return res
                 .status(200)
                 .json({ 
                     message: 'Question names successfully!',
-                    questions: questionArray,
+                    data: id2name,
                  })
     } catch (err) {
         return res.status(500).json({
