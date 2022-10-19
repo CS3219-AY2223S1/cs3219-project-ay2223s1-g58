@@ -93,6 +93,12 @@ const CategoryRepository = {
             limit: 1,
         })
     },
+    getAllTypes: function () {
+        return db.Category.findAll({
+            distinct: true,
+            attributes: ['types']
+        })
+    },
 }
 
 module.exports = CategoryRepository
