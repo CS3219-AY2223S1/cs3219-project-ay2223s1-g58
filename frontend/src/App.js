@@ -10,6 +10,8 @@ import Profile from './pages/Profile'
 import PersistLogin from './components/PersistLogin'
 import Match from './pages/Match'
 import Room from './pages/Room'
+import QuestionBank from './pages/QuestionBank'
+import QuestionPage from './pages/QuestionPage'
 import History from './pages/History.jsx'
 
 function App() {
@@ -20,6 +22,8 @@ function App() {
           <Route path="/" element={<Layout />}>
             {/* public routes */}
             <Route path="/login" element={<Login />} />
+            <Route path="/questions" element={<QuestionBank />} />
+            <Route path="/question/:questionId" element={<QuestionPage />} />
             <Route element={<PersistLogin />}>
               <Route path="/signup" element={<Signup />} />
             </Route>

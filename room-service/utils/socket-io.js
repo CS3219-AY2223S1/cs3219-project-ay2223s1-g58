@@ -24,6 +24,20 @@ exports.initSocket = (httpServer) => {
       next(e);
     }
   });
+  io.on("connection", (socket) => {
+    console.log("connection here");
+    socket.on("join-room", (payload) => {
+      console.log("join-room payload", payload);
+      const { roomId, userId } = payload;
+
+      socket.join(roomId);
+      socket.to(roomId).emit("user-connected", userId);
+
+      socket.on("disconnect", () => {
+        socket.to(roomId).emit("user-disconnected", userId);
+      });
+    });
+  });
 };
 
 exports.sendMessageToBoth = (firstSocket, secondSocket, event, message) =>

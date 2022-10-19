@@ -17,11 +17,14 @@ import RoomEndDialog from '../components/room/RoomEndDialog'
 import io from 'socket.io-client'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import VideoChat from '../components/room/VideoChat'
 
 const Room = () => {
   const navigate = useNavigate()
   const { roomId } = useParams()
   const [questionId, setQuestionId] = useState()
+  const [room, setRoom] = useState()
+  const [socket, setSocket] = useState()
   const [editor, setEditor] = useState()
   const [isValid, setIsValid] = useState(true)
   const toast = useToast()
@@ -34,6 +37,7 @@ const Room = () => {
       .then((res) => {
         if (res && res.status === STATUS_CODE_SUCCESS) {
           setQuestionId(res.data.data.questionId)
+          setRoom(res.data.data)
         }
       })
       .catch((e) => {
@@ -74,7 +78,7 @@ const Room = () => {
       })
       setQuestionId(payload.question)
     })
-
+    setSocket(newSocket)
     return () => newSocket.close()
   }, [auth.accessToken, navigate, roomId, toast])
 
@@ -145,16 +149,26 @@ const Room = () => {
           </h1>
         </main>
       ) : (
-        <div className="grid h-screen grid-cols-2 gap-4">
-          <QuestionPane questionId={questionId} roomId={roomId} />
-          <div className="flex flex-col justify-start">
-            <Editor roomId={roomId} setEditorComponent={setEditor} />
-            <div className="flex flex-row items-center justify-center">
+        <>
+          <VideoChat
+            userId={auth.username}
+            otherUserId={
+              room.userId1 === auth.username ? room.userId2 : room.userId1
+            }
+            roomId={roomId}
+            socket={socket}
+          />
+          <div className="grid h-screen grid-cols-2 gap-4">
+            <QuestionPane questionId={questionId} roomId={roomId} />
+            <div className="flex flex-col justify-start">
+              <Editor roomId={roomId} setEditorComponent={setEditor} />
+              <div className="flex flex-row items-center justify-center">
               <Button className='mx-2' onClick={markCompleted}>Mark completed</Button>
               <RoomEndDialog handleClick={endSession} />
             </div>
+            </div>
           </div>
-        </div>
+        </>
       )}
     </>
   )

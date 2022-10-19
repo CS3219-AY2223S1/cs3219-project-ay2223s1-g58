@@ -24,6 +24,55 @@ async function createQuestion(req, res) {
     }
 }
 
+async function getQuestionNames(req, res) {
+    try {
+        const {id} = req.query
+        const questionArray = await QuestionRepository.findQuestionsById(id)
+        return res
+                .status(200)
+                .json({ 
+                    message: 'Question names successfully!',
+                    questions: questionArray,
+                 })
+    } catch (err) {
+        return res.status(500).json({
+            message: 'Database failure when retriving question names! ' + err,
+        })
+    }
+}
+
+async function getAllQuestions(req, res) {
+    try {
+        const questions = await QuestionRepository.getAllQuestion()
+        return res.status(200).json({
+            message: 'All questions retrieved!',
+            questions: questions,
+        })
+    } catch (err) {
+        return res.status(500).json({
+            message: 'Database failure when retriving all questions! ' + err,
+        })
+    }
+}
+
+async function getAllTypes(req, res) {
+    try {
+        const allTypes = await CategoryRepository.getAllTypes()
+        let union = []
+        allTypes.map(arr => 
+         union = Array.from(new Set([...union, ...arr.types]))
+        )
+        return res.status(200).json({
+            message: 'All types retrieved!',
+            types: union
+        })
+    } catch (err) {
+        return res.status(500).json({
+            message: 'Database failure when retriving all questions! ' + err,
+        })
+    }
+}
+
 async function getNextQuestion(req, res) {
     try {
         var category, question
@@ -156,8 +205,11 @@ async function updateQuestion(req, res) {
 
 module.exports = {
     createQuestion,
+    getQuestionNames,
+    getAllQuestions,
     getQuestion,
     deleteQuestionById,
     updateQuestion,
     getNextQuestion,
+    getAllTypes,
 }
