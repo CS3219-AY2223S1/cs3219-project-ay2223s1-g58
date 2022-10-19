@@ -54,13 +54,6 @@ describe('GET Next Question of same difficulty', function () {
             .expect('Content-Type', /json/)
             .expect(
                 200,
-                {
-                    id: 7,
-                    name: 'test',
-                    content: 'test',
-                    difficulty: 'easy',
-                    types: ['test'],
-                },
                 done
             )
     })

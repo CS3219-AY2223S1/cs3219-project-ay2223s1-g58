@@ -1,7 +1,13 @@
 'use strict'
 const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
-    class Category extends Model {}
+    class Category extends Model {
+        static associate(models) {
+            Category.belongsTo(models.Question, {
+                foreignKey: 'questionId',
+            })
+        }
+    }
     Category.init(
         {
             difficulty: {
@@ -15,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
             questionId: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
+                unique: true,
                 references: { model: 'Questions', key: 'id' },
                 onDelete: 'cascade',
                 onUpdate: 'cascade',
@@ -25,5 +32,6 @@ module.exports = (sequelize, DataTypes) => {
             modelName: 'Category',
         }
     )
+
     return Category
 }
