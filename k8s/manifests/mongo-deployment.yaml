@@ -12,6 +12,10 @@ spec:
       labels:
         app: mongo
     spec:
+      volumes:
+        - name: mongo-storage
+          persistentVolumeClaim:
+            claimName: mongo-persistent-volume-claim
       containers:
         - name: mongo
           image: mongo
