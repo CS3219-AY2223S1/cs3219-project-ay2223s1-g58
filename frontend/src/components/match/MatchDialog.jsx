@@ -28,8 +28,12 @@ const PHASES = {
 }
 
 const MatchDialog = ({ isDisabled }) => {
+
+const difficultyList = ['easy', 'medium', 'hard']
+
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [difficulty, setDifficulty] = useState('')
+  const [type, setType] = useState('')
   const [phase, setPhase] = useState(PHASES.SELECT)
   const [socket, setSocket] = useState()
   const navigate = useNavigate()
@@ -61,7 +65,12 @@ const MatchDialog = ({ isDisabled }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    socket.emit(EVENT_EMIT.MATCH_FIND, { difficulty: difficulty })
+    if (difficulty) {
+      socket.emit(EVENT_EMIT.MATCH_FIND, { difficulty: difficulty })
+    } else {
+      socket.emit(EVENT_EMIT.MATCH_FIND, { type: type })
+    }
+
     setPhase(PHASES.FINDING)
   }
 
@@ -82,7 +91,13 @@ const MatchDialog = ({ isDisabled }) => {
           <MatchForm
             onClose={handleClose}
             onSubmit={handleSubmit}
-            onChange={(e) => setDifficulty(e.target.value)}
+            onChange={(e) => {
+              if (difficultyList.includes(e.target.value)) {
+                setDifficulty(e.target.value)
+              } else {
+                setType(e.target.value)
+              }
+            }}
           />
         )
       case PHASES.FINDING:
