@@ -8,12 +8,12 @@ require("dotenv").config();
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(
-  cors({
-    origin: `https://leetwithfriend.com`,
-    credentials: true,
-  })
-); // config cors so that front-end can use
+// app.use(
+//   cors({
+//     origin: `https://leetwithfriend.com`,
+//     credentials: true,
+//   })
+// ); // config cors so that front-end can use
 app.options("*", cors());
 
 app.get("/", (req, res) => {
