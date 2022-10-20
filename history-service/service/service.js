@@ -6,6 +6,9 @@ const HistoryService = {
   /** Returns an array of questions the user has completed, including questions from any current room. */
   getUserHistory: async function (uid) {
     const resp = await HistoryRepository.getByUid(uid).lean() // an array of rooms
+    if (resp.length === 0) {
+      return []
+    }
     const questions = flattenHist(uid, resp)
     const params = getIdParams(questions)
 
@@ -39,7 +42,6 @@ function flattenHist(uid, data) {
   return data.flatMap((room) => {
     const partner = room.u1 === uid ? room.u2 : room.u1
     function transformer(question) {
-      console.log(`========= transformer =========\n${question}`)
       return {
         partner,
         roomId: room.roomId,
@@ -53,11 +55,8 @@ function flattenHist(uid, data) {
 /** Constructs a query param string consisting of the question IDs. */
 function getIdParams(questions) {
   const ids = new Set(questions.map((q) => {
-    console.log(q)
-    console.log(`>>> q.id=${q.id}`)
     return q.id
   }))
-  console.log(ids)
   const params = new URLSearchParams()
   ids.forEach((id) => params.append('id', id))
   return params
