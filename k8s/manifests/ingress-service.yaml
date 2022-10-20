@@ -46,7 +46,14 @@ spec:
                 name: question-cluster-ip-service
                 port:
                   number: 8500
-          - path: /socket.io?(.*)
+          - path: /socket.io/room?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: room-cluster-ip-service
+                port:
+                  number: 8022
+          - path: /socket.io/matching?(.*)
             pathType: Prefix
             backend:
               service:
@@ -91,7 +98,14 @@ spec:
                 name: question-cluster-ip-service
                 port:
                   number: 8500
-          - path: /socket.io?(.*)
+          - path: /socket.io/room?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: room-cluster-ip-service
+                port:
+                  number: 8022
+          - path: /socket.io/matching?(.*)
             pathType: Prefix
             backend:
               service:
