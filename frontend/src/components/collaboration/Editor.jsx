@@ -45,7 +45,7 @@ const Editor = ({ roomId, setEditorComponent }) => {
   useEffect(() => {
     /** Timer ID returned by setTimeout, used for sending cursor data */
     let timerId = null
-    const MIN_DELAY = 1, MAX_DELAY = 100 // Delay duration in milisec to send cursor data
+    const MIN_DELAY = 1, MAX_DELAY = 50 // Delay duration in milisec to send cursor data
     let lastSend = 0 // Timestamp of last cursor update
 
     // Delay to send cursor should be in the range [MIN_DELAY, MAX_DELAY]
