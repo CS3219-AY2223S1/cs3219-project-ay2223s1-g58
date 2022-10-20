@@ -53,6 +53,13 @@ spec:
                 name: matching-cluster-ip-service
                 port:
                   number: 8001
+          - path: /api/v1/room?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: room-cluster-ip-service
+                port:
+                  number: 8022
     - host: 'www.leetwithfriend.com' # https
       http:
         paths:
@@ -91,6 +98,13 @@ spec:
                 name: matching-cluster-ip-service
                 port:
                   number: 8001
+          - path: /api/v1/room?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: room-cluster-ip-service
+                port:
+                  number: 8022
     # - http:
     #     paths:
     #       - path: /?(.*)
