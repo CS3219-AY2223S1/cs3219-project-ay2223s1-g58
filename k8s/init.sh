@@ -47,6 +47,20 @@ kubectl create secret generic postgres-password --from-literal POSTGRES_PASSWORD
 ## Install ingress-nginx
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 
+## Update all the docker images
+docker build -t b9jmthkk/frontend:latest -f ./frontend/Dockerfile.production ./frontend
+docker build -t b9jmthkk/user:latest -f ./user-service/Dockerfile ./user-service
+docker build -t b9jmthkk/question:latest -f ./question-service/Dockerfile ./question-service
+docker build -t b9jmthkk/matching:latest -f ./matching-service/Dockerfile ./matching-service
+docker build -t b9jmthkk/room:latest -f ./room-service/Dockerfile ./room-service
+## Login
+docker login -u xxxxx -p xxxxxxxxxx
+## Push all images
+docker push b9jmthkk/frontend:latest
+docker push b9jmthkk/user:latest
+docker push b9jmthkk/question:latest
+docker push b9jmthkk/matching:latest
+docker push b9jmthkk/room:latest
 ## Apply all manifests
 
 # (Note that may need to wait a few minutes for the above ingress-nginx to be ready)
