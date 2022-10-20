@@ -13,7 +13,7 @@ spec:
   #   - hosts:
   #       - 'leetwithfriend.com'
   #       - 'www.leetwithfriend.com'
-  #     secretName: 'leetwithfriend-tls'
+  #     secretName: 'leetwithfriend-com'
   rules:
     # - host: 'leetwithfriend.com' # https
     #   http:
