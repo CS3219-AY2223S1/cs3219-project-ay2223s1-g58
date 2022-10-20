@@ -6,7 +6,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(
     cors({
-        origin: `http://localhost:${process.env.PORT || 3000}`,
+        origin: `https://leetwithfriend.com`,
         credentials: true,
     })
 ) // config cors so that front-end can use
