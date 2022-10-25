@@ -11,8 +11,12 @@ export function Footer() {
           <div>
             <div className="flex items-center text-gray-900 dark:text-gray-300">
               <div className="ml-4">
-                <p className="text-base font-semibold">PeerPrep</p>
-                <p className="mt-1 text-sm">Prepare with your peers</p>
+                <p className="text-base font-semibold">LeetWithFriend</p>
+                <p className="mt-1 text-sm">
+                  An interview preparation platform and peer matching system,
+                  where students can find peers to practice whiteboard-style
+                  interview questions together.
+                </p>
               </div>
             </div>
             <nav className="flex gap-8 mt-11">
