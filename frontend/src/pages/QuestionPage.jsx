@@ -1,10 +1,13 @@
 import {
-  Divider,
   Text,
+  Code,
+  HStack,
+  StackDivider,
+  VStack,
+  Box,
   useToast,
-  Grid,
+  Image,
   Badge,
-  GridItem,
   Heading,
   IconButton,
 } from '@chakra-ui/react'
@@ -23,10 +26,71 @@ const difficultyColorMap = new Map([
   ['hard', 'red'],
 ])
 
+const supTheme = {
+  em: ({ node, ...props }) => {
+    if (
+      props.children[0] &&
+      typeof props.children[0] === 'string' &&
+      props.children[0].startsWith('^')
+    ) {
+      return <sup>{props.children[0].substring(1, 2)}</sup>
+    }
+    if (
+      props.children[0] &&
+      typeof props.children[0] === 'string' &&
+      props.children[0].startsWith('~')
+    ) {
+      return <sub>{props.children[0].substring(1, 2)}</sub>
+    }
+    return <i {...props} />
+  },
+}
+
 const newTheme = {
+  img: ({ node, children, ...props }) => {
+    return <Image m={4} src={node.properties.src}></Image>
+  },
+  code: ({ node, inline, children, ...props }) => {
+    return !inline ? (
+      <Code overflow="auto" fontSize="lg" w="100%" p={2} mt={4} mb={4}>
+        <ReactMarkdown
+          components={ChakraUIRenderer(supTheme)}
+          children={children[0]}
+        />
+      </Code>
+    ) : (
+      <Code fontSize="lg">
+        <ReactMarkdown
+          components={ChakraUIRenderer(supTheme)}
+          children={children[0]}
+        />
+      </Code>
+    )
+  },
   p: (props) => {
     const { children } = props
-    return <Text className="text-md">{children}</Text>
+    return (
+      <Text overflow="auto" mb={1} className="text-lg">
+        {children}
+      </Text>
+    )
+  },
+  em: ({ node, ...props }) => {
+    if (
+      props.children[0] &&
+      typeof props.children[0] === 'string' &&
+      props.children[0].startsWith('^')
+    ) {
+      return <sup>{props.children[0].substring(1, 2)}</sup>
+    }
+    if (
+      props.children[0] &&
+      typeof props.children[0] === 'string' &&
+      props.children[0].startsWith('~')
+    ) {
+      return <sub>{props.children[0].substring(1, 2)}</sub>
+    }
+    return <i {...props} />
   },
 }
 
@@ -102,65 +166,43 @@ const QuestionPage = () => {
   }
 
   const difficultyColor = (difficulty) => difficultyColorMap.get(difficulty)
-
   return (
     <>
-      {
-        <Grid
-          maxHeight="100%"
-          autoRows="repeat(3, 1fr)"
-          autoColumns="repeat(4,1fr)"
-          gap={6}
-        >
-          <GridItem colSpan={1} align="center">
+      <Box className="rounded-lg border">
+        <VStack h="100vh" divider={<StackDivider borderColor="gray.200" />}>
+          <Heading size="lg" fontWeight="semibold" color="gray 500">
+            {questionData.name}
+          </Heading>
+          <HStack spacing={350}>
             <IconButton
-              w={10}
               onClick={previousQuestion}
               aria-label="Back"
               icon={<ArrowBackIcon />}
             ></IconButton>
-          </GridItem>
-          <GridItem colSpan={1} align="center">
-            <Heading size="lg" fontWeight="semibold" color="gray 500">
-              {questionData.name}
-            </Heading>
-          </GridItem>
-          <GridItem
-            colSpan={1}
-            align={['center', 'left']}
-            verticalAlign="center"
-          >
             <Badge
+              align="center"
+              textAlign="center"
               borderRadius="full"
-              px="6"
+              px="2"
               colorScheme={difficultyColor(questionData.difficulty)}
             >
               {questionData.difficulty}
             </Badge>
-          </GridItem>
-          <GridItem colSpan={1} align="center">
             <IconButton
-              w={10}
               onClick={nextQuestion}
               aria-label="Back"
               icon={<ArrowForwardIcon />}
             ></IconButton>
-          </GridItem>
-          <GridItem colSpan={4}>
-            <Divider orientation="horizontal" />
-          </GridItem>
-          <GridItem colSpan={4} ml="5px" mr="5px">
-            <div className="mx-2 max-h-full max-w-full overflow-y-auto px-2">
-              <ReactMarkdown
-                components={ChakraUIRenderer(newTheme)}
-                children={parse(questionData.content)}
-                skipHtml
-              />
-              ;
-            </div>
-          </GridItem>
-        </Grid>
-      }
+          </HStack>
+          <div className="mx-2 max-h-full overflow-y-auto px-2">
+            <ReactMarkdown
+              components={ChakraUIRenderer(newTheme)}
+              children={parse(questionData.content)}
+              skipHtml
+            />
+          </div>
+        </VStack>
+      </Box>
     </>
   )
 }
