@@ -37,11 +37,7 @@ let redisClient
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
-app.use(cors({
-    origin: `https://leetwithfriend.com`,
-    credentials: true
-}))
-// app.options("*", cors());
+app.use(cors())
 
 app.use(cookieParser())
 app.use(morgan("dev"))
