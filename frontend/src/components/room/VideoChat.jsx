@@ -6,6 +6,7 @@ import {
   ButtonGroup,
   Stack,
   useColorModeValue,
+  useToast,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import {
@@ -15,32 +16,32 @@ import {
   FaVideoSlash,
 } from 'react-icons/fa'
 import { PEERJS_PATH, PEERJS_PORT } from '../../constants'
-
+import { useRef } from 'react'
+// userid1 is initiator
 const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
+  const toast = useToast()
   const [isShowOther, setShowOther] = useState(false)
   const [isAudio, setAudio] = useState(false)
   const [isVideo, setVideo] = useState(false)
-  const [peer, setPeer] = useState()
+  const peer = useRef(null)
   const [myStream, setMyStream] = useState()
   const [otherStream, setOtherStream] = useState()
-  const [otherCallerId, setOtherCallerId] = useState()
   const buttonColour = useColorModeValue('blackAlpha', 'gray')
+  const selfVideo = useRef()
+  const otherVideo = useRef()
 
   useEffect(() => {
-    if (!peer) {
+    if (!peer.current || peer.current.destroyed) {
       console.log('You should only ever see me once!')
-      // const time = new Date().getTime() / 60000
-      const id = userId // + time
-      console.log('userId: ', id)
-      const newPeer = new Peer(id, {
+      peer.current = new Peer(userId, {
         host: 'localhost',
         port: PEERJS_PORT,
         path: PEERJS_PATH,
         // proxied: true,
       })
-      setPeer(newPeer)
+    }
 
-      const selfVideo = document.getElementById('self')
+    if (!myStream) {
       const getUserMedia =
         navigator.getUserMedia ||
         navigator.webkitGetUserMedia ||
@@ -50,10 +51,10 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
         (stream) => {
           stream.getVideoTracks()[0].enabled = isVideo
           stream.getAudioTracks()[0].enabled = isAudio
-          console.log('my stream is set here: ', stream)
+          console.log('stream.getVideoTracks()[0]', stream.getVideoTracks()[0])
+          console.log('stream.getAudioTracks()[0]', stream.getAudioTracks()[0])
           setMyStream(stream)
-          addVideoStream(selfVideo, stream)
-          socket.emit()
+          selfVideo.current.srcObject = stream
           callOtherUser(otherUserId, stream)
         },
         (err) => {
@@ -62,25 +63,18 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
       )
     }
 
-    socket.on('user-connected', (id) => {
-      callOtherUser(id, myStream)
-    })
-
-    socket.on('user-disconnected', (otherUserId) => {
-      setUpOtherStream(null, false)
-    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [myStream, peer, socket, userId])
+  }, [myStream, peer.current, socket, userId])
 
   useEffect(() => {
-    if (peer) {
-      console.log('newPeer that is set in peer: ', peer)
+    if (peer.current) {
+      console.log('newPeer that is set in peer: ', peer.current)
 
       if (myStream && !otherStream) {
-        callOtherUser(otherUserId, myStream)
+        callOtherUser(otherUserId, myStream, peer.current)
       }
 
-      peer.on(
+      peer.current.on(
         'call',
         (call) => {
           console.log('Hi, I just got a call, this is mystream: ', myStream)
@@ -96,30 +90,74 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
           console.log('Failed to get local stream', err)
         }
       )
-      peer.on('open', (userId) => {
+
+      peer.current.on('open', (userId) => {
         console.log('opened with: ', userId)
         socket.emit('join-room', { roomId, userId })
+      })
+
+      peer.current.on('close', () => {
+        console.log('ohter person closed: ', userId)
+      })
+
+      peer.current.on('error', (e) => {
+        console.log('on error', e)
+        // toast({
+        //   title: 'Something went wrong',
+        //   description: 'Please refresh the page',
+        //   status: 'error',
+        //   // isClosable: true,
+        // })
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAudio, isVideo, myStream, peer, roomId, socket])
 
-  // useEffect(() => {
-  //   function checkIfOnline() {
-  //     console.log('checking if other dude is there')
-  //     if (!callOtherUser(otherUserId, myStream)) {
-  //       setTimeout(checkIfOnline, 5000)
-  //     }
-  //   }
-  //   if (!otherStream && peer && myStream) {
-  //     console.log('other stream', otherStream)
-  //     checkIfOnline()
-  //   }
-  // }, [myStream, otherStream, otherUserId, peer])
+  useEffect(() => {
+    return () => {
+      if (peer.current) {
+        peer.current.destroy()
+        console.log('cleaned up')
+      }
+    }
+  }, [])
 
-  const callOtherUser = (id, stream) => {
-    console.log('callOtherUser: ID, stream, peer: ', id, stream, peer)
-    const call = peer.call(id, stream)
+  const callOtherUser = (id, providedStream) => {
+    console.log(
+      'callOtherUser: ID, providestream, mystream, peer: ',
+      id,
+      providedStream,
+      myStream,
+      peer.current
+    )
+    if (!peer.current) {
+      console.log('no peer yet')
+      return false
+    }
+    console.log(
+      'stream.getVideoTracks()[0]',
+      providedStream
+        ? providedStream.getVideoTracks()[0]
+        : myStream.getVideoTracks()[0]
+    )
+    // if (providedStream) {
+    //   providedStream.getAudioTracks()[0] = false
+    // }
+
+    // if (myStream) {
+    //   myStream.getAudioTracks()[0] = false
+    // }
+
+    // console.log(
+    //   'stream.getAudioTracks()[0]',
+    //   providedStream
+    //     ? providedStream.getAudioTracks()[0]
+    //     : myStream.getAudioTracks()[0]
+    // )
+    const call = peer.current.call(
+      id,
+      providedStream ? providedStream : myStream
+    )
     console.log('call: ', call)
     if (call) {
       call.on('stream', (remoteStream) => {
@@ -133,33 +171,17 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
 
   const setUpOtherStream = (stream, isShow) => {
     setShowOther(isShow)
-
-    // if (isShow) {
-    // console.log('setUpOtherStream, showing')
     setOtherStream(stream)
-    const otherVideo = document.getElementById('other')
-    addVideoStream(otherVideo, stream)
-    // }
-
-    console.log(isShowOther)
-  }
-
-  function addVideoStream(video, stream) {
-    video.srcObject = stream
-    video.addEventListener('loadedmetadata', () => {
-      video.play()
-    })
+    otherVideo.current.srcObject = stream
   }
 
   const toggleAudioVideo = (isAudio, isVideo) => {
     setAudio(isAudio)
     setVideo(isVideo)
-    // const selfVideo = document.getElementById('self')
-    const updatedStream = myStream
-    updatedStream.getVideoTracks()[0].enabled = isVideo
-    updatedStream.getAudioTracks()[0].enabled = isAudio
-    setMyStream(updatedStream)
-    callOtherUser(otherUserId, updatedStream)
+    myStream.getVideoTracks()[0].enabled = isVideo
+    myStream.getAudioTracks()[0].enabled = isAudio
+    setMyStream(myStream)
+    callOtherUser(otherUserId, myStream)
   }
 
   return (
@@ -167,7 +189,12 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
       <HStack spacing="5px" position="fixed" bottom={5} right={5} zIndex={1000}>
         <Stack spacing={-10} background="black" hidden={!isShowOther}>
           <AspectRatio w="200px" ratio={4 / 3}>
-            <video id="other" autoPlay={true} />
+            <video
+              id="other"
+              ref={otherVideo}
+              autoPlay={true}
+              playsInline={true}
+            />
           </AspectRatio>
           <ButtonGroup colorScheme={buttonColour} spacing="0">
             <Button
@@ -190,7 +217,13 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
         </Stack>
         <Stack spacing={-10} background="black">
           <AspectRatio w="200px" ratio={4 / 3}>
-            <video id="self" muted={true} autoPlay={true} />
+            <video
+              id="self"
+              ref={selfVideo}
+              muted={true}
+              autoPlay={true}
+              playsInline={true}
+            />
           </AspectRatio>
           <ButtonGroup colorScheme={buttonColour} spacing="0">
             <Button
