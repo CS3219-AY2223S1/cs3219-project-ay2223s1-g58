@@ -23,6 +23,7 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
   const [isShowOther, setShowOther] = useState(false)
   const [isAudio, setAudio] = useState(false)
   const [isVideo, setVideo] = useState(false)
+  const [audioChannel, setAudioChannel] = useState()
   const peer = useRef(null)
   const [myStream, setMyStream] = useState()
   const [otherStream, setOtherStream] = useState()
@@ -49,10 +50,11 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
       getUserMedia(
         { video: true, audio: true },
         (stream) => {
+          setAudioChannel(stream.getAudioTracks()[0])
           stream.getVideoTracks()[0].enabled = isVideo
-          stream.getAudioTracks()[0].enabled = isAudio
-          console.log('stream.getVideoTracks()[0]', stream.getVideoTracks()[0])
-          console.log('stream.getAudioTracks()[0]', stream.getAudioTracks()[0])
+          if (!isAudio) {
+            stream.removeTrack(stream.getAudioTracks()[0])
+          }
           setMyStream(stream)
           selfVideo.current.srcObject = stream
           callOtherUser(otherUserId, stream)
@@ -102,12 +104,6 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
 
       peer.current.on('error', (e) => {
         console.log('on error', e)
-        // toast({
-        //   title: 'Something went wrong',
-        //   description: 'Please refresh the page',
-        //   status: 'error',
-        //   // isClosable: true,
-        // })
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -140,20 +136,6 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
         ? providedStream.getVideoTracks()[0]
         : myStream.getVideoTracks()[0]
     )
-    // if (providedStream) {
-    //   providedStream.getAudioTracks()[0] = false
-    // }
-
-    // if (myStream) {
-    //   myStream.getAudioTracks()[0] = false
-    // }
-
-    // console.log(
-    //   'stream.getAudioTracks()[0]',
-    //   providedStream
-    //     ? providedStream.getAudioTracks()[0]
-    //     : myStream.getAudioTracks()[0]
-    // )
     const call = peer.current.call(
       id,
       providedStream ? providedStream : myStream
@@ -179,7 +161,11 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
     setAudio(isAudio)
     setVideo(isVideo)
     myStream.getVideoTracks()[0].enabled = isVideo
-    myStream.getAudioTracks()[0].enabled = isAudio
+    if (isAudio) {
+      myStream.addTrack(audioChannel)
+    } else {
+      myStream.removeTrack(audioChannel)
+    }
     setMyStream(myStream)
     callOtherUser(otherUserId, myStream)
   }
