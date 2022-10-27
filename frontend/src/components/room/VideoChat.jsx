@@ -7,151 +7,187 @@ import {
   Stack,
   useColorModeValue,
 } from '@chakra-ui/react'
-import { useEffect } from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   FaMicrophone,
   FaMicrophoneSlash,
   FaVideo,
   FaVideoSlash,
 } from 'react-icons/fa'
+import { PEERJS_PATH, PEERJS_PORT } from '../../constants'
 
 const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
-  const [isShowOther, setShowOther] = useState(true)
+  const [isShowOther, setShowOther] = useState(false)
   const [isAudio, setAudio] = useState(false)
   const [isVideo, setVideo] = useState(false)
   const [peer, setPeer] = useState()
   const [myStream, setMyStream] = useState()
   const [otherStream, setOtherStream] = useState()
+  const [otherCallerId, setOtherCallerId] = useState()
   const buttonColour = useColorModeValue('blackAlpha', 'gray')
+
   useEffect(() => {
     if (!peer) {
-      console.log('userId: ', userId)
-      const newPeer = new Peer(userId)
+      console.log('You should only ever see me once!')
+      // const time = new Date().getTime() / 60000
+      const id = userId // + time
+      console.log('userId: ', id)
+      const newPeer = new Peer(id, {
+        host: 'localhost',
+        port: PEERJS_PORT,
+        path: PEERJS_PATH,
+        // proxied: true,
+      })
       setPeer(newPeer)
-      console.log('newPeer: ', newPeer)
+
       const selfVideo = document.getElementById('self')
-      const otherVideo = document.getElementById('other')
       const getUserMedia =
         navigator.getUserMedia ||
         navigator.webkitGetUserMedia ||
         navigator.mozGetUserMedia
       getUserMedia(
-        { video: true, audio: isAudio },
-        function (stream) {
+        { video: true, audio: true },
+        (stream) => {
           stream.getVideoTracks()[0].enabled = isVideo
+          stream.getAudioTracks()[0].enabled = isAudio
+          console.log('my stream is set here: ', stream)
           setMyStream(stream)
-          selfVideo.srcObject = stream
-          console.log('hi over here', stream.getVideoTracks())
-          const call = newPeer.call(otherUserId, stream)
-          call.on('stream', function (remoteStream) {
-            // Show stream in some video/canvas element.
-            setUpOtherStream(remoteStream, true)
-            otherVideo.srcObject = remoteStream
-          })
-          console.log('otheruser: ', otherUserId)
-
-          socket.on('user-connected', (otherUserId) => {
-            console.log('user-connected: peer', newPeer)
-            console.log('otherUserId', otherUserId)
-            const call = newPeer.call(otherUserId, stream)
-            call.on('stream', function (remoteStream) {
-              console.log('user connected and called back')
-              setUpOtherStream(remoteStream, true)
-              console.log(remoteStream)
-              otherVideo.srcObject = remoteStream
-            })
-          })
-
-          socket.on('user-disconnected', (otherUserId) => {
-            console.log('user-disconnected: peer', peer)
-            console.log('otherUserId', otherUserId)
-            setUpOtherStream(null, false)
-            otherVideo.srcObject = null
-          })
+          addVideoStream(selfVideo, stream)
+          socket.emit()
+          callOtherUser(otherUserId, stream)
         },
-        function (err) {
+        (err) => {
           console.log('Failed to get local stream', err)
         }
       )
-      newPeer.on('call', function (call) {
-        getUserMedia(
-          { video: true, audio: isAudio },
-          function (stream) {
-            console.log('Hi, I just got a call')
-            stream.getVideoTracks()[0].enabled = isVideo
-            call.answer(stream) // Answer the call with an A/V stream.
-            call.on('stream', function (remoteStream) {
-              // Show stream in some video/canvas element.
-              console.log('remote stream from call', remoteStream)
-              otherVideo.srcObject = remoteStream
-              setUpOtherStream(remoteStream, true)
-            })
-          },
-          function (err) {
-            console.log('Failed to get local stream', err)
-          }
-        )
-      })
-      newPeer.on('close', function () {
-        console.log('close')
-      })
-      newPeer.on('open', (userId) => {
+    }
+
+    socket.on('user-connected', (id) => {
+      callOtherUser(id, myStream)
+    })
+
+    socket.on('user-disconnected', (otherUserId) => {
+      setUpOtherStream(null, false)
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [myStream, peer, socket, userId])
+
+  useEffect(() => {
+    if (peer) {
+      console.log('newPeer that is set in peer: ', peer)
+
+      if (myStream && !otherStream) {
+        callOtherUser(otherUserId, myStream)
+      }
+
+      peer.on(
+        'call',
+        (call) => {
+          console.log('Hi, I just got a call, this is mystream: ', myStream)
+          call.answer(myStream) // Answer the call with an A/V stream.
+          call.on('stream', (remoteStream) => {
+            // Show stream in some video/canvas element.
+            console.log('remote stream from call', remoteStream)
+
+            setUpOtherStream(remoteStream, true)
+          })
+        },
+        (err) => {
+          console.log('Failed to get local stream', err)
+        }
+      )
+      peer.on('open', (userId) => {
         console.log('opened with: ', userId)
         socket.emit('join-room', { roomId, userId })
       })
     }
-  }, [isAudio, isVideo, otherUserId, peer, roomId, socket, userId])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAudio, isVideo, myStream, peer, roomId, socket])
+
+  // useEffect(() => {
+  //   function checkIfOnline() {
+  //     console.log('checking if other dude is there')
+  //     if (!callOtherUser(otherUserId, myStream)) {
+  //       setTimeout(checkIfOnline, 5000)
+  //     }
+  //   }
+  //   if (!otherStream && peer && myStream) {
+  //     console.log('other stream', otherStream)
+  //     checkIfOnline()
+  //   }
+  // }, [myStream, otherStream, otherUserId, peer])
+
+  const callOtherUser = (id, stream) => {
+    console.log('callOtherUser: ID, stream, peer: ', id, stream, peer)
+    const call = peer.call(id, stream)
+    console.log('call: ', call)
+    if (call) {
+      call.on('stream', (remoteStream) => {
+        console.log('received stream from other dude')
+        setUpOtherStream(remoteStream, true)
+      })
+      return true
+    }
+    return false
+  }
 
   const setUpOtherStream = (stream, isShow) => {
-    setOtherStream(stream)
     setShowOther(isShow)
+
+    // if (isShow) {
+    // console.log('setUpOtherStream, showing')
+    setOtherStream(stream)
+    const otherVideo = document.getElementById('other')
+    addVideoStream(otherVideo, stream)
+    // }
+
+    console.log(isShowOther)
+  }
+
+  function addVideoStream(video, stream) {
+    video.srcObject = stream
+    video.addEventListener('loadedmetadata', () => {
+      video.play()
+    })
   }
 
   const toggleAudioVideo = (isAudio, isVideo) => {
     setAudio(isAudio)
     setVideo(isVideo)
-    const selfVideo = document.getElementById('self')
-    const getUserMedia =
-      navigator.getUserMedia ||
-      navigator.webkitGetUserMedia ||
-      navigator.mozGetUserMedia
-    console.log('toggleAudioVideo')
-    getUserMedia(
-      { video: true, audio: isAudio },
-      function (stream) {
-        console.log('toggleAudioVideo send new stream isVideo', isVideo)
-        stream.getVideoTracks()[0].enabled = isVideo
-        setMyStream(stream)
-        selfVideo.srcObject = stream
-        peer.call(otherUserId, stream)
-      },
-      function (err) {
-        console.log('Failed to get local stream', err)
-      }
-    )
+    // const selfVideo = document.getElementById('self')
+    const updatedStream = myStream
+    updatedStream.getVideoTracks()[0].enabled = isVideo
+    updatedStream.getAudioTracks()[0].enabled = isAudio
+    setMyStream(updatedStream)
+    callOtherUser(otherUserId, updatedStream)
   }
 
   return (
     <>
       <HStack spacing="5px" position="fixed" bottom={5} right={5} zIndex={1000}>
-        {isShowOther && (
-          <Stack spacing={-10} background="black">
-            <AspectRatio w="200px" ratio={4 / 3}>
-              <video id="other" autoPlay={true} />
-            </AspectRatio>
-            <ButtonGroup colorScheme={buttonColour} spacing="0">
-              <Button width="full">
-                {otherStream && otherStream.getAudioTracks().length > 0 ? (
-                  <FaMicrophone />
-                ) : (
-                  <FaMicrophoneSlash />
-                )}
-              </Button>
-              <Button width="full">{otherUserId}</Button>
-            </ButtonGroup>
-          </Stack>
-        )}
+        <Stack spacing={-10} background="black" hidden={!isShowOther}>
+          <AspectRatio w="200px" ratio={4 / 3}>
+            <video id="other" autoPlay={true} />
+          </AspectRatio>
+          <ButtonGroup colorScheme={buttonColour} spacing="0">
+            <Button
+              width="full"
+              onClick={() =>
+                console.log(
+                  'other dude audio',
+                  otherStream && otherStream.getAudioTracks()
+                )
+              }
+            >
+              {otherStream && otherStream.getAudioTracks()[0] ? (
+                <FaMicrophone />
+              ) : (
+                <FaMicrophoneSlash />
+              )}
+            </Button>
+            <Button width="full">{otherUserId}</Button>
+          </ButtonGroup>
+        </Stack>
         <Stack spacing={-10} background="black">
           <AspectRatio w="200px" ratio={4 / 3}>
             <video id="self" muted={true} autoPlay={true} />

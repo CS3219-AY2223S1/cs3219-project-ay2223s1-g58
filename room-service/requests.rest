@@ -10,3 +10,5 @@ Content-Type: application/json
 ### DELETE Room
 DELETE http://localhost:8022/api/v1/room/MUdekW1LM87Ouq0SAAAC|Ex7jLTZLxXKGW6wXAAAF
 
+### Get PeerJS server 
+GET http://localhost:9000/myapp
