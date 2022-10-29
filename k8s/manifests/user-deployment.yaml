@@ -37,3 +37,7 @@ spec:
                 secretKeyRef:
                   name: refresh-token-secret
                   key: REFRESH_TOKEN_SECRET
+          resources:
+            requests:
+              cpu: 5m
+              memory: 100Mi

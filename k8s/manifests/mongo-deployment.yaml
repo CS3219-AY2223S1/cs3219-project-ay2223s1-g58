@@ -22,3 +22,7 @@ spec:
           ports:
             - name: http
               containerPort: 27017
+          resources:
+            requests:
+              cpu: 10m
+              memory: 100Mi

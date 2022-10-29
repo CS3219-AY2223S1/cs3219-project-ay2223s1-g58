@@ -30,3 +30,7 @@ spec:
                 secretKeyRef:
                   name: access-token-secret
                   key: ACCESS_TOKEN_SECRET
+          resources:
+            requests:
+              cpu: 2m
+              memory: 80Mi
