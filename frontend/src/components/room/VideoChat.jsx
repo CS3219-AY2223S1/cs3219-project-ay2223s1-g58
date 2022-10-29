@@ -6,7 +6,6 @@ import {
   ButtonGroup,
   Stack,
   useColorModeValue,
-  useToast,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import {
@@ -70,17 +69,7 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
       getUserMedia(
         { video: true, audio: true },
         (stream) => {
-          console.log('got stream', stream)
           isAudioRef.current = false
-          // setVideoChannel(stream.getVideoTracks()[0])
-          // if (!isVideo) {
-          //   stream.removeTrack(stream.getVideoTracks()[0])
-          // }
-          // stream.getVideoTracks()[0] = isVideo
-          // setAudioChannel(stream.getAudioTracks()[0])
-          // if (!isAudio) {
-          //   stream.removeTrack(stream.getAudioTracks()[0])
-          // }
           const videoTrack = stream
             .getTracks()
             .find((track) => track.kind === 'video')
@@ -135,15 +124,6 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
                 console.log('Received', data)
                 setOtherAudio(data.isAudio)
               })
-              // conn.on('open', function () {
-              //   // Receive messages
-              //   conn.on('data', function (data) {
-              //     console.log('Received', data)
-              //   })
-
-              //   // Send messages
-              //   conn.send('Hello from markers-page!')
-              // })
             },
             (err) => {
               console.log('Connection err', err)
@@ -157,13 +137,6 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVideo, myStream, otherUserId, roomId, socket, userId])
-
-  // const sendAudioVideoStatus = (conn) => {
-  //   console.log('audio video', isAudio, isVideo)
-  //   if (conn) {
-  //     conn.send({ isAudio, isVideo })
-  //   }
-  // }
 
   useEffect(() => {
     if (peer.current) {
@@ -221,11 +194,9 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
       })
 
       conn.on('open', function () {
-        // Send messages
         conn.send({ isAudio: isAudioRef.current, isVideo })
       })
 
-      // Receive messages
       conn.on('data', function (data) {
         console.log('Received', data)
         setOtherAudio(data.isAudio)
@@ -245,41 +216,21 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
     setVideo(isVideoEnabled)
     console.log('toggleAudioVideo, stream:', myStream)
 
-    // if (isVideo) {
-    //   myStream.addTrack(videoChannel)
-    // } else {
-    //   myStream.removeTrack(videoChannel)
-    // }
     const videoTrack = myStream
       .getTracks()
       .find((track) => track.kind === 'video')
     console.log('videoTracks: ', myStream.getTracks())
     videoTrack.enabled = isVideoEnabled
 
-    const audioTrack = myStream //.getAudioTracks()[0]
+    const audioTrack = myStream
       .getTracks()
       .find((track) => track.kind === 'audio')
     audioTrack.enabled = isAudioEnabled
-    // audioTrack.muted = !isAudio
 
-    // myStream.getVideoTracks()[0] = isVideo
-    // if (isAudio) {
-    //   myStream.addTrack(audioChannel)
-    // } else {
-    //   myStream.removeTrack(audioChannel)
-    // }
     setMyStream(myStream)
-    // callOtherUser(otherUserId, myStream)
-    // socket.emit('toggleAudioVideo', { isAudio, isVideo })
+
     if (connection) {
       connection.send({ isAudio: isAudioEnabled, isVideo: isVideoEnabled })
-      // connection.on('open', () => {
-      //   // Send messages
-      //   console.log('new audio video', isAudioEnabled, isVideoEnabled)
-      //   if (connection) {
-      //     connection.send({ isAudio: isAudioEnabled, isVideo: isVideoEnabled })
-      //   }
-      // })
     }
   }
 
