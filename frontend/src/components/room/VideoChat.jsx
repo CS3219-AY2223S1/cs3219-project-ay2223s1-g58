@@ -17,13 +17,14 @@ import {
 } from 'react-icons/fa'
 import { PEERJS_PATH, PEERJS_PORT } from '../../constants'
 import { useRef } from 'react'
-// userid1 is initiator
+
 const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
-  const toast = useToast()
   const [isShowOther, setShowOther] = useState(false)
+  const isAudioRef = useRef(false)
   const [isAudio, setAudio] = useState(false)
   const [isVideo, setVideo] = useState(false)
-  const [audioChannel, setAudioChannel] = useState()
+  const [isOtherAudio, setOtherAudio] = useState(false)
+  const [connection, setConnection] = useState()
   const peer = useRef(null)
   const [myStream, setMyStream] = useState()
   const [otherStream, setOtherStream] = useState()
@@ -33,12 +34,31 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
 
   useEffect(() => {
     if (!peer.current || peer.current.destroyed) {
-      console.log('You should only ever see me once!')
       peer.current = new Peer(userId, {
         host: 'localhost',
         port: PEERJS_PORT,
         path: PEERJS_PATH,
-        // proxied: true,
+      })
+
+      peer.current.on('open', (userId) => {
+        console.log('opened with: ', userId)
+        socket.emit('join-room', { roomId, userId })
+      })
+
+      peer.current.on('close', () => {
+        console.log('other person closed: ', userId)
+        setUpOtherStream(null, false)
+      })
+
+      peer.current.on('error', (e) => {
+        console.log('peer error', e)
+      })
+
+      socket.on('user-disconnected', (otherUserId) => {
+        console.log('user-disconnected: peer', peer.current)
+        console.log('otherUserId', otherUserId)
+        setUpOtherStream(null, false)
+        otherVideo.srcObject = null
       })
     }
 
@@ -50,23 +70,100 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
       getUserMedia(
         { video: true, audio: true },
         (stream) => {
-          setAudioChannel(stream.getAudioTracks()[0])
-          stream.getVideoTracks()[0].enabled = isVideo
-          if (!isAudio) {
-            stream.removeTrack(stream.getAudioTracks()[0])
-          }
+          console.log('got stream', stream)
+          isAudioRef.current = false
+          // setVideoChannel(stream.getVideoTracks()[0])
+          // if (!isVideo) {
+          //   stream.removeTrack(stream.getVideoTracks()[0])
+          // }
+          // stream.getVideoTracks()[0] = isVideo
+          // setAudioChannel(stream.getAudioTracks()[0])
+          // if (!isAudio) {
+          //   stream.removeTrack(stream.getAudioTracks()[0])
+          // }
+          const videoTrack = stream
+            .getTracks()
+            .find((track) => track.kind === 'video')
+          videoTrack.enabled = isVideo
+
+          const audioTrack = stream
+            .getTracks()
+            .find((track) => track.kind === 'audio')
+          audioTrack.enabled = isAudioRef.current
           setMyStream(stream)
           selfVideo.current.srcObject = stream
           callOtherUser(otherUserId, stream)
+
+          peer.current.on(
+            'call',
+            (call) => {
+              console.log('Hi, I just got a call, this is mystream: ', stream)
+              call.answer(stream) // Answer the call with an A/V stream.
+              call.on('stream', (remoteStream) => {
+                // Show stream in some video/canvas element.
+                console.log('remote stream from call', remoteStream)
+
+                setUpOtherStream(remoteStream, true)
+              })
+            },
+            (err) => {
+              console.log('Failed to get local stream', err)
+            }
+          )
+
+          peer.current.on(
+            'connection',
+            (conn) => {
+              console.log('Hi, I just got a connection')
+              console.log('connect', conn)
+              setConnection(conn)
+
+              conn.on('error', function (err) {
+                console.log('error')
+              })
+
+              conn.on('open', () => {
+                // Send messages
+                console.log('audio video', isAudioRef.current, isVideo)
+                if (conn) {
+                  conn.send({ isAudio: isAudioRef.current, isVideo })
+                }
+              })
+
+              // Receive messages
+              conn.on('data', function (data) {
+                console.log('Received', data)
+                setOtherAudio(data.isAudio)
+              })
+              // conn.on('open', function () {
+              //   // Receive messages
+              //   conn.on('data', function (data) {
+              //     console.log('Received', data)
+              //   })
+
+              //   // Send messages
+              //   conn.send('Hello from markers-page!')
+              // })
+            },
+            (err) => {
+              console.log('Connection err', err)
+            }
+          )
         },
         (err) => {
           console.log('Failed to get local stream', err)
         }
       )
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [myStream, peer.current, socket, userId])
+  }, [isVideo, myStream, otherUserId, roomId, socket, userId])
+
+  // const sendAudioVideoStatus = (conn) => {
+  //   console.log('audio video', isAudio, isVideo)
+  //   if (conn) {
+  //     conn.send({ isAudio, isVideo })
+  //   }
+  // }
 
   useEffect(() => {
     if (peer.current) {
@@ -75,43 +172,14 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
       if (myStream && !otherStream) {
         callOtherUser(otherUserId, myStream, peer.current)
       }
-
-      peer.current.on(
-        'call',
-        (call) => {
-          console.log('Hi, I just got a call, this is mystream: ', myStream)
-          call.answer(myStream) // Answer the call with an A/V stream.
-          call.on('stream', (remoteStream) => {
-            // Show stream in some video/canvas element.
-            console.log('remote stream from call', remoteStream)
-
-            setUpOtherStream(remoteStream, true)
-          })
-        },
-        (err) => {
-          console.log('Failed to get local stream', err)
-        }
-      )
-
-      peer.current.on('open', (userId) => {
-        console.log('opened with: ', userId)
-        socket.emit('join-room', { roomId, userId })
-      })
-
-      peer.current.on('close', () => {
-        console.log('ohter person closed: ', userId)
-      })
-
-      peer.current.on('error', (e) => {
-        console.log('on error', e)
-      })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAudio, isVideo, myStream, peer, roomId, socket])
+  }, [myStream, otherStream, otherUserId])
 
   useEffect(() => {
     return () => {
       if (peer.current) {
+        peer.current.disconnect()
         peer.current.destroy()
         console.log('cleaned up')
       }
@@ -128,27 +196,41 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
     )
     if (!peer.current) {
       console.log('no peer yet')
-      return false
+      return
     }
-    console.log(
-      'stream.getVideoTracks()[0]',
-      providedStream
-        ? providedStream.getVideoTracks()[0]
-        : myStream.getVideoTracks()[0]
-    )
+
     const call = peer.current.call(
       id,
       providedStream ? providedStream : myStream
     )
-    console.log('call: ', call)
+
     if (call) {
       call.on('stream', (remoteStream) => {
         console.log('received stream from other dude')
         setUpOtherStream(remoteStream, true)
       })
-      return true
     }
-    return false
+
+    const conn = peer.current.connect(id)
+    if (conn) {
+      console.log('connect', conn)
+      setConnection(conn)
+
+      conn.on('error', function (err) {
+        console.log('conection error: ', err)
+      })
+
+      conn.on('open', function () {
+        // Send messages
+        conn.send({ isAudio: isAudioRef.current, isVideo })
+      })
+
+      // Receive messages
+      conn.on('data', function (data) {
+        console.log('Received', data)
+        setOtherAudio(data.isAudio)
+      })
+    }
   }
 
   const setUpOtherStream = (stream, isShow) => {
@@ -157,17 +239,48 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
     otherVideo.current.srcObject = stream
   }
 
-  const toggleAudioVideo = (isAudio, isVideo) => {
-    setAudio(isAudio)
-    setVideo(isVideo)
-    myStream.getVideoTracks()[0].enabled = isVideo
-    if (isAudio) {
-      myStream.addTrack(audioChannel)
-    } else {
-      myStream.removeTrack(audioChannel)
-    }
+  const toggleAudioVideo = (isAudioEnabled, isVideoEnabled) => {
+    isAudioRef.current = isAudioEnabled
+    setAudio(isAudioEnabled)
+    setVideo(isVideoEnabled)
+    console.log('toggleAudioVideo, stream:', myStream)
+
+    // if (isVideo) {
+    //   myStream.addTrack(videoChannel)
+    // } else {
+    //   myStream.removeTrack(videoChannel)
+    // }
+    const videoTrack = myStream
+      .getTracks()
+      .find((track) => track.kind === 'video')
+    console.log('videoTracks: ', myStream.getTracks())
+    videoTrack.enabled = isVideoEnabled
+
+    const audioTrack = myStream //.getAudioTracks()[0]
+      .getTracks()
+      .find((track) => track.kind === 'audio')
+    audioTrack.enabled = isAudioEnabled
+    // audioTrack.muted = !isAudio
+
+    // myStream.getVideoTracks()[0] = isVideo
+    // if (isAudio) {
+    //   myStream.addTrack(audioChannel)
+    // } else {
+    //   myStream.removeTrack(audioChannel)
+    // }
     setMyStream(myStream)
-    callOtherUser(otherUserId, myStream)
+    // callOtherUser(otherUserId, myStream)
+    // socket.emit('toggleAudioVideo', { isAudio, isVideo })
+    if (connection) {
+      connection.send({ isAudio: isAudioEnabled, isVideo: isVideoEnabled })
+      // connection.on('open', () => {
+      //   // Send messages
+      //   console.log('new audio video', isAudioEnabled, isVideoEnabled)
+      //   if (connection) {
+      //     connection.send({ isAudio: isAudioEnabled, isVideo: isVideoEnabled })
+      //   }
+      // })
+    }
   }
 
   return (
@@ -185,18 +298,19 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
           <ButtonGroup colorScheme={buttonColour} spacing="0">
             <Button
               width="full"
-              onClick={() =>
+              onClick={() => {
                 console.log(
                   'other dude audio',
                   otherStream && otherStream.getAudioTracks()
                 )
-              }
+                console.log(
+                  'other video',
+                  otherStream && otherStream.getVideoTracks()
+                )
+                console.log('other stream tracks', otherStream.getTracks())
+              }}
             >
-              {otherStream && otherStream.getAudioTracks()[0] ? (
-                <FaMicrophone />
-              ) : (
-                <FaMicrophoneSlash />
-              )}
+              {isOtherAudio ? <FaMicrophone /> : <FaMicrophoneSlash />}
             </Button>
             <Button width="full">{otherUserId}</Button>
           </ButtonGroup>
@@ -215,7 +329,7 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
             <Button
               width="full"
               onClick={() => {
-                toggleAudioVideo(!isAudio, isVideo)
+                toggleAudioVideo(!isAudioRef.current, isVideo)
               }}
             >
               {isAudio ? <FaMicrophone /> : <FaMicrophoneSlash />}
@@ -224,7 +338,7 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
               width="full"
               onClick={() => {
                 console.log(myStream)
-                toggleAudioVideo(isAudio, !isVideo)
+                toggleAudioVideo(isAudioRef.current, !isVideo)
               }}
             >
               {isVideo ? <FaVideo /> : <FaVideoSlash />}
