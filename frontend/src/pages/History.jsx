@@ -3,8 +3,8 @@ import { Helmet } from 'react-helmet-async'
 import { useState, useEffect } from 'react'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { URL_HISTORY_USER, STATUS_CODE_BAD_REQUEST, STATUS_CODE_SUCCESS } from '../constants'
-import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, Spinner, Button } from '@chakra-ui/react'
-import { useNavigate } from 'react-router-dom'
+import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, Spinner } from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
 
 const History = () => {
   const { auth } = useAuth()
@@ -68,7 +68,6 @@ const History = () => {
 }
 
 const HistTable = ({ questions }) => {
-  const navigate = useNavigate()
   return (
     <TableContainer overflowY='auto' whiteSpace='pre-wrap' maxHeight='100vh'>
       <Table variant='striped' className='max-w-full table-fixed'>
@@ -86,13 +85,12 @@ const HistTable = ({ questions }) => {
               <Tr key={q.roomId + q.id + idx} className='text-gray-700 dark:text-gray-300'>
                 <Td>{q.partner}</Td>
                 <Td>
-                  <Button
-                    variant='link'
-                    onClick={() => navigate(`/question/${q.id}`)}
-                    className='dark:text-gray-500'
+                  <Link 
+                    to={`/question/${q.id}`} 
+                    className='font-semibold hover:underline text-gray-500 dark:text-gray-300'
                   >
-                      {q.name}
-                  </Button>
+                    {q.name}
+                  </Link>
                 </Td>
                 <Td className='font-mono text-sm'>{q.answer}</Td>
                 <Td>
