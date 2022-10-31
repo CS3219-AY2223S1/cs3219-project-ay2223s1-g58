@@ -1,36 +1,36 @@
-Oct 29, 2022 3:11:07 AM reposense.parser.CsvParser validateHeader
+Oct 31, 2022 4:22:20 AM reposense.parser.CsvParser validateHeader
 INFO: Parsed header of CSV file, repo-config.csv, and recognized columns: Ignore Standalone Config,  Repository's Location,  Skip Ignored File Analysis,  Branch,  File formats,  Ignore Glob List,  Ignore Authors List,  Ignore Commits List
-Oct 29, 2022 3:11:07 AM reposense.parser.CsvParser validateHeader
+Oct 31, 2022 4:22:20 AM reposense.parser.CsvParser validateHeader
 INFO: Parsed header of CSV file, author-config.csv, and recognized columns: Author's Emails,  Repository's Location,  Author's GitHub ID,  Branch,  Author's Display Name,  Ignore Glob List,  Author's Git Author Name
-Oct 29, 2022 3:11:07 AM reposense.model.AuthorConfiguration checkDuplicateAliases
+Oct 31, 2022 4:22:20 AM reposense.model.AuthorConfiguration checkDuplicateAliases
 WARNING: Duplicate alias tlylt found. The alias will belong to the last author - tlylt
-Oct 29, 2022 3:11:07 AM reposense.model.AuthorConfiguration checkDuplicateAliases
+Oct 31, 2022 4:22:20 AM reposense.model.AuthorConfiguration checkDuplicateAliases
 WARNING: Duplicate alias tlylt found. The alias will belong to the last author - tlylt
-Oct 29, 2022 3:11:07 AM reposense.report.RepoCloner spawnCloneProcess
+Oct 31, 2022 4:22:20 AM reposense.report.RepoCloner spawnCloneProcess
 INFO: Cloning in parallel from https://github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g58.git...
-Oct 29, 2022 3:11:07 AM reposense.report.RepoCloner waitForCloneProcess
+Oct 31, 2022 4:22:20 AM reposense.report.RepoCloner waitForCloneProcess
 INFO: Waiting for cloning of https://github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g58.git to complete...
-Oct 29, 2022 3:11:09 AM reposense.report.RepoCloner waitForCloneProcess
+Oct 31, 2022 4:22:21 AM reposense.report.RepoCloner waitForCloneProcess
 INFO: Cloning of https://github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g58.git completed!
-Oct 29, 2022 3:11:09 AM reposense.report.ReportGenerator analyzeRepos
+Oct 31, 2022 4:22:21 AM reposense.report.ReportGenerator analyzeRepos
 INFO: [1/1] Analyzing https://github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g58.git (main)...
-Oct 29, 2022 3:11:09 AM reposense.report.ReportGenerator updateRepoConfig
+Oct 31, 2022 4:22:21 AM reposense.report.ReportGenerator updateRepoConfig
 INFO: https://github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g58.git (main) does not contain a standalone config file.
-Oct 29, 2022 3:11:09 AM reposense.authorship.FileInfoExtractor extractTextFileInfos
+Oct 31, 2022 4:22:21 AM reposense.authorship.FileInfoExtractor extractTextFileInfos
 INFO: Extracting relevant file info from https://github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g58.git (main)...
-Oct 29, 2022 3:11:09 AM reposense.authorship.FileInfoExtractor generateFileInfo
+Oct 31, 2022 4:22:21 AM reposense.authorship.FileInfoExtractor generateFileInfo
 WARNING: File "question-service/seeders/category.json" has 549717B size. The file size limit is set at 500000B. Skipping analysis of this file...
-Oct 29, 2022 3:11:09 AM reposense.authorship.FileInfoExtractor generateFileInfo
+Oct 31, 2022 4:22:21 AM reposense.authorship.FileInfoExtractor generateFileInfo
 WARNING: File "frontend/package-lock.json" has 1485956B size. The file size limit is set at 500000B. Skipping analysis of this file...
-Oct 29, 2022 3:11:09 AM reposense.authorship.FileInfoExtractor generateFileInfo
+Oct 31, 2022 4:22:21 AM reposense.authorship.FileInfoExtractor generateFileInfo
 WARNING: File "question-service/seeders/question.json" has 2895015B size. The file size limit is set at 500000B. Skipping analysis of this file...
-Oct 29, 2022 3:11:12 AM reposense.commits.CommitInfoExtractor extractCommitInfos
+Oct 31, 2022 4:22:26 AM reposense.commits.CommitInfoExtractor extractCommitInfos
 INFO: Extracting commits info for https://github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g58.git (main)...
-Oct 29, 2022 3:11:13 AM reposense.commits.CommitInfoAnalyzer analyzeCommits
+Oct 31, 2022 4:22:26 AM reposense.commits.CommitInfoAnalyzer analyzeCommits
 INFO: Analyzing commits info for https://github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g58.git (main)...
-Oct 29, 2022 3:11:13 AM reposense.report.ReportGenerator analyzeRepo
+Oct 31, 2022 4:22:26 AM reposense.report.ReportGenerator analyzeRepo
 INFO: Analysis of https://github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g58.git (main) completed!
-Oct 29, 2022 3:11:13 AM reposense.report.ReportGenerator generateReposReport
+Oct 31, 2022 4:22:26 AM reposense.report.ReportGenerator generateReposReport
 INFO: The report is generated at /home/runner/work/cs3219-project-ay2223s1-g58/cs3219-project-ay2223s1-g58/reposense-report
-Oct 29, 2022 3:11:13 AM reposense.RepoSense main
-INFO: Elapsed processing time: 5.87 second(s)
+Oct 31, 2022 4:22:26 AM reposense.RepoSense main
+INFO: Elapsed processing time: 6.90 second(s)
