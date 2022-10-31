@@ -51,7 +51,7 @@ const getCursorExtension = (uid) => {
         // This renders into the other person's cursor.
         return state.field(f).map((x) => {
           return {
-            pos: x.pos,
+            pos: Math.min(x.pos, state.doc.length),
             create: () => {
               const dom = document.createElement('div')
               dom.className = 'cm-other-cursor'  // Styling handled by CodeMirror's theme (see Editor.jsx)
