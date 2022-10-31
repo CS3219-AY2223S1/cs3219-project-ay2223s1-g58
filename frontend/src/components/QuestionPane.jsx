@@ -2,10 +2,11 @@ import {
   Text,
   Box,
   Badge,
-  HStack,
   VStack,
   Heading,
   useToast,
+  Image,
+  Code,
   StackDivider,
 } from '@chakra-ui/react'
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer'
@@ -27,10 +28,71 @@ const difficultyColorMap = new Map([
   ['hard', 'red'],
 ])
 
+const supTheme = {
+  em: ({ node, ...props }) => {
+    if (
+      props.children[0] &&
+      typeof props.children[0] === 'string' &&
+      props.children[0].startsWith('^')
+    ) {
+      return <sup>{props.children[0].substring(1, 2)}</sup>
+    }
+    if (
+      props.children[0] &&
+      typeof props.children[0] === 'string' &&
+      props.children[0].startsWith('~')
+    ) {
+      return <sub>{props.children[0].substring(1, 2)}</sub>
+    }
+    return <i {...props} />
+  },
+}
+
 const newTheme = {
+  img: ({ node, children, ...props }) => {
+    return <Image m={4} src={node.properties.src}></Image>
+  },
+  code: ({ node, inline, children, ...props }) => {
+    return !inline ? (
+      <Code overflow="auto" fontSize="lg" w="100%" p={2} mt={4} mb={4}>
+        <ReactMarkdown
+          components={ChakraUIRenderer(supTheme)}
+          children={children[0]}
+        />
+      </Code>
+    ) : (
+      <Code fontSize="lg">
+        <ReactMarkdown
+          components={ChakraUIRenderer(supTheme)}
+          children={children[0]}
+        />
+      </Code>
+    )
+  },
   p: (props) => {
     const { children } = props
-    return <Text className="text-sm">{children}</Text>
+    return (
+      <Text overflow="auto" mb={1} className="text-lg">
+        {children}
+      </Text>
+    )
+  },
+  em: ({ node, ...props }) => {
+    if (
+      props.children[0] &&
+      typeof props.children[0] === 'string' &&
+      props.children[0].startsWith('^')
+    ) {
+      return <sup>{props.children[0].substring(1, 2)}</sup>
+    }
+    if (
+      props.children[0] &&
+      typeof props.children[0] === 'string' &&
+      props.children[0].startsWith('~')
+    ) {
+      return <sub>{props.children[0].substring(1, 2)}</sub>
+    }
+    return <i {...props} />
   },
 }
 
@@ -92,25 +154,18 @@ const QuestionPane = ({ questionId, roomId }) => {
     <>
       <Box className="rounded-lg border">
         <VStack h="100vh" divider={<StackDivider borderColor="gray.200" />}>
-          <HStack spacing="30px" className="mt-2">
+          <VStack divider={<StackDivider borderColor="gray.200"/>}>
             <Heading size="lg" fontWeight="semibold" color="gray 500">
-              {questionData.name}
-            </Heading>
-            <Badge
-              borderRadius="full"
-              px="2"
-              colorScheme={difficultyColor(questionData.difficulty)}
-            >
-              {questionData.difficulty}
-            </Badge>
-            <Button
-              onClick={getNextQuestion}
-              variant="outline"
-              className=" dark:text-gray-300"
-            >
-              Next Question
-            </Button>
-          </HStack>
+                {questionData.name}
+              </Heading>
+              <Badge
+                borderRadius="full"
+                px="2"
+                colorScheme={difficultyColor(questionData.difficulty)}
+              >
+                {questionData.difficulty}
+              </Badge>
+          </VStack>
           <div className="mx-2 max-h-full overflow-y-auto px-2">
             <ReactMarkdown
               components={ChakraUIRenderer(newTheme)}
@@ -118,6 +173,13 @@ const QuestionPane = ({ questionId, roomId }) => {
               skipHtml
             />
           </div>
+          <Button
+              onClick={getNextQuestion}
+              variant="outline"
+              className=" dark:text-gray-300"
+            >
+              Next Question
+            </Button>
         </VStack>
       </Box>
     </>
