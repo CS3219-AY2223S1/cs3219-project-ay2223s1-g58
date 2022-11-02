@@ -37,7 +37,18 @@ let redisClient
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
-app.use(cors())
+
+if (process.env.ENV === "PRODUCTION") {
+    app.use(cors())
+    app.options("*", cors());
+} else {
+    app.use(
+        cors({
+            origin: `http://localhost:${process.env.PORT || 3000}`,
+            credentials: true,
+        })
+    )
+}
 
 app.use(cookieParser())
 app.use(morgan("dev"))
