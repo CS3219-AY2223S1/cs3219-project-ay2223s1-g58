@@ -24,7 +24,7 @@ spec:
             - name: DB_LOCAL_URI
               value: mongodb://mongo-cluster-ip-service:27017/peerprep
             - name: ENV
-              value: PRODUCTION
+              value: production
             - name: PORT
               value: '80'
             - name: ACCESS_TOKEN_SECRET
@@ -39,5 +39,5 @@ spec:
                   key: REFRESH_TOKEN_SECRET
           resources:
             requests:
-              cpu: 5m
+              cpu: 8m
               memory: 100Mi

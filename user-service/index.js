@@ -38,7 +38,7 @@ let redisClient
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
-if (process.env.ENV === "PRODUCTION") {
+if (process.env.ENV === "production") {
     app.use(cors())
     app.options("*", cors());
 } else {

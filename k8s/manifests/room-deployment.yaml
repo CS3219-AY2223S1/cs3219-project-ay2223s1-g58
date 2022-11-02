@@ -22,7 +22,7 @@ spec:
             - name: PORT
               value: '80'
             - name: ENV
-              value: PRODUCTION
+              value: production
             - name: URI_QUESTION_SERVICE
               value: http://question-cluster-ip-service:8500
             - name: ACCESS_TOKEN_SECRET

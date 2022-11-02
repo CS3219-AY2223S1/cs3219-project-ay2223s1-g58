@@ -24,12 +24,12 @@ spec:
             - name: DB_LOCAL_URI
               value: mongodb://mongo-cluster-ip-service:27017/peerprep
             - name: ENV
-              value: PRODUCTION
+              value: production
             - name: PORT
               value: '80'
             - name: URI_QUESTION_SERVICE
               value: http://question-cluster-ip-service:8500
           resources:
             requests:
-              cpu: 2m
+              cpu: 5m
               memory: 80Mi
