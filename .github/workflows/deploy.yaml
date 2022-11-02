@@ -72,4 +72,4 @@ jobs:
           kubectl set image deployments/question-deployment question=b9jmthkk/question:${{ env.SHA }}
           kubectl set image deployments/matching-deployment matching=b9jmthkk/matching:${{ env.SHA }}
           kubectl set image deployments/room-deployment room=b9jmthkk/room:${{ env.SHA }}
-          kubectl set image deployments/history-deployment room=b9jmthkk/history:${{ env.SHA }}
+          kubectl set image deployments/history-deployment history=b9jmthkk/history:${{ env.SHA }}
