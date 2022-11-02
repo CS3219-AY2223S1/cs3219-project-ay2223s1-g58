@@ -27,6 +27,8 @@ spec:
               value: http://question-cluster-ip-service:8500
             - name: URI_ROOM_SERVICE
               value: http://room-cluster-ip-service:8022
+            - name: URI_HISTORY_SERVICE
+              value: http://history-cluster-ip-service:8080
             - name: ACCESS_TOKEN_SECRET
               valueFrom:
                 secretKeyRef:
