@@ -45,6 +45,7 @@ jobs:
           docker build -t b9jmthkk/question:latest -t b9jmthkk/question:${{ env.SHA }} -f ./question-service/Dockerfile ./question-service
           docker build -t b9jmthkk/matching:latest -t b9jmthkk/matching:${{ env.SHA }} -f ./matching-service/Dockerfile ./matching-service
           docker build -t b9jmthkk/room:latest -t b9jmthkk/room:${{ env.SHA }} -f ./room-service/Dockerfile ./room-service
+          docker build -t b9jmthkk/history:latest -t b9jmthkk/history:${{ env.SHA }} -f ./history-service/Dockerfile ./history-service
 
       - name: Push to Docker Hub
         run: |-
@@ -53,12 +54,14 @@ jobs:
           docker push b9jmthkk/question:latest
           docker push b9jmthkk/matching:latest
           docker push b9jmthkk/room:latest
+          docker push b9jmthkk/history:latest
 
           docker push b9jmthkk/frontend:${{ env.SHA }}
           docker push b9jmthkk/user:${{ env.SHA }}
           docker push b9jmthkk/question:${{ env.SHA }}
           docker push b9jmthkk/matching:${{ env.SHA }}
           docker push b9jmthkk/room:${{ env.SHA }}
+          docker push b9jmthkk/history:${{ env.SHA }}
 
       - name: Re-Apply K8s Config and update image
         run: |-
@@ -69,3 +72,4 @@ jobs:
           kubectl set image deployments/question-deployment question=b9jmthkk/question:${{ env.SHA }}
           kubectl set image deployments/matching-deployment matching=b9jmthkk/matching:${{ env.SHA }}
           kubectl set image deployments/room-deployment room=b9jmthkk/room:${{ env.SHA }}
+          kubectl set image deployments/history-deployment history=b9jmthkk/history:${{ env.SHA }}
