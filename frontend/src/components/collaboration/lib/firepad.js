@@ -150,7 +150,7 @@ const Firepad = (function () {
 
   Firepad.prototype.getText = function () {
     this.assertReady_("getText")
-    if (this.codeMirror6_) return this.codeMirror6_.state.doc.text.join('\n')
+    if (this.codeMirror6_) return this.codeMirror6_.state.doc.toString()
     throw new Error('Firepad cannot find CodeMirror6 instance')
   }
 
