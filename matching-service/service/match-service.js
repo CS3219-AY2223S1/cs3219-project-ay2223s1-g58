@@ -75,7 +75,7 @@ const MatchService = {
       userId1: userWaiting,
       userId2: userNew,
       difficulty,
-      types: types,
+      types,
     });
     console.log(`Created room ${roomId} for ${userWaiting} and ${userNew}`);
     sendMessageToBoth(socketIdWaiting, socketIdNew, EVENT_EMIT.MATCH_SUCCESS, {

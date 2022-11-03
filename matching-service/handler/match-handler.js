@@ -53,6 +53,10 @@ exports.findMatch = async function (payload) {
       });
       return;
     }
+
+    // Retrieve available type
+    const types = match.types ? match.types : value.types;
+
     // TODO additional validations
     await MatchService.matchSuccess(
       match.socketId,
@@ -60,7 +64,7 @@ exports.findMatch = async function (payload) {
       socket.id,
       socket.userId,
       value.difficulty,
-      value.types
+      types
     );
   } catch (e) {
     // TODO add custom error messages
