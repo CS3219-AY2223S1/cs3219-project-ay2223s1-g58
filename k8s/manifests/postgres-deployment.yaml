@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: postgres-persistent-volume-claim
+      containers:
+        - name: postgres
+          image: postgres
+          ports:
+            - name: http
+              containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: postgres_db
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_HOST
+              value: localhost
+            - name: POSTGRES_PORT
+              value: '5432'
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-password
+                  key: POSTGRES_PASSWORD

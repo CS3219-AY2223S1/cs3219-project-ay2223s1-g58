@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: history-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: history
+  template:
+    metadata:
+      labels:
+        app: history
+    spec:
+      containers:
+        - name: history
+          image: b9jmthkk/history
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: REDIS_HOST
+              value: redis-cluster-ip-service
+            - name: DB_LOCAL_URI
+              value: mongodb://mongo-cluster-ip-service:27017/peerprep
+            - name: ENV
+              value: PRODUCTION
+            - name: PORT
+              value: '80'
+            - name: URI_QUESTION_SERVICE
+              value: http://question-cluster-ip-service:8500

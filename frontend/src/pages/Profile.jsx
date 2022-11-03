@@ -156,9 +156,12 @@ const Profile = () => {
   return (
     <form className="container max-w-2xl mx-auto my-4 mt-4 shadow-md md:w-3/4">
       <Helmet>
-        <title>Profile | PeerPrep</title>
+        <title>Profile | LeetWithFriend</title>
         <meta charSet="utf-8" />
-        <meta name="description" content="PeerPrep help you prep" />
+        <meta
+          name="description"
+          content="An interview preparation platform and peer matching system, where students can find peers to practice whiteboard-style interview questions together."
+        />
       </Helmet>
       <div className="p-4 bg-gray-100 border-t-2 rounded-lg bg-opacity-5">
         <div className="max-w-sm mx-auto md:mx-0 md:w-full">
