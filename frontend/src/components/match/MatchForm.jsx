@@ -8,11 +8,6 @@ import {
   Select,
   FormControl,
   FormLabel,
-  Tabs,
-  Tab,
-  TabList,
-  TabPanels,
-  TabPanel,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
 import { URL_QUESTION_SERVICE } from '../../constants'
@@ -40,15 +35,8 @@ const MatchForm = ({ onClose, onSubmit, onChange }) => {
 
 
   return (
-    <Tabs>
-      <TabList>
-        <Tab>Difficulty</Tab>
-        <Tab>Category</Tab>
-      </TabList>
-      <TabPanels>
-        <TabPanel>
           <form onSubmit={onSubmit}>
-            <ModalHeader>Select match criterias</ModalHeader>
+            <ModalHeader>Select match criteria</ModalHeader>
             <ModalCloseButton />
 
             <ModalBody>
@@ -63,30 +51,14 @@ const MatchForm = ({ onClose, onSubmit, onChange }) => {
               <FormControl isRequired></FormControl>
             </ModalBody>
 
-            <ModalFooter>
-              <Button variant="ghost" mr={3} onClick={onClose}>
-                Cancel
-              </Button>
-              <Button colorScheme="blue" type="submit">
-                Match
-              </Button>
-            </ModalFooter>
-          </form>
-        </TabPanel>
-          
-        <TabPanel>
-        <form onSubmit={onSubmit}>
-            <ModalHeader>Select match criterias</ModalHeader>
-            <ModalCloseButton />
-
             <ModalBody>
-              <FormControl isRequired>
+            <FormControl>
                 <FormLabel>Question Category</FormLabel>
                 <Select placeholder="Select a category" onChange={onChange}>
                   {data}
                 </Select>
-              </FormControl>
-              <FormControl isRequired></FormControl>
+                </FormControl>
+                <FormControl></FormControl>
             </ModalBody>
 
             <ModalFooter>
@@ -98,9 +70,6 @@ const MatchForm = ({ onClose, onSubmit, onChange }) => {
               </Button>
             </ModalFooter>
           </form>
-        </TabPanel>
-      </TabPanels>
-    </Tabs>
   )
 }
 

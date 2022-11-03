@@ -115,7 +115,11 @@ async function getQuestion(req, res) {
     try {
         const { difficulty, id, types } = req.query
         var category, question
-        if (difficulty) {
+        if (difficulty && types) {
+            console.log(types)
+            category = await CategoryRepository.findByTypesAndDifficulty(difficulty, types)
+            question = await QuestionRepository.findById(category.questionId)
+        } else if (difficulty) {
             category = await CategoryRepository.findByDifficulty(difficulty)
             question = await QuestionRepository.findById(category.questionId)
         } else if (types) {

@@ -18,6 +18,21 @@ const CategoryRepository = {
             limit: 1,
         })
     },
+    findByTypesAndDifficulty: function (difficulty, types) {
+        if (!Array.isArray(types)) {
+            types = [types]
+        }
+        return db.Category.findOne({
+            where: {
+                difficulty: difficulty,
+                types: {
+                    [Op.overlap]: types,
+                },
+            },
+            order: db.sequelize.random(),
+            limit: 1,
+        })
+    },
     findByQuestionId: function (id) {
         return db.Category.findOne({
             where: {

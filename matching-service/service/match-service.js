@@ -25,11 +25,14 @@ const scheduleTimeout = (socketId) => {
 };
 
 const MatchService = {
-  findByDifficulty: function (difficulty, socketId) {
+  findByDifficulty: function (difficulty, types, socketId) {
+    if (types) {
+      return MatchRepository.findByTypesAndDifficulty(difficulty, types, socketId);
+    }
     return MatchRepository.findByDifficulty(difficulty, socketId);
   },
-  createMatch: async function (socketId, difficulty, userId) {
-    const created = await MatchRepository.create(socketId, difficulty, userId);
+  createMatch: async function (socketId, difficulty, types, userId) {
+    const created = await MatchRepository.create(socketId, difficulty, types, userId);
     scheduleTimeout(socketId);
     return created;
   },
@@ -41,7 +44,8 @@ const MatchService = {
     userWaiting,
     socketIdNew,
     userNew,
-    difficulty
+    difficulty,
+    types
   ) {
     await MatchService.deleteMatch(socketIdWaiting);
     console.log(EVENT_EMIT.MATCH_SUCCESS);
@@ -51,6 +55,7 @@ const MatchService = {
       userId1: userWaiting,
       userId2: userNew,
       difficulty,
+      types: types
     });
     console.log(`Created room ${roomId} for ${userWaiting} and ${userNew}`);
     sendMessageToBoth(socketIdWaiting, socketIdNew, EVENT_EMIT.MATCH_SUCCESS, {

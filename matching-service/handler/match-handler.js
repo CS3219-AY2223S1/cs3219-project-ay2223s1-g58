@@ -12,8 +12,10 @@ exports.findMatch = async function (payload) {
     }
     const match = await MatchService.findByDifficulty(
       value.difficulty,
+      value.types,
       socket.id
     );
+
     // no other user with same requirements ready for match, or other user is not active
     if (!match || !isSocketActive(match.socketId)) {
       // matched but socket inactive
@@ -24,6 +26,7 @@ exports.findMatch = async function (payload) {
       await MatchService.createMatch(
         socket.id,
         value.difficulty,
+        value.types,
         socket.userId
       );
       console.log(EVENT_EMIT.MATCHING);
@@ -38,7 +41,8 @@ exports.findMatch = async function (payload) {
       match.userId,
       socket.id,
       socket.userId,
-      value.difficulty
+      value.difficulty,
+      value.types,
     );
   } catch (e) {
     // TODO add custom error messages

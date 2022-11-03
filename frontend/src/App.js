@@ -12,6 +12,7 @@ import Match from './pages/Match'
 import Room from './pages/Room'
 import QuestionBank from './pages/QuestionBank'
 import QuestionPage from './pages/QuestionPage'
+import QuestionPane from './components/QuestionPane'
 
 function App() {
   return (

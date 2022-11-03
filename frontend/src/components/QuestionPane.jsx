@@ -8,6 +8,7 @@ import {
   Image,
   Code,
   StackDivider,
+  Container,
 } from '@chakra-ui/react'
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer'
 import { AuthLayout } from '../components/AuthLayout'
@@ -21,6 +22,7 @@ import {
 import axios from '../api/axios'
 import { useEffect, useState } from 'react'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import TypesStack from './TypesStack'
 
 const difficultyColorMap = new Map([
   ['easy', 'green'],
@@ -53,15 +55,16 @@ const newTheme = {
     return <Image m={4} src={node.properties.src}></Image>
   },
   code: ({ node, inline, children, ...props }) => {
+
     return !inline ? (
-      <Code overflow="auto" fontSize="lg" w="100%" p={2} mt={4} mb={4}>
+      <Code overflow="auto" fontSize="md" w="100%" >
         <ReactMarkdown
           components={ChakraUIRenderer(supTheme)}
           children={children[0]}
         />
       </Code>
     ) : (
-      <Code fontSize="lg">
+      <Code fontSize="md" >
         <ReactMarkdown
           components={ChakraUIRenderer(supTheme)}
           children={children[0]}
@@ -72,7 +75,7 @@ const newTheme = {
   p: (props) => {
     const { children } = props
     return (
-      <Text overflow="auto" mb={1} className="text-lg">
+      <Text overflow="auto" mb={1} className="text-md">
         {children}
       </Text>
     )
@@ -165,14 +168,15 @@ const QuestionPane = ({ questionId, roomId }) => {
               >
                 {questionData.difficulty}
               </Badge>
+              {TypesStack(questionData.types)}
           </VStack>
-          <div className="mx-2 max-h-full overflow-y-auto px-2">
+          <Box overflow='auto' w="95%" mx='2' my='2'>
             <ReactMarkdown
               components={ChakraUIRenderer(newTheme)}
               children={parse(questionData.content)}
               skipHtml
             />
-          </div>
+          </Box>
           <Button
               onClick={getNextQuestion}
               variant="outline"

@@ -52,14 +52,14 @@ const newTheme = {
   },
   code: ({ node, inline, children, ...props }) => {
     return !inline ? (
-      <Code overflow="auto" fontSize="lg" w="100%" p={2} mt={4} mb={4}>
+      <Code overflow="auto" fontSize="md" w="100%" p={1} mt={1} mb={1}>
         <ReactMarkdown
           components={ChakraUIRenderer(supTheme)}
           children={children[0]}
         />
       </Code>
     ) : (
-      <Code fontSize="lg">
+      <Code fontSize="md">
         <ReactMarkdown
           components={ChakraUIRenderer(supTheme)}
           children={children[0]}
@@ -70,7 +70,7 @@ const newTheme = {
   p: (props) => {
     const { children } = props
     return (
-      <Text overflow="auto" mb={1} className="text-lg">
+      <Text overflow="auto" mb={1} className="text-md">
         {children}
       </Text>
     )

@@ -65,12 +65,7 @@ const difficultyList = ['easy', 'medium', 'hard']
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (difficulty) {
-      socket.emit(EVENT_EMIT.MATCH_FIND, { difficulty: difficulty })
-    } else {
-      socket.emit(EVENT_EMIT.MATCH_FIND, { type: type })
-    }
-
+    socket.emit(EVENT_EMIT.MATCH_FIND, { difficulty: difficulty, types: type })
     setPhase(PHASES.FINDING)
   }
 

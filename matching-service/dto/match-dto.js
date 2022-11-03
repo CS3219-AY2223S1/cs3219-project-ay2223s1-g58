@@ -5,4 +5,5 @@ exports.matchDto = Joi.object({
   difficulty: Joi.string()
     .valid(...Object.values(DIFFICULTY))
     .error(new Error("Invalid/missing difficulty")),
+  types: Joi.string(),
 });

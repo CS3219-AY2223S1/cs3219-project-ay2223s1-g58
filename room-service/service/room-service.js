@@ -14,16 +14,16 @@ const RoomService = {
   findByUserId: function (userId) {
     return RoomRepository.findByUserId(userId);
   },
-  createRoom: async function (roomId, userId1, userId2, difficulty) {
+  createRoom: async function (roomId, userId1, userId2, difficulty, types) {
     const response = await axios.get(URL_QUESTION_SERVICE, {
-      params: { difficulty: difficulty },
+      params: { difficulty: difficulty, types: types },
     });
     return RoomRepository.create(
       roomId,
       response.data.id,
       userId1,
       userId2,
-      difficulty
+      difficulty,
     );
   },
   updateRoomQuestionId: async function (roomId) {
