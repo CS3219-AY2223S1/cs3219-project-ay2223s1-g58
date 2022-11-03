@@ -26,9 +26,12 @@ const Match = () => {
   return (
     <div>
       <Helmet>
-        <title>Match | PeerPrep</title>
+        <title>Match | LeetWithFriend</title>
         <meta charSet="utf-8" />
-        <meta name="description" content="PeerPrep help you prep" />
+        <meta
+          name="description"
+          content="An interview preparation platform and peer matching system, where students can find peers to practice whiteboard-style interview questions together."
+        />
       </Helmet>
       <main className="flex flex-col items-center justify-center h-full">
         {isInRoom ? (

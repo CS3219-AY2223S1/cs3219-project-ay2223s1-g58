@@ -5,9 +5,12 @@ const PageNotFound = () => {
   return (
     <main className="flex h-screen w-full flex-col items-center justify-center bg-[#1A2238]">
       <Helmet>
-        <title>404 | PeerPrep</title>
+        <title>404 | LeetWithFriend</title>
         <meta charSet="utf-8" />
-        <meta name="description" content="PeerPrep help you prep" />
+        <meta
+          name="description"
+          content="An interview preparation platform and peer matching system, where students can find peers to practice whiteboard-style interview questions together."
+        />
       </Helmet>
       <h1 className="font-extrabold tracking-widest text-white text-9xl">
         404
