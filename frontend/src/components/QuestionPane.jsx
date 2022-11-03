@@ -8,7 +8,6 @@ import {
   Image,
   Code,
   StackDivider,
-  Container,
 } from '@chakra-ui/react'
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer'
 import { AuthLayout } from '../components/AuthLayout'

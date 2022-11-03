@@ -31,12 +31,21 @@ const scheduleTimeout = (socketId) => {
 const MatchService = {
   findByDifficulty: function (difficulty, types, socketId) {
     if (types) {
-      return MatchRepository.findByTypesAndDifficulty(difficulty, types, socketId);
+      return MatchRepository.findByTypesAndDifficulty(
+        difficulty,
+        types,
+        socketId
+      );
     }
     return MatchRepository.findByDifficulty(difficulty, socketId);
   },
   createMatch: async function (socketId, difficulty, types, userId) {
-    const created = await MatchRepository.create(socketId, difficulty, types, userId);
+    const created = await MatchRepository.create(
+      socketId,
+      difficulty,
+      types,
+      userId
+    );
     scheduleTimeout(socketId);
     return created;
   },
@@ -66,7 +75,7 @@ const MatchService = {
       userId1: userWaiting,
       userId2: userNew,
       difficulty,
-      types: types
+      types: types,
     });
     console.log(`Created room ${roomId} for ${userWaiting} and ${userNew}`);
     sendMessageToBoth(socketIdWaiting, socketIdNew, EVENT_EMIT.MATCH_SUCCESS, {

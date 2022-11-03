@@ -12,16 +12,24 @@ const MatchRepository = {
       },
     });
   },
-  findByTypesAndDifficulty: function(difficulty, types, socketId) {
+  findByTypesAndDifficulty: function (difficulty, types, socketId) {
     return db.Match.findOne({
       where: {
-        difficulty: difficulty,
-        types: types,
-        socketId: {
-          [Sequelize.Op.ne]: socketId,
-        },
-      }
-    })
+        [Sequelize.Op.and]: [
+          { difficulty: difficulty },
+          {
+            socketId: {
+              [Sequelize.Op.ne]: socketId,
+            },
+          },
+          {
+            types: {
+              [Sequelize.Op.or]: [null, "", types],
+            },
+          },
+        ],
+      },
+    });
   },
   findBySocketId: function (socketId) {
     return db.Match.findOne({
