@@ -10,4 +10,5 @@ services:
       - .env
     environment:
       ENV: production
+      HISTORY_SERVICE_HOST: host.docker.internal
       QUESTION_SERVICE_HOST: host.docker.internal

@@ -1,0 +1,2 @@
+Repository's Location,Branch,File formats,Ignore Glob List,Ignore standalone config,Ignore Commits List,Ignore Authors List,Skip Ignored File Analysis
+https://github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g58.git,main,,**.json,,,dependabot[bot];github-classroom[bot],yes

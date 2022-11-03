@@ -108,7 +108,7 @@ export function Header() {
                             <MobileNavLink to="/">Home</MobileNavLink>
                             <MobileNavLink to="/profile">Profile</MobileNavLink>
                             <MobileNavLink to="/match">Match</MobileNavLink>
-                            <MobileNavLink to="/learning">
+                            <MobileNavLink to="/history">
                               Learning History
                             </MobileNavLink>
                             <MobileNavLink to="/questions">

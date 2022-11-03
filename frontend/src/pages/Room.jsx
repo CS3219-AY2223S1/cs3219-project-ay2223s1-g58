@@ -1,12 +1,13 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import {
+  EVENT_LISTEN,
   URL_ROOM_SERVICE,
   STATUS_CODE_SUCCESS,
   STATUS_CODE_BAD_REQUEST,
   URI_ROOM_SERVICE_SOCKET_PATH,
-  EVENT_LISTEN,
   URI_ROOM_SERVICE,
+  URL_HISTORY_ROOM,
 } from '../constants'
 import { Button, useToast, Stack, Text } from '@chakra-ui/react'
 import { Helmet } from 'react-helmet-async'
@@ -24,6 +25,7 @@ const Room = () => {
   const [questionId, setQuestionId] = useState()
   const [room, setRoom] = useState()
   const [socket, setSocket] = useState()
+  const [editor, setEditor] = useState()
   const [isValid, setIsValid] = useState(true)
   const toast = useToast()
   const { auth } = useAuth()
@@ -86,6 +88,32 @@ const Room = () => {
       .catch(console.log)
   }
 
+  const markCompleted = async () => {
+    console.log(editor.getText());
+    await axiosPrivate
+      .put(`${URL_HISTORY_ROOM}/${roomId}`, {
+        questionId,
+        answer: editor.getText(),   // accessing Firepad
+      })
+      .then(() => {
+        toast({
+          title: 'Marked question as completed!',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        })
+      })
+      .catch((e) => {
+        toast({
+          title: "Couldn't mark as completed...",
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        })
+        return console.log(e)
+      })
+  }
+
   const getHelmet = () => {
     return (
       <Helmet>
@@ -133,10 +161,11 @@ const Room = () => {
           <div className="grid h-screen grid-cols-2 gap-4">
             <QuestionPane questionId={questionId} roomId={roomId} />
             <div className="flex flex-col justify-start">
-              <Editor roomId={roomId} />
-              <div className="flex flex-col items-center justify-start">
-                <RoomEndDialog handleClick={endSession} />
-              </div>
+              <Editor roomId={roomId} setEditorComponent={setEditor} />
+              <div className="flex flex-row items-center justify-center">
+              <Button className='mx-2' onClick={markCompleted}>Mark completed</Button>
+              <RoomEndDialog handleClick={endSession} />
+            </div>
             </div>
           </div>
         </>

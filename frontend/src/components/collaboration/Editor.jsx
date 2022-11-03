@@ -30,7 +30,7 @@ const languageExtensions = {
   'JavaScript': javascript(),
 }
 
-const Editor = ({ roomId }) => {
+const Editor = ({ roomId, setEditorComponent }) => {
   const docPath = 'docs/' + roomId
 
   const { auth } = useAuth()
@@ -45,7 +45,7 @@ const Editor = ({ roomId }) => {
   useEffect(() => {
     /** Timer ID returned by setTimeout, used for sending cursor data */
     let timerId = null
-    const MIN_DELAY = 1, MAX_DELAY = 100 // Delay duration in milisec to send cursor data
+    const MIN_DELAY = 1, MAX_DELAY = 50 // Delay duration in milisec to send cursor data
     let lastSend = 0 // Timestamp of last cursor update
 
     // Delay to send cursor should be in the range [MIN_DELAY, MAX_DELAY]
@@ -102,6 +102,8 @@ const Editor = ({ roomId }) => {
 
     let cl
     firepad.on('ready', () => {
+      console.log('editor ready')
+      setEditorComponent(firepad)
       cl = new CursorListener(docPath, codeMirrorInstance)
       setReady(true)
     })
@@ -113,7 +115,8 @@ const Editor = ({ roomId }) => {
       db.ref(`${docPath}/users/${uid}`).set(null)
       parentNode.removeChild(parentNode.children[0])
     }
-  })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [docPath, lang, tabSize, uid])
 
   return (
     <>
