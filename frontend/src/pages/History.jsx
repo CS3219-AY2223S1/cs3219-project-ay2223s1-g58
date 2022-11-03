@@ -1,8 +1,9 @@
 import useAuth from '../hooks/useAuth'
 import { Helmet } from 'react-helmet-async'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { URL_HISTORY_USER, STATUS_CODE_BAD_REQUEST, STATUS_CODE_SUCCESS } from '../constants'
+import { useTable, useSortBy } from 'react-table'
 import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, Spinner } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
@@ -43,6 +44,50 @@ const History = () => {
     )
   }
 
+  const columns = useMemo(() => [
+    {
+      Header: 'Partner',
+      accessor: 'partner',
+      widthProp: 'w-1/6',   // Own property to style column width (not react-table's property)
+      disableSortBy: true,
+    },
+    {
+      Header: 'Question id',
+      accessor: 'id',
+      widthProp: 'w-1/5',
+      disableSortBy: true,
+      Cell: (cellInfo) => (
+        <Link 
+          to={`/question/${cellInfo.row.original.id}`} 
+          className='font-semibold hover:underline text-gray-500 dark:text-gray-300'
+        >
+          {cellInfo.row.original.name}
+        </Link>
+      )
+    },
+    {
+      Header: 'Answer',
+      accessor: 'answer',
+      widthProp: 'w-1/2',
+      disableSortBy: true,
+      Cell: ({ cell: { value } }) => (
+        <div className='font-mono text-sm whitespace-pre-wrap'>{value}</div>
+      )
+    },
+    {
+      Header: 'Completed at',
+      accessor: 'completedAt',
+      Cell: ({ cell: { value } }) => {
+        return new Date(value).toLocaleString('en-GB', {
+          hour12: 'true',
+          dateStyle: 'medium',
+          timeStyle: 'medium',
+        })
+      },
+      sortType: 'basic',
+    }
+  ], [])
+
   return (
     <>
       {getHelmet()}
@@ -60,46 +105,60 @@ const History = () => {
         {!isLoading && !isValid ? (
           <h1>Unable to retrieve your learning history</h1>
         ) : (
-          <HistTable questions={hist} />
+          <HistTable columns={columns} data={hist} />
         )}
       </main>
     </>
   )
 }
 
-const HistTable = ({ questions }) => {
+const HistTable = ({ columns, data }) => {
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+  } = useTable({
+    columns, 
+    data,
+    disableSortRemove: true,
+    initialState: {
+      sortBy: [
+        {
+          id: 'completedAt',
+          desc: true,
+        }
+      ]
+    }
+  }, useSortBy)
+
   return (
-    <TableContainer overflowY='auto' whiteSpace='pre-wrap' maxHeight='100vh'>
-      <Table variant='striped' className='max-w-full table-fixed'>
+    <TableContainer overflowY='auto' whiteSpace='pre-wrap' maxHeight='100vh' className='mr-2'>
+      <Table variant='striped' className='max-w-full table-fixed' {...getTableProps()}>
         <Thead className='sticky top-0 bg-blue-200 dark:bg-blue-900'>
-          <Tr>
-            <Th className='w-1/6'>Partner</Th>
-            <Th className='w-1/5'>Question id</Th>
-            <Th className='w-1/2'>Answer</Th>
-            <Th>Completed at</Th>
-          </Tr>
+          {headerGroups.map(headerGroup => (
+            <Tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map(column => (
+                <Th className={column.widthProp} {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  {column.render('Header')}
+                  {column.isSorted && <span>{column.isSortedDesc ? ' ▼' : ' ▲'}</span>}
+                </Th>
+              ))}
+            </Tr>
+          ))}
         </Thead>
-        <Tbody>
-          {questions.map((q, idx) => {
+        
+        <Tbody {...getTableBodyProps()}>
+          {rows.map((row) => {
+            prepareRow(row)
             return (
-              <Tr key={q.roomId + q.id + idx} className='text-gray-700 dark:text-gray-300'>
-                <Td>{q.partner}</Td>
-                <Td>
-                  <Link 
-                    to={`/question/${q.id}`} 
-                    className='font-semibold hover:underline text-gray-500 dark:text-gray-300'
-                  >
-                    {q.name}
-                  </Link>
-                </Td>
-                <Td className='font-mono text-sm'>{q.answer}</Td>
-                <Td>
-                  {new Date(q.completedAt).toLocaleString('en-GB', {
-                    hour12: 'true',
-                    dateStyle: 'medium',
-                    timeStyle: 'medium',
-                  })}
-                </Td>
+              <Tr {...row.getRowProps()}>
+                {row.cells.map(cell => (
+                  <Td className='align-text-top' {...cell.getCellProps()}>
+                    {cell.render('Cell')}
+                  </Td>
+                ))}
               </Tr>
             )
           })}
