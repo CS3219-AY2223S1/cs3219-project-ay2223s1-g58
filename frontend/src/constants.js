@@ -48,6 +48,7 @@ export const URI_ROOM_SERVICE_SOCKET_PATH = '/socket.io/room'
 const PREFIX_ROOM_SERVICE = '/api/v1/room'
 export const URL_ROOM_SERVICE = URI_ROOM_SERVICE + PREFIX_ROOM_SERVICE
 
+export const PEERJS_HOST = 'localhost'
 export const PEERJS_PORT = process.env.NODE_ENV === 'production' ? 80 : 9000
 export const PEERJS_PATH = '/myapp'
 

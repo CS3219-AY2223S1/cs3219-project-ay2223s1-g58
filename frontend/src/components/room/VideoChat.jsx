@@ -14,7 +14,7 @@ import {
   FaVideo,
   FaVideoSlash,
 } from 'react-icons/fa'
-import { PEERJS_PATH, PEERJS_PORT } from '../../constants'
+import { PEERJS_PATH, PEERJS_PORT, PEERJS_HOST } from '../../constants'
 import { useRef } from 'react'
 
 const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
@@ -34,7 +34,7 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
   useEffect(() => {
     if (!peer.current || peer.current.destroyed) {
       peer.current = new Peer(userId, {
-        host: 'localhost',
+        host: PEERJS_HOST,
         port: PEERJS_PORT,
         path: PEERJS_PATH,
       })
