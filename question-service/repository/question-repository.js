@@ -9,14 +9,14 @@ const QuestionRepository = {
             },
         })
     },
-    findQuestionsById: function(ids) {
+    findQuestionsById: function (ids) {
         return db.Question.findAll({
             attributes: ['id', 'name'],
             where: {
                 id: {
                     [Op.in]: ids,
-                }
-            }
+                },
+            },
         })
     },
     create: function (name, content) {
@@ -49,10 +49,15 @@ const QuestionRepository = {
     },
     getAllQuestion: function () {
         return db.Question.findAll({
+            attributes: ['id', 'name'],
             distinct: true,
-            include: [db.Category],
+            include: [
+                {
+                    model: db.Category,
+                    attributes: ['difficulty', 'types'],
+                },
+            ],
         })
-
     },
 }
 

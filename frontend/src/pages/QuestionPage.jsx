@@ -9,9 +9,7 @@ import {
   Image,
   Badge,
   Heading,
-  IconButton,
 } from '@chakra-ui/react'
-import { ArrowBackIcon, ArrowForwardIcon } from '@chakra-ui/icons'
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer'
 import { AuthLayout } from '../components/AuthLayout'
 import ReactMarkdown from 'react-markdown'
@@ -19,6 +17,7 @@ import { URL_QUESTION_SERVICE } from '../constants'
 import axios from '../api/axios'
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { Button } from '../components/Button'
 
 const difficultyColorMap = new Map([
   ['easy', 'green'],
@@ -173,12 +172,14 @@ const QuestionPage = () => {
           <Heading size="lg" fontWeight="semibold" color="gray 500">
             {questionData.name}
           </Heading>
-          <HStack spacing={350}>
-            <IconButton
+          <HStack spacing={450}>
+            <Button
               onClick={previousQuestion}
-              aria-label="Back"
-              icon={<ArrowBackIcon />}
-            ></IconButton>
+              variant="outline"
+              className=" dark:text-gray-300"
+            >
+              Previous Question
+            </Button>
             <Badge
               align="center"
               textAlign="center"
@@ -188,19 +189,21 @@ const QuestionPage = () => {
             >
               {questionData.difficulty}
             </Badge>
-            <IconButton
+            <Button
               onClick={nextQuestion}
-              aria-label="Back"
-              icon={<ArrowForwardIcon />}
-            ></IconButton>
+              variant="outline"
+              className=" dark:text-gray-300"
+            >
+              Next Question
+            </Button>
           </HStack>
-          <div className="mx-2 max-h-full overflow-y-auto px-2">
+          <Box overflow="auto" w="95%" mx="2" my="2">
             <ReactMarkdown
               components={ChakraUIRenderer(newTheme)}
               children={parse(questionData.content)}
               skipHtml
             />
-          </div>
+          </Box>
         </VStack>
       </Box>
     </>
