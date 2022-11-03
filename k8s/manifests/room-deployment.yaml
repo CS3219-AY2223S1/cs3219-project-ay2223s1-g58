@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: room-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: room
+  template:
+    metadata:
+      labels:
+        app: room
+    spec:
+      containers:
+        - name: room
+          image: b9jmthkk/room
+          ports:
+            - name: http
+              containerPort: 8022
+          env:
+            - name: PORT
+              value: '80'
+            - name: URI_QUESTION_SERVICE
+              value: http://question-cluster-ip-service:8500
+            - name: ACCESS_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: access-token-secret
+                  key: ACCESS_TOKEN_SECRET

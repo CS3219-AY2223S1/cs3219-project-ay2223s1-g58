@@ -2,11 +2,7 @@ import { useEffect, useState } from 'react'
 import MatchDialog from '../components/match/MatchDialog'
 import { Helmet } from 'react-helmet-async'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
-import {
-  URL_ROOM_SERVICE,
-  STATUS_CODE_SUCCESS,
-  STATUS_CODE_BAD_REQUEST,
-} from '../constants'
+import { URL_ROOM_SERVICE, STATUS_CODE_SUCCESS } from '../constants'
 import { Button } from '@chakra-ui/react'
 
 const Match = () => {
@@ -24,9 +20,7 @@ const Match = () => {
         }
       })
       .catch((e) => {
-        if (e.response.status === STATUS_CODE_BAD_REQUEST) {
-          console.log(e)
-        }
+        console.log(e)
       })
   }, [axiosPrivate])
   return (

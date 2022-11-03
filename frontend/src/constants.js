@@ -6,7 +6,7 @@ export const STATUS_CODE_BAD_REQUEST = 400
 // USER SERVICE API
 const URI_USER_SERVICE =
   process.env.NODE_ENV === 'production'
-    ? 'http://localhost:80'
+    ? ''
     : 'http://localhost:8000'
 const PREFIX_USER_SERVICE = '/api/v1/user'
 export const URL_USER_SERVICE = URI_USER_SERVICE + PREFIX_USER_SERVICE
@@ -20,7 +20,7 @@ export const URL_USER_TOKEN_TEST = URL_USER_SERVICE + '/testToken'
 
 const URI_QUESTION_SERVICE =
   process.env.NODE_ENV === 'production'
-    ? 'http://localhost:80'
+    ? ''
     : 'http://localhost:8500'
 export const URL_QUESTION_SERVICE = URI_QUESTION_SERVICE + '/api/v1/question'
 export const PASSWORD_REGEX =
@@ -31,7 +31,7 @@ export const EMAIL_REGEX = /^\S+@\S+\.\S+$/
 
 export const URI_MATCHING_SERVICE =
   process.env.NODE_ENV === 'production'
-    ? 'http://localhost:80'
+    ? ''
     : 'http://localhost:8001'
 
 export const URI_MATCHING_SERVICE_SOCKET_PATH = '/socket.io/matching'
@@ -41,7 +41,7 @@ export const URL_MATCHING_SERVICE =
 
 export const URI_ROOM_SERVICE =
   process.env.NODE_ENV === 'production'
-    ? 'http://localhost:80'
+    ? ''
     : 'http://localhost:8022'
 
 export const URI_ROOM_SERVICE_SOCKET_PATH = '/socket.io/room'
@@ -68,7 +68,7 @@ export const RANDOM_AVATAR_URL = 'https://avatars.dicebear.com/api/bottts/'
 
 const URI_HISTORY_SERVICE =
   process.env.NODE_ENV === 'production'
-    ? 'http://localhost:80'
+    ? ''
     : 'http://localhost:8080'
 const PREFIX_HISTORY_SERVICE = '/api/v1/history'
 export const URL_HISTORY_USER =

@@ -4,12 +4,8 @@ const cors = require('cors')
 const app = express()
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
-app.use(
-    cors({
-        origin: `http://localhost:${process.env.PORT || 3000}`,
-        credentials: true,
-    })
-) // config cors so that front-end can use
+app.options("*", cors());
+app.use(cors())
 
 const {
     createQuestion,
