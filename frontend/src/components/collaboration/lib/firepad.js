@@ -260,9 +260,9 @@ const Firepad = (function () {
 
   Firepad.prototype.getText = function () {
     this.assertReady_("getText")
+    if (this.codeMirror6_) return this.codeMirror6_.state.doc.text.join('\n')
     if (this.codeMirror_) return this.richTextCodeMirror_.getText()
-    else if (this.ace_) return this.ace_.getSession().getDocument().getValue()
-    else return this.monaco_.getModel().getValue()
+    throw new Error('Firepad cannot find CodeMirror instance')
   }
 
   Firepad.prototype.setText = function (textPieces) {

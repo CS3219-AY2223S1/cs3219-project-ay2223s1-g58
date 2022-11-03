@@ -26,13 +26,18 @@ async function createQuestion(req, res) {
 
 async function getQuestionNames(req, res) {
     try {
-        const {id} = req.query
+        let { id } = req.query
+        if (!(id instanceof Array)) {  // If there is only 1 id, the value will not be an array
+          id = [id]
+        }
         const questionArray = await QuestionRepository.findQuestionsById(id)
+        const id2name = {}
+        questionArray.forEach(q => id2name[q.id] = q.name)
         return res
                 .status(200)
                 .json({ 
                     message: 'Question names successfully!',
-                    questions: questionArray,
+                    data: id2name,
                  })
     } catch (err) {
         return res.status(500).json({
