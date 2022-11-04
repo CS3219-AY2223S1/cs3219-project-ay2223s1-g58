@@ -27,6 +27,8 @@ export async function createHistory(req, res) {
     const { roomId, u1, u2 } = req.body
     if (!roomId) {
       return res.status(400).json({ message: 'roomId is missing' })
+    } else if (!u1 || !u2) {
+      return res.status(400).json({ message: 'u1 or u2 missing, must provide usernames' })
     }
     const resp = await HistoryService.createRoomHistory(roomId, u1, u2)
     if (resp?.err) {

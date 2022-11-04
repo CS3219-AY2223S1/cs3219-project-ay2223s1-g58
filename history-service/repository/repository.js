@@ -43,7 +43,6 @@ const HistoryRepository = {
     if (!doc) {
       return { err: 'roomId does not exist' }
     }
-    console.log(doc)
   },
 }
 
