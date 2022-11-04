@@ -18,3 +18,7 @@ spec:
           ports:
             - name: http
               containerPort: 3000
+          resources:
+            requests:
+              cpu: 2m
+              memory: 20Mi

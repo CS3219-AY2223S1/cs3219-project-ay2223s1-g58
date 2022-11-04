@@ -19,6 +19,9 @@ chmod 700 get_helm.sh
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm install my-release ingress-nginx/ingress-nginx
 
+## Install metrics server for HPA
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
 ## Install https cert manager
 helm repo add jetstack https://charts.jetstack.io
 helm repo update

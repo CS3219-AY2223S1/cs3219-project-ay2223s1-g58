@@ -18,3 +18,7 @@ spec:
           ports:
             - name: http
               containerPort: 6379
+          resources:
+            requests:
+              cpu: 8m
+              memory: 10Mi

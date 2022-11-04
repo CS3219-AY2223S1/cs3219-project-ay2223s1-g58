@@ -8,8 +8,19 @@ require("dotenv").config();
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.options("*", cors());
-app.use(cors())
+
+
+if (process.env.ENV === "production") {
+  app.use(cors())
+  app.options("*", cors());
+} else {
+  app.use(
+    cors({
+      origin: `http://localhost:${process.env.PORT || 3000}`,
+      credentials: true,
+    })
+  )
+}
 
 app.get("/", (req, res) => {
   res.send("Hello World from room-service");
