@@ -16,16 +16,23 @@ describe('Get service status', function () {
 })
 
 describe('POST /room (create room history)', function () {
-  it('creates room successfully', function (done) {
-    request(app)
+  it('creates room successfully', async function () {
+    // Delete existing room if any
+    await request(app)
+      .delete(`${URI_PREFIX}/room/testDelete`)
+      .send({
+        'roomId': 'testRoom',
+      })
+    
+    const resp = await request(app)
       .post(`${URI_PREFIX}/room`)
       .send({
         'roomId': 'testRoom',
         'u1': 'testUser1',
         'u2': 'testUser2',
       })
-      .expect(201)
-      .expect({ message: 'Created room history' }, done)
+    expect(resp.statusCode).to.equal(201)
+    expect(resp.body.message).to.equal('Created room history')
   })
 
   it('fails for duplicate roomId', function (done) {
