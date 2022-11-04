@@ -5,9 +5,7 @@ import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import { URL_QUESTION_SERVICE_QUESTION_NAMES } from '../constants/const.js'
 
-
 const URI_PREFIX = '/api/v1/history'
-const mockAxios = new MockAdapter(axios)
 
 describe('Get service status', function () {
   it('responds server alive', function (done) {
@@ -97,6 +95,7 @@ describe('GET /user/:uid (get user history)', function () {
 
   // testUser1 has history in testRoom, which was updated in previous test
   it('gets successfully for non-empty history', async function () {
+    const mockAxios = new MockAdapter(axios)
     // Mock the response from Question Service. Mock any GET request to /questionNames endpoint
     mockAxios
       .onGet(new RegExp(`^${URL_QUESTION_SERVICE_QUESTION_NAMES}`))
