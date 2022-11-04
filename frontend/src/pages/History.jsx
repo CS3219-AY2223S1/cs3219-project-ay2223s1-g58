@@ -31,15 +31,18 @@ const History = () => {
       }
     }
     fetchHist()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const getHelmet = () => {
     return (
       <Helmet>
-        <title>History | PeerPrep</title>
+        <title>History | LeetWithFriend</title>
         <meta charSet="utf-8" />
-        <meta name="description" content="PeerPrep help you prep" />
+        <meta
+          name="description"
+          content="An interview preparation platform and peer matching system, where students can find peers to practice whiteboard-style interview questions together."
+        />
       </Helmet>
     )
   }
@@ -92,7 +95,7 @@ const History = () => {
     <>
       {getHelmet()}
 
-      <main className="flex h-full flex-col items-center justify-start">
+      <main className="flex flex-col items-center justify-start h-full">
         {isLoading && (
           <Spinner
             thickness="4px"
@@ -101,7 +104,7 @@ const History = () => {
             color="blue.500"
           />
         )}
-        
+
         {!isLoading && !isValid ? (
           <h1>Unable to retrieve your learning history</h1>
         ) : (

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matching-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: matching
+  template:
+    metadata:
+      labels:
+        app: matching
+    spec:
+      containers:
+        - name: matching
+          image: b9jmthkk/matching
+          ports:
+            - name: http
+              containerPort: 8001
+          env:
+            - name: PORT
+              value: '80'
+            - name: ENV
+              value: production
+            - name: URI_QUESTION_SERVICE
+              value: http://question-cluster-ip-service:8500
+            - name: URI_ROOM_SERVICE
+              value: http://room-cluster-ip-service:8022
+            - name: URI_HISTORY_SERVICE
+              value: http://history-cluster-ip-service:8080
+            - name: ACCESS_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: access-token-secret
+                  key: ACCESS_TOKEN_SECRET
+          resources:
+            requests:
+              cpu: 5m
+              memory: 80Mi
