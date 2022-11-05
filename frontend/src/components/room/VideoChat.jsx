@@ -57,7 +57,6 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
         console.log('user-disconnected: peer', peer.current)
         console.log('otherUserId', otherUserId)
         setUpOtherStream(null, false)
-        otherVideo.srcObject = null
       })
     }
 
@@ -207,7 +206,9 @@ const VideoChat = ({ userId, otherUserId, roomId, socket }) => {
   const setUpOtherStream = (stream, isShow) => {
     setShowOther(isShow)
     setOtherStream(stream)
-    otherVideo.current.srcObject = stream
+    if (otherVideo.current) {
+      otherVideo.current.srcObject = stream
+    }
   }
 
   const toggleAudioVideo = (isAudioEnabled, isVideoEnabled) => {
