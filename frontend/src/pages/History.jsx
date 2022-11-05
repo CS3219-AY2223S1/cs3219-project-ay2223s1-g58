@@ -137,8 +137,8 @@ const HistTable = ({ columns, data }) => {
   }, useSortBy)
 
   return (
-    <TableContainer overflowY='auto' whiteSpace='pre-wrap' maxHeight='100vh' className='mr-2'>
-      <Table variant='striped' className='max-w-full table-fixed' {...getTableProps()}>
+    <TableContainer overflowY='auto' whiteSpace='pre-wrap' maxHeight='100vh'>
+      <Table variant='striped' className='w-full max-w-screen-xl table-fixed' {...getTableProps()}>
         <Thead className='sticky top-0 bg-blue-200 dark:bg-blue-900'>
           {headerGroups.map(headerGroup => (
             <Tr {...headerGroup.getHeaderGroupProps()}>
