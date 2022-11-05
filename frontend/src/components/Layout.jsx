@@ -7,7 +7,7 @@ const Layout = () => {
   return (
     <>
       <Header />
-      <Box className="h-screen">
+      <Box>
         <Outlet />
       </Box>
       <Footer />

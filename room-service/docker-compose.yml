@@ -5,9 +5,13 @@ services:
     build:
       context: .
     ports:
-      - "8001:8001"
+      - "8022:8022"
     env_file:
       - .env
     environment:
       ENV: production
       QUESTION_SERVICE_HOST: host.docker.internal
+  peerjs-server:
+    image: peerjs/peerjs-server
+    ports:
+      - "9000:9000"

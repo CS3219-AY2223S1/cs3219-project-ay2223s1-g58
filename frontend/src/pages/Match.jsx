@@ -4,6 +4,8 @@ import { Helmet } from 'react-helmet-async'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { URL_ROOM_SERVICE, STATUS_CODE_SUCCESS } from '../constants'
 import { Button } from '@chakra-ui/react'
+import { PrimaryFeatures } from '../components/PrimaryFeatures'
+import { ArrowForwardIcon } from '@chakra-ui/icons'
 
 const Match = () => {
   const [roomId, setRoomId] = useState()
@@ -35,20 +37,34 @@ const Match = () => {
       </Helmet>
       <main className="flex flex-col items-center justify-center h-full">
         {isInRoom ? (
-          <>
-            <h1>You are already in a room, please rejoin it. </h1>{' '}
-            <h1>End Session to start a new match. </h1>
-            <br />
-            <Button as="a" href={`/room/${roomId}`}>
-              Rejoin
-            </Button>
-          </>
+          <PrimaryFeatures
+            content={
+              <div className="flex items-center justify-center max-w-2xl gap-4 mx-auto lg:mx-0 lg:max-w-3xl">
+                <h2 className="text-3xl font-medium tracking-tight text-gray-600 dark:text-white">
+                  Already in room!
+                </h2>
+                <Button
+                  as="a"
+                  href={`/room/${roomId}`}
+                  variant="outline"
+                  rightIcon={<ArrowForwardIcon />}
+                >
+                  Rejoin
+                </Button>
+              </div>
+            }
+          />
         ) : (
-          <>
-            <h1>Select your criterias and find a match within 30s!</h1>
-            <br />
-            <MatchDialog isDisabled={isInRoom} />
-          </>
+          <PrimaryFeatures
+            content={
+              <div className="flex items-center justify-center max-w-2xl gap-4 mx-auto lg:mx-0 lg:max-w-3xl">
+                <h2 className="text-3xl font-medium tracking-tight text-gray-600 dark:text-white">
+                  Ready to match? Select your criteria and
+                </h2>
+                <MatchDialog isDisabled={isInRoom} />
+              </div>
+            }
+          />
         )}
       </main>
     </div>
