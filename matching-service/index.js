@@ -29,3 +29,5 @@ const httpServer = createServer(app);
 initSocket(httpServer, findMatch, cancelMatch);
 
 httpServer.listen(8001);
+
+module.exports = app;

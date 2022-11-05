@@ -1,4 +1,7 @@
+/* eslint-disable node/no-unpublished-require */
 /* eslint-disable no-undef */
+const request = require("supertest");
+
 const app = require("../index");
 
 describe("Get service status", () => {
