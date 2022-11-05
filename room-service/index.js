@@ -33,3 +33,5 @@ const httpServer = createServer(app);
 initSocket(httpServer);
 
 httpServer.listen(8022);
+
+module.exports = app;
