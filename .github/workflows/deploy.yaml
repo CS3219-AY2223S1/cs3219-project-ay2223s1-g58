@@ -1,0 +1,75 @@
+name: Deploy To Production
+on:
+  push:
+    branches:
+      - production
+
+env:
+  SHA: $(git rev-parse HEAD)
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login to Docker
+        run: |-
+          # docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+      - name: Set Service Key
+        uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: '${{ secrets.GKE_SA_KEY }}'
+
+      - name: Set Project
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: cs3219-365909 # from google cloud console
+
+      - name: Auth
+        run: |-
+          gcloud --quiet auth configure-docker
+
+      - name: Get Credentials
+        uses: google-github-actions/get-gke-credentials@v0
+        with:
+          cluster_name: cs3219-cluster
+          location: asia-southeast1-a
+
+      - name: Build new Docker image
+        run: |-
+          docker build -t b9jmthkk/frontend:latest -t b9jmthkk/frontend:${{ env.SHA }} -f ./frontend/Dockerfile.production ./frontend
+          docker build -t b9jmthkk/user:latest -t b9jmthkk/user:${{ env.SHA }} -f ./user-service/Dockerfile ./user-service
+          docker build -t b9jmthkk/question:latest -t b9jmthkk/question:${{ env.SHA }} -f ./question-service/Dockerfile ./question-service
+          docker build -t b9jmthkk/matching:latest -t b9jmthkk/matching:${{ env.SHA }} -f ./matching-service/Dockerfile ./matching-service
+          docker build -t b9jmthkk/room:latest -t b9jmthkk/room:${{ env.SHA }} -f ./room-service/Dockerfile ./room-service
+          docker build -t b9jmthkk/history:latest -t b9jmthkk/history:${{ env.SHA }} -f ./history-service/Dockerfile ./history-service
+
+      - name: Push to Docker Hub
+        run: |-
+          docker push b9jmthkk/frontend:latest
+          docker push b9jmthkk/user:latest
+          docker push b9jmthkk/question:latest
+          docker push b9jmthkk/matching:latest
+          docker push b9jmthkk/room:latest
+          docker push b9jmthkk/history:latest
+
+          docker push b9jmthkk/frontend:${{ env.SHA }}
+          docker push b9jmthkk/user:${{ env.SHA }}
+          docker push b9jmthkk/question:${{ env.SHA }}
+          docker push b9jmthkk/matching:${{ env.SHA }}
+          docker push b9jmthkk/room:${{ env.SHA }}
+          docker push b9jmthkk/history:${{ env.SHA }}
+
+      - name: Re-Apply K8s Config and update image
+        run: |-
+          kubectl apply -f k8s/manifests
+
+          kubectl set image deployments/frontend-deployment frontend=b9jmthkk/frontend:${{ env.SHA }}
+          kubectl set image deployments/user-deployment user=b9jmthkk/user:${{ env.SHA }}
+          kubectl set image deployments/question-deployment question=b9jmthkk/question:${{ env.SHA }}
+          kubectl set image deployments/matching-deployment matching=b9jmthkk/matching:${{ env.SHA }}
+          kubectl set image deployments/room-deployment room=b9jmthkk/room:${{ env.SHA }}
+          kubectl set image deployments/history-deployment history=b9jmthkk/history:${{ env.SHA }}

@@ -2,8 +2,22 @@ import useAuth from '../hooks/useAuth'
 import { Helmet } from 'react-helmet-async'
 import { useState, useEffect } from 'react'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
-import { URL_HISTORY_USER, STATUS_CODE_BAD_REQUEST, STATUS_CODE_SUCCESS } from '../constants'
-import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, Spinner, Button } from '@chakra-ui/react'
+import {
+  URL_HISTORY_USER,
+  STATUS_CODE_BAD_REQUEST,
+  STATUS_CODE_SUCCESS,
+} from '../constants'
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer,
+  Spinner,
+  Button,
+} from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 
 const History = () => {
@@ -30,15 +44,18 @@ const History = () => {
       }
     }
     fetchHist()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const getHelmet = () => {
     return (
       <Helmet>
-        <title>History | PeerPrep</title>
+        <title>History | LeetWithFriend</title>
         <meta charSet="utf-8" />
-        <meta name="description" content="PeerPrep help you prep" />
+        <meta
+          name="description"
+          content="An interview preparation platform and peer matching system, where students can find peers to practice whiteboard-style interview questions together."
+        />
       </Helmet>
     )
   }
@@ -47,7 +64,7 @@ const History = () => {
     <>
       {getHelmet()}
 
-      <main className="flex h-full flex-col items-center justify-start">
+      <main className="flex flex-col items-center justify-start h-full">
         {isLoading && (
           <Spinner
             thickness="4px"
@@ -56,7 +73,7 @@ const History = () => {
             color="blue.500"
           />
         )}
-        
+
         {!isLoading && !isValid ? (
           <h1>Unable to retrieve your learning history</h1>
         ) : (
@@ -70,31 +87,34 @@ const History = () => {
 const HistTable = ({ questions }) => {
   const navigate = useNavigate()
   return (
-    <TableContainer overflowY='auto' whiteSpace='pre-wrap' maxHeight='100vh'>
-      <Table variant='striped' className='max-w-full table-fixed'>
-        <Thead className='sticky top-0 bg-blue-200 dark:bg-blue-900'>
+    <TableContainer overflowY="auto" whiteSpace="pre-wrap" maxHeight="100vh">
+      <Table variant="striped" className="max-w-full table-fixed">
+        <Thead className="sticky top-0 bg-blue-200 dark:bg-blue-900">
           <Tr>
-            <Th className='w-1/6'>Partner</Th>
-            <Th className='w-1/5'>Question id</Th>
-            <Th className='w-1/2'>Answer</Th>
+            <Th className="w-1/6">Partner</Th>
+            <Th className="w-1/5">Question id</Th>
+            <Th className="w-1/2">Answer</Th>
             <Th>Completed at</Th>
           </Tr>
         </Thead>
         <Tbody>
           {questions.map((q, idx) => {
             return (
-              <Tr key={q.roomId + q.id + idx} className='text-gray-700 dark:text-gray-300'>
+              <Tr
+                key={q.roomId + q.id + idx}
+                className="text-gray-700 dark:text-gray-300"
+              >
                 <Td>{q.partner}</Td>
                 <Td>
                   <Button
-                    variant='link'
+                    variant="link"
                     onClick={() => navigate(`/question/${q.id}`)}
-                    className='dark:text-gray-500'
+                    className="dark:text-gray-500"
                   >
-                      {q.name}
+                    {q.name}
                   </Button>
                 </Td>
-                <Td className='font-mono text-sm'>{q.answer}</Td>
+                <Td className="font-mono text-sm">{q.answer}</Td>
                 <Td>
                   {new Date(q.completedAt).toLocaleString('en-GB', {
                     hour12: 'true',

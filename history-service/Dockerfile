@@ -4,7 +4,7 @@ FROM node:14.17.0
 WORKDIR /app
 
 # Install dependencies
-COPY package*.json .
+COPY package*.json ./
 RUN npm ci --quiet
 
 # Copy source files

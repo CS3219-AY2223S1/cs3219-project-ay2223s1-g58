@@ -1,6 +1,8 @@
-# CS3219-AY22-23-Project-PeerPrep
+# CS3219-AY22-23-Project-Group-58
 
-PeerPrep
+LeetWithFriend at https://leetwithfriend.com/
+
+- An interview preparation platform and peer matching system, where students can find peers to practice whiteboard-style interview questions together.
 
 ## Development
 
