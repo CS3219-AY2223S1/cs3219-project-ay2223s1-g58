@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "start": "node index.js",
+    "start": "npm run db:migrate:production && node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
     "lint:fix": "eslint --fix --ext .js .",
     "db:migrate": "sequelize-cli db:migrate",
-    "db:migrate:undo": "sequelize-cli db:migrate:undo:all"
+    "db:migrate:undo": "sequelize-cli db:migrate:undo:all",
+    "db:migrate:production": "sequelize-cli db:migrate --env production",
+    "db:migrate:production:undo": "sequelize-cli db:migrate:undo:all --env production"
   },
   "keywords": [],
   "author": "",
@@ -37,6 +39,7 @@
     "jsonwebtoken": "^8.5.1",
     "nanoid": "^2.1.11",
     "node-schedule": "^2.1.0",
+    "pg": "^8.8.0",
     "sequelize": "^6.21.4",
     "socket.io": "^4.5.1",
     "sqlite3": "^5.0.11",

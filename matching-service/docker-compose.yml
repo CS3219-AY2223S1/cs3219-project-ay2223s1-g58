@@ -1,14 +1,36 @@
 version: "3.8"
 
 services:
+  postgres_db:
+    image: postgres:latest
+    restart: always
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "postgres_db", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   nodeserver:
     build:
       context: .
     ports:
       - "8001:8001"
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    restart: on-failure
+    links:
+      - postgres_db
     env_file:
       - .env
     environment:
       ENV: production
       HISTORY_SERVICE_HOST: host.docker.internal
       QUESTION_SERVICE_HOST: host.docker.internal
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres_db
+      POSTGRES_USER: postgres
+      POSTGRES_HOST: postgres_db
+      POSTGRES_PORT: 5432
