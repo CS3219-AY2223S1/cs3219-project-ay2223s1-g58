@@ -19,6 +19,7 @@ import {
 } from '../../constants'
 import MatchError from './MatchError'
 import useAuth from '../../hooks/useAuth'
+import { ArrowForwardIcon } from '@chakra-ui/icons'
 
 const PHASES = {
   SELECT: 'SELECT',
@@ -28,8 +29,7 @@ const PHASES = {
 }
 
 const MatchDialog = ({ isDisabled }) => {
-
-const difficultyList = ['easy', 'medium', 'hard']
+  const difficultyList = ['easy', 'medium', 'hard']
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [difficulty, setDifficulty] = useState('')
@@ -121,10 +121,14 @@ const difficultyList = ['easy', 'medium', 'hard']
 
   return (
     <>
-      <Button onClick={handleOpen} disabled={isDisabled}>
+      <Button
+        onClick={handleOpen}
+        disabled={isDisabled}
+        variant="outline"
+        rightIcon={<ArrowForwardIcon />}
+      >
         Find Match
       </Button>
-
       <Modal isOpen={isOpen} onClose={handleClose}>
         <ModalOverlay />
         <ModalContent>{renderBody()}</ModalContent>

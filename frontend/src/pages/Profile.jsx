@@ -154,7 +154,7 @@ const Profile = () => {
   }
 
   return (
-    <form className="container max-w-2xl mx-auto mt-4 shadow-md md:w-3/4">
+    <form className="container max-w-2xl mx-auto my-4 mt-4 shadow-md md:w-3/4">
       <Helmet>
         <title>Profile | LeetWithFriend</title>
         <meta charSet="utf-8" />
