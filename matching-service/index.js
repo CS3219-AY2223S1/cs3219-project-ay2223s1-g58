@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const { createServer } = require("http");
 const { initSocket } = require("./utils/socket-io");
-const { findMatch, cancelMatch } = require("./handler/match-handler");
+const { findMatch, cancelMatch } = require("./controller/match-controller");
 require("dotenv").config();
 
 const app = express();
@@ -10,7 +10,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 if (process.env.ENV === "production") {
-  app.use(cors())
+  app.use(cors());
   app.options("*", cors());
 } else {
   app.use(
@@ -18,7 +18,7 @@ if (process.env.ENV === "production") {
       origin: `http://localhost:${process.env.PORT || 3000}`,
       credentials: true,
     })
-  )
+  );
 }
 
 app.get("/", (req, res) => {

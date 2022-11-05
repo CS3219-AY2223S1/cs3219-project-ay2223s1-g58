@@ -11,6 +11,12 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres_db
+      POSTGRES_USER: postgres
+      POSTGRES_HOST: postgres_db
+      POSTGRES_PORT: 5432
 
   nodeserver:
     build:
@@ -24,7 +30,7 @@ services:
     links:
       - postgres_db
     env_file:
-      - .env
+      - .env.prod
     environment:
       ENV: production
       HISTORY_SERVICE_HOST: host.docker.internal

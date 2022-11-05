@@ -30,7 +30,7 @@ services:
     links:
       - postgres_db
     env_file:
-      - .env
+      - .env.prod
     environment:
       ENV: test
       QUESTION_SERVICE_HOST: host.docker.internal

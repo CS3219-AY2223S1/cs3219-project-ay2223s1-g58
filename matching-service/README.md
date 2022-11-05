@@ -20,6 +20,14 @@ docker build . -t matching-service
 docker run -p 8001:8001 -d matching-service
 ```
 
+## Continuous integration (CI)
+
+- Running automated tests in docker
+
+```bash
+docker-compose -f docker-compose.test.yml up --exit-code-from nodeserver --build
+```
+
 ### How to test with Postman
 
 1. Run `docker-compose up --build`
