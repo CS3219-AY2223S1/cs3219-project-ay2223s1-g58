@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import {
   Button,
-  TableContainer,
+  Box,
   Input,
   InputGroup,
   InputLeftElement,
@@ -104,13 +104,13 @@ const QuestionBank = () => {
           <Button
             variant="link"
             color="gray.600"
-            textOverflow="ellipsis"
-            overflow='hidden'
             maxW='340px'
             justifyContent="flex-start"
             onClick={() => navigate('/question/' + value.id)}
           >
-            {value.id + '. ' + value.name}
+            <Text overflow='hidden' textOverflow= 'ellipsis'>
+              {value.id + '. ' + value.name}
+            </Text>
           </Button>
         ),
       },
@@ -134,6 +134,7 @@ const QuestionBank = () => {
 
   return !loading ? (
     <>
+      <Box overflowY='auto'>
       <VStack >
       <InputGroup w="35%" alignItems="center">
         <InputLeftElement
@@ -146,10 +147,9 @@ const QuestionBank = () => {
         />
       </InputGroup>
       <br />
-      <TableContainer overflowY="auto" maxHeight="100%" align="center">
         <QuestionTable columns={columns} data={filteredData} />
-      </TableContainer>
       </VStack>
+      </Box>
     </>
   ) : (
     <AuthLayout title="Retrieving question...">

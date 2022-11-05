@@ -6,6 +6,7 @@ import {
   Table,
   Thead,
   Tbody,
+  TableContainer,
   Tr,
   Th,
   Td,
@@ -50,7 +51,8 @@ export default function QuestionTable({ columns, data }) {
   return (
     <>
       <VStack gap={4}>
-        <Table w="85%" variant="striped" {...getTableProps()}>
+      <TableContainer overflowY="auto" maxH="650" align="center" mawW='md'>
+        <Table maxH="400" variant="striped" {...getTableProps()}>
           <Thead>
             {headerGroups.map((headerGroup) => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
@@ -77,6 +79,7 @@ export default function QuestionTable({ columns, data }) {
             })}
           </Tbody>
         </Table>
+      </TableContainer>
         <HStack gap={6}>
         <Tooltip label="First Page">
           <IconButton

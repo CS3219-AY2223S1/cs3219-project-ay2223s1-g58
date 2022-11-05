@@ -72,24 +72,44 @@ async function getAllTypes(req, res) {
         })
     } catch (err) {
         return res.status(500).json({
-            message: 'Database failure when retriving all questions! ' + err,
+            message: 'Database failure when retriving all types! ' + err,
+        })
+    }
+}
+
+async function getTypesByDifficulty(req, res) {
+    try {
+        const { difficulty } = req.query
+        const types = await CategoryRepository.getTypesByDifficulty(difficulty)
+        let union = []
+        types.map(
+            (arr) => (union = Array.from(new Set([...union, ...arr.types])))
+        )
+        return res.status(200).json({
+            message: 'Types retrieved!',
+            types: union,
+        })
+    } catch (err) {
+        return res.status(500).json({
+            message: 'Database failure when retriving types! ' + err,
         })
     }
 }
 
 async function getNextQuestion(req, res) {
     try {
-        var category, question
+        let category, question
         const { past_id, difficulty, types } = req.query
-        if (!types && !difficulty) {
-            return res
-                .status(400)
-                .json({ message: `The difficulty/types is missing!` })
-        } else if (types) {
-            category = await CategoryRepository.findNextQuestionOfSameTypes(
-                types,
+        if (types && difficulty) {
+            category = await CategoryRepository.findNextQuestionOfSameDifficultyAndTypes(
+                [types],
+                difficulty,
                 past_id
             )
+            if (typeof category === 'undefined') {
+                // if no more next question, just retrieve randomly
+                category = await CategoryRepository.findByTypesAndDifficulty(difficulty, types)
+            }
             question = await QuestionRepository.findById(category.questionId)
         } else if (difficulty) {
             category =
@@ -238,4 +258,5 @@ module.exports = {
     updateQuestion,
     getNextQuestion,
     getAllTypes,
+    getTypesByDifficulty,
 }

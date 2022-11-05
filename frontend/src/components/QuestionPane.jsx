@@ -51,7 +51,7 @@ const supTheme = {
 
 const newTheme = {
   img: ({ node, children, ...props }) => {
-    return <Image m={4} src={node.properties.src}></Image>
+    return <Image m={4} size='md' src={node.properties.src}></Image>
   },
   code: ({ node, inline, children, ...props }) => {
 
@@ -63,7 +63,7 @@ const newTheme = {
         />
       </Code>
     ) : (
-      <Code fontSize="md" >
+      <Code fontSize="md" size='md' mb={2}>
         <ReactMarkdown
           components={ChakraUIRenderer(supTheme)}
           children={children[0]}

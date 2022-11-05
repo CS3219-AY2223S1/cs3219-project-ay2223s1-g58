@@ -24,13 +24,14 @@ const RoomService = {
       userId1,
       userId2,
       difficulty,
+      types
     );
   },
   updateRoomQuestionId: async function (roomId) {
     const room = await RoomRepository.findByRoomId(roomId);
     console.log(room);
     const response = await axios.get(URL_QUESTION_SERVICE_NEXT_QUESTION, {
-      params: { difficulty: room.difficulty, past_id: room.questionId },
+      params: { difficulty: room.difficulty, past_id: room.questionId, types: room.types },
     });
     // TODO append it to array instead of replacing when update to Postgres
     RoomRepository.update(roomId, { ...room, questionId: response.data.id });

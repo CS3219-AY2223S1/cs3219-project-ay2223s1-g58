@@ -70,7 +70,7 @@ const CategoryRepository = {
     findNextQuestionOfSameDifficulty: function (difficulty, id) {
         // filter out questions in id
         const numberIds = []
-        console.log(id)
+
         for (var i = 0; i < id.length; i++) {
             numberIds.push(parseInt(id[i]))
         }
@@ -94,7 +94,7 @@ const CategoryRepository = {
         if (!Array.isArray(types)) {
             types = [types]
         }
-        console.log(types)
+
         return db.Category.findOne({
             where: {
                 types: {
@@ -108,10 +108,39 @@ const CategoryRepository = {
             limit: 1,
         })
     },
+    findNextQuestionOfSameDifficultyAndTypes: function (types, difficulty, id) {
+        // filter out questions in id
+        const numberIds = []
+
+        for (var i = 0; i < id.length; i++) {
+            numberIds.push(parseInt(id[i]))
+        }
+
+        return db.Category.findOne({
+            where: {
+                difficulty: difficulty,
+                types: types,
+                questionId: {
+                    [Op.notIn]: numberIds,
+                },
+            },
+            order: db.sequelize.random(),
+            limit: 1,
+        })
+    },
     getAllTypes: function () {
         return db.Category.findAll({
             distinct: true,
-            attributes: ['types']
+            attributes: ['types'],
+        })
+    },
+    getTypesByDifficulty: function (difficulty) {
+        return db.Category.findAll({
+            distinct: true,
+            where: {
+                difficulty: difficulty,
+            },
+            attributes: ['types'],
         })
     },
 }
