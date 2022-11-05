@@ -9,8 +9,6 @@ COPY package*.json ./
 RUN npm install --quiet
 # Copy all files from project excluding node_modules (via .dockerignore)
 COPY . .
-# Create sqlite3 database tables
-RUN npm run db:migrate
 # Expose port 
 EXPOSE 8022
 # Exec form to avoid starting a shell session

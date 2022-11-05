@@ -1,17 +1,40 @@
 version: "3.8"
 
 services:
+  peerjs-server:
+    image: peerjs/peerjs-server
+    ports:
+      - "9000:9000"
+
+  postgres_db:
+    image: postgres:latest
+    restart: always
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "postgres_db", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   nodeserver:
     build:
       context: .
     ports:
       - "8022:8022"
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    restart: on-failure
+    links:
+      - postgres_db
     env_file:
       - .env
     environment:
       ENV: production
       QUESTION_SERVICE_HOST: host.docker.internal
-  peerjs-server:
-    image: peerjs/peerjs-server
-    ports:
-      - "9000:9000"
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres_db
+      POSTGRES_USER: postgres
+      POSTGRES_HOST: postgres_db
+      POSTGRES_PORT: 5432

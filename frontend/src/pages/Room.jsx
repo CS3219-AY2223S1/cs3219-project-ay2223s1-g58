@@ -5,6 +5,7 @@ import {
   URL_ROOM_SERVICE,
   STATUS_CODE_SUCCESS,
   STATUS_CODE_BAD_REQUEST,
+  STATUS_CODE_NOT_MODIFIED,
   URI_ROOM_SERVICE_SOCKET_PATH,
   URI_ROOM_SERVICE,
   URL_HISTORY_ROOM,
@@ -23,6 +24,7 @@ const Room = () => {
   const navigate = useNavigate()
   const { roomId } = useParams()
   const [questionId, setQuestionId] = useState()
+  const [isFirstQuestion, setFirstQuestion] = useState(true)
   const [room, setRoom] = useState()
   const [socket, setSocket] = useState()
   const [editor, setEditor] = useState()
@@ -35,9 +37,14 @@ const Room = () => {
     axiosPrivate
       .get(`${URL_ROOM_SERVICE}/${roomId}`)
       .then((res) => {
-        if (res && res.status === STATUS_CODE_SUCCESS) {
+        if (
+          res &&
+          (res.status === STATUS_CODE_SUCCESS ||
+            res.status === STATUS_CODE_NOT_MODIFIED)
+        ) {
           setQuestionId(res.data.data.questionId)
           setRoom(res.data.data)
+          setFirstQuestion(res.data.data.isFirst)
         }
       })
       .catch((e) => {
@@ -70,13 +77,14 @@ const Room = () => {
 
     newSocket.on(`${roomId}-${EVENT_LISTEN.ROOM_UPDATE}`, (payload) => {
       toast({
-        title: 'Next Question',
-        description: 'Fetched new question',
+        title: 'Updated current question',
+        description: 'Fetch question success',
         status: 'success',
         duration: 4000,
         isClosable: true,
       })
       setQuestionId(payload.question)
+      setFirstQuestion(payload.isFirst)
     })
     setSocket(newSocket)
     return () => newSocket.close()
@@ -89,11 +97,11 @@ const Room = () => {
   }
 
   const markCompleted = async () => {
-    console.log(editor.getText());
+    console.log(editor.getText())
     await axiosPrivate
       .put(`${URL_HISTORY_ROOM}/${roomId}`, {
         questionId,
-        answer: editor.getText(),   // accessing Firepad
+        answer: editor.getText(), // accessing Firepad
       })
       .then(() => {
         toast({
@@ -132,7 +140,7 @@ const Room = () => {
       {getHelmet()}
 
       {!isValid || !questionId ? (
-        <main className="flex flex-col items-center justify-start h-full">
+        <main className="flex h-full flex-col items-center justify-start">
           <h1>
             {isValid ? (
               'Retrieving room...'
@@ -162,13 +170,19 @@ const Room = () => {
             socket={socket}
           />
           <div className="grid h-screen grid-cols-2 gap-4">
-            <QuestionPane questionId={questionId} roomId={roomId} />
+            <QuestionPane
+              questionId={questionId}
+              roomId={roomId}
+              isFirstQuestion={isFirstQuestion}
+            />
             <div className="flex flex-col justify-start">
               <Editor roomId={roomId} setEditorComponent={setEditor} />
               <div className="flex flex-row items-center justify-center">
-              <Button className='mx-2' onClick={markCompleted}>Mark completed</Button>
-              <RoomEndDialog handleClick={endSession} />
-            </div>
+                <Button className="mx-2" onClick={markCompleted}>
+                  Mark completed
+                </Button>
+                <RoomEndDialog handleClick={endSession} />
+              </div>
             </div>
           </div>
         </>
