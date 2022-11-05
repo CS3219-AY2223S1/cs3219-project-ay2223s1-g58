@@ -68,9 +68,12 @@ function Signup() {
   return (
     <>
       <Helmet>
-        <title>Signup | PeerPrep</title>
+        <title>Signup | LeetWithFriend</title>
         <meta charSet="utf-8" />
-        <meta name="description" content="PeerPrep help you prep" />
+        <meta
+          name="description"
+          content="An interview preparation platform and peer matching system, where students can find peers to practice whiteboard-style interview questions together."
+        />
       </Helmet>
       {success ? (
         <AuthLayout title="Sign up successful!">

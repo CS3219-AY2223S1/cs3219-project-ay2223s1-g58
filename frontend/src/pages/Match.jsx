@@ -2,11 +2,7 @@ import { useEffect, useState } from 'react'
 import MatchDialog from '../components/match/MatchDialog'
 import { Helmet } from 'react-helmet-async'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
-import {
-  URL_ROOM_SERVICE,
-  STATUS_CODE_SUCCESS,
-  STATUS_CODE_BAD_REQUEST,
-} from '../constants'
+import { URL_ROOM_SERVICE, STATUS_CODE_SUCCESS } from '../constants'
 import { Button } from '@chakra-ui/react'
 
 const Match = () => {
@@ -24,19 +20,20 @@ const Match = () => {
         }
       })
       .catch((e) => {
-        if (e.response.status === STATUS_CODE_BAD_REQUEST) {
-          console.log(e)
-        }
+        console.log(e)
       })
   }, [axiosPrivate])
   return (
     <div>
       <Helmet>
-        <title>Match | PeerPrep</title>
+        <title>Match | LeetWithFriend</title>
         <meta charSet="utf-8" />
-        <meta name="description" content="PeerPrep help you prep" />
+        <meta
+          name="description"
+          content="An interview preparation platform and peer matching system, where students can find peers to practice whiteboard-style interview questions together."
+        />
       </Helmet>
-      <main className="flex h-full flex-col items-center justify-center">
+      <main className="flex flex-col items-center justify-center h-full">
         {isInRoom ? (
           <>
             <h1>You are already in a room, please rejoin it. </h1>{' '}

@@ -117,9 +117,12 @@ const Room = () => {
   const getHelmet = () => {
     return (
       <Helmet>
-        <title>Room | PeerPrep</title>
+        <title>Room | LeetWithFriend</title>
         <meta charSet="utf-8" />
-        <meta name="description" content="PeerPrep help you prep" />
+        <meta
+          name="description"
+          content="An interview preparation platform and peer matching system, where students can find peers to practice whiteboard-style interview questions together."
+        />
       </Helmet>
     )
   }
@@ -129,7 +132,7 @@ const Room = () => {
       {getHelmet()}
 
       {!isValid || !questionId ? (
-        <main className="flex h-full flex-col items-center justify-start">
+        <main className="flex flex-col items-center justify-start h-full">
           <h1>
             {isValid ? (
               'Retrieving room...'

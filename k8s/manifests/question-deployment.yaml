@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: question-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: question
+  template:
+    metadata:
+      labels:
+        app: question
+    spec:
+      containers:
+        - name: question
+          image: b9jmthkk/question
+          ports:
+            - name: http
+              containerPort: 8500
+          env:
+            - name: PORT
+              value: '80'
+            - name: ENV
+              value: production
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_HOST
+              value: postgres-cluster-ip-service
+            - name: POSTGRES_PORT
+              value: '5432'
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-password
+                  key: POSTGRES_PASSWORD
+          resources:
+            requests:
+              cpu: 5m
+              memory: 120Mi
