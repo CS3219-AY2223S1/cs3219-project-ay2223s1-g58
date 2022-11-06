@@ -6,7 +6,7 @@ import {
   InputGroup,
   InputLeftElement,
   Text,
-  VStack
+  VStack,
 } from '@chakra-ui/react'
 import { SearchIcon } from '@chakra-ui/icons'
 import { useState, useEffect } from 'react'
@@ -16,7 +16,6 @@ import { AuthLayout } from '../components/AuthLayout'
 import TypesStack from '../components/TypesStack'
 import axios from '../api/axios'
 import { URL_QUESTION_SERVICE } from '../constants'
-
 
 const difficultyColorMap = new Map([
   ['easy', 'green.500'],
@@ -61,10 +60,7 @@ const QuestionBank = () => {
         } else if (typeof question[key] === 'object') {
           crawl(question[key], allValues)
         } else {
-          if (
-            key.toString() === 'name' ||
-            key.toString() === 'difficulty'
-          )
+          if (key.toString() === 'name' || key.toString() === 'difficulty')
             allValues.push(question[key] + ' ')
         }
       }
@@ -104,11 +100,15 @@ const QuestionBank = () => {
           <Button
             variant="link"
             color="gray.600"
-            maxW='340px'
+            maxW="340px"
             justifyContent="flex-start"
             onClick={() => navigate('/question/' + value.id)}
           >
-            <Text overflow='hidden' textOverflow= 'ellipsis'>
+            <Text
+              overflow="hidden"
+              textOverflow="ellipsis"
+              className="dark:text-gray-200"
+            >
               {value.id + '. ' + value.name}
             </Text>
           </Button>
@@ -123,7 +123,7 @@ const QuestionBank = () => {
         Header: 'Difficulty',
         accessor: 'Category.difficulty',
         Cell: ({ cell: { value } }) => (
-          <Text color={difficultyColorMap.get(value)} fontWeight='normal'>
+          <Text color={difficultyColorMap.get(value)} fontWeight="normal">
             {value[0].toUpperCase() + value.slice(1)}
           </Text>
         ),
@@ -134,26 +134,26 @@ const QuestionBank = () => {
 
   return !loading ? (
     <>
-      <Box overflowY='auto'>
-      <VStack >
-      <InputGroup w="35%" alignItems="center">
-        <InputLeftElement
-          pointerEvents="none"
-          children={<SearchIcon color="gray.300" />}
-        />
-        <Input
-          onChange={(e) => setSearchVal(e.target.value)}
-          placeholder="Search"
-        />
-      </InputGroup>
-      <br />
-        <QuestionTable columns={columns} data={filteredData} />
-      </VStack>
+      <Box overflowY="auto">
+        <VStack>
+          <InputGroup w="35%" alignItems="center">
+            <InputLeftElement
+              pointerEvents="none"
+              children={<SearchIcon color="gray.300" />}
+            />
+            <Input
+              onChange={(e) => setSearchVal(e.target.value)}
+              placeholder="Search"
+            />
+          </InputGroup>
+          <br />
+          <QuestionTable columns={columns} data={filteredData} />
+        </VStack>
       </Box>
     </>
   ) : (
     <AuthLayout title="Retrieving question...">
-      <div className="text-center text-xl"></div>
+      <div className="text-xl text-center"></div>
     </AuthLayout>
   )
 }
