@@ -2,10 +2,25 @@ import useAuth from '../hooks/useAuth'
 import { Helmet } from 'react-helmet-async'
 import { useState, useEffect, useMemo } from 'react'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
-import { URL_HISTORY_USER, STATUS_CODE_BAD_REQUEST, STATUS_CODE_SUCCESS } from '../constants'
+import {
+  URL_HISTORY_USER,
+  STATUS_CODE_BAD_REQUEST,
+  STATUS_CODE_SUCCESS,
+} from '../constants'
 import { useTable, useSortBy } from 'react-table'
-import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, Spinner } from '@chakra-ui/react'
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer,
+  Spinner,
+} from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
+import blank from '../images/blank.svg'
+import { Image } from '@chakra-ui/react'
 
 const History = () => {
   const { auth } = useAuth()
@@ -47,49 +62,52 @@ const History = () => {
     )
   }
 
-  const columns = useMemo(() => [
-    {
-      Header: 'Partner',
-      accessor: 'partner',
-      widthProp: 'w-1/6',   // Own property to style column width (not react-table's property)
-      disableSortBy: true,
-    },
-    {
-      Header: 'Question id',
-      accessor: 'id',
-      widthProp: 'w-1/5',
-      disableSortBy: true,
-      Cell: (cellInfo) => (
-        <Link 
-          to={`/question/${cellInfo.row.original.id}`} 
-          className='font-semibold hover:underline text-gray-500 dark:text-gray-300'
-        >
-          {cellInfo.row.original.name}
-        </Link>
-      )
-    },
-    {
-      Header: 'Answer',
-      accessor: 'answer',
-      widthProp: 'w-1/2',
-      disableSortBy: true,
-      Cell: ({ cell: { value } }) => (
-        <div className='font-mono text-sm whitespace-pre-wrap'>{value}</div>
-      )
-    },
-    {
-      Header: 'Completed at',
-      accessor: 'completedAt',
-      Cell: ({ cell: { value } }) => {
-        return new Date(value).toLocaleString('en-GB', {
-          hour12: 'true',
-          dateStyle: 'medium',
-          timeStyle: 'medium',
-        })
+  const columns = useMemo(
+    () => [
+      {
+        Header: 'Partner',
+        accessor: 'partner',
+        widthProp: 'w-1/6', // Own property to style column width (not react-table's property)
+        disableSortBy: true,
       },
-      sortType: 'basic',
-    }
-  ], [])
+      {
+        Header: 'Question id',
+        accessor: 'id',
+        widthProp: 'w-1/5',
+        disableSortBy: true,
+        Cell: (cellInfo) => (
+          <Link
+            to={`/question/${cellInfo.row.original.id}`}
+            className="font-semibold text-gray-500 hover:underline dark:text-gray-300"
+          >
+            {cellInfo.row.original.name}
+          </Link>
+        ),
+      },
+      {
+        Header: 'Answer',
+        accessor: 'answer',
+        widthProp: 'w-1/2',
+        disableSortBy: true,
+        Cell: ({ cell: { value } }) => (
+          <div className="font-mono text-sm whitespace-pre-wrap">{value}</div>
+        ),
+      },
+      {
+        Header: 'Completed at',
+        accessor: 'completedAt',
+        Cell: ({ cell: { value } }) => {
+          return new Date(value).toLocaleString('en-GB', {
+            hour12: 'true',
+            dateStyle: 'medium',
+            timeStyle: 'medium',
+          })
+        },
+        sortType: 'basic',
+      },
+    ],
+    []
+  )
 
   return (
     <>
@@ -107,8 +125,22 @@ const History = () => {
 
         {!isLoading && !isValid ? (
           <h1>Unable to retrieve your learning history</h1>
-        ) : (
+        ) : hist !== undefined && hist.length > 0 ? (
           <HistTable columns={columns} data={hist} />
+        ) : (
+          <div>
+            <h1 className="flex justify-center h-20 font-semibold">
+              You have not completed any questions yet...
+            </h1>
+            <div className="flex items-center gap-4 px-4 py-3">
+              <Image
+                src={blank}
+                alt="blank"
+                className="inset-0 w-full pointer-events-none"
+                unoptimized
+              />
+            </div>
+          </div>
         )}
       </main>
     </>
@@ -116,49 +148,56 @@ const History = () => {
 }
 
 const HistTable = ({ columns, data }) => {
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = useTable({
-    columns, 
-    data,
-    disableSortRemove: true,
-    initialState: {
-      sortBy: [
-        {
-          id: 'completedAt',
-          desc: true,
-        }
-      ]
-    }
-  }, useSortBy)
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable(
+      {
+        columns,
+        data,
+        disableSortRemove: true,
+        initialState: {
+          sortBy: [
+            {
+              id: 'completedAt',
+              desc: true,
+            },
+          ],
+        },
+      },
+      useSortBy
+    )
 
   return (
-    <TableContainer overflowY='auto' whiteSpace='pre-wrap' maxHeight='100vh'>
-      <Table variant='striped' className='w-full max-w-screen-xl table-fixed' {...getTableProps()}>
-        <Thead className='sticky top-0 bg-blue-200 dark:bg-blue-900'>
-          {headerGroups.map(headerGroup => (
+    <TableContainer overflowY="auto" whiteSpace="pre-wrap" maxHeight="100vh">
+      <Table
+        variant="striped"
+        className="w-full max-w-screen-xl table-fixed"
+        {...getTableProps()}
+      >
+        <Thead className="sticky top-0 bg-blue-200 dark:bg-blue-900">
+          {headerGroups.map((headerGroup) => (
             <Tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
-                <Th className={column.widthProp} {...column.getHeaderProps(column.getSortByToggleProps())}>
+              {headerGroup.headers.map((column) => (
+                <Th
+                  className={column.widthProp}
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
+                >
                   {column.render('Header')}
-                  {column.isSorted && <span>{column.isSortedDesc ? ' ▼' : ' ▲'}</span>}
+                  {column.isSorted && (
+                    <span>{column.isSortedDesc ? ' ▼' : ' ▲'}</span>
+                  )}
                 </Th>
               ))}
             </Tr>
           ))}
         </Thead>
-        
+
         <Tbody {...getTableBodyProps()}>
           {rows.map((row) => {
             prepareRow(row)
             return (
               <Tr {...row.getRowProps()}>
-                {row.cells.map(cell => (
-                  <Td className='align-text-top' {...cell.getCellProps()}>
+                {row.cells.map((cell) => (
+                  <Td className="align-text-top" {...cell.getCellProps()}>
                     {cell.render('Cell')}
                   </Td>
                 ))}
