@@ -186,7 +186,9 @@ export const FirebaseAdapter = (function (global) {
   }
 
   FirebaseAdapter.prototype.sendCursor = function (obj) {
-    this.userRef_.child("cursor").set(obj)
+    if (obj !== null) {
+      this.userRef_.child("cursor").set(obj)
+    }
     this.cursor_ = obj
   }
 
