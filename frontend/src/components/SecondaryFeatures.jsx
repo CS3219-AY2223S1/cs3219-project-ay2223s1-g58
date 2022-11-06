@@ -9,6 +9,7 @@ import {
   Icon,
   useColorModeValue,
 } from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
 
 import Arrow from './Arrow'
 
@@ -222,7 +223,7 @@ export function SecondaryFeatures({ username }) {
             width={'min-content'}
             mt={3}
           >
-            <Button px={6} as="a" href="/match">
+            <Button px={6} as={Link} to="/match">
               Get Started
             </Button>
             <Box>

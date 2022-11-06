@@ -11,6 +11,7 @@ import { PhoneFrame } from './PhoneFrame'
 import collaboration from '../images/collaboration.png'
 import video from '../images/video.png'
 import { Image } from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
 
 const MotionAppScreenHeader = motion(AppScreen.Header)
 const MotionAppScreenBody = motion(AppScreen.Body)
@@ -262,11 +263,11 @@ function ThirdScreen({ custom, animated = false }) {
                 </div>
               </div>
             ))}
-            <a href="/history">
+            <Link to="/history">
               <div className="rounded-lg bg-cyan-500 px-3 py-2 text-center text-sm font-semibold text-white">
                 Go to History
               </div>
-            </a>
+            </Link>
           </div>
         </div>
       </MotionAppScreenBody>

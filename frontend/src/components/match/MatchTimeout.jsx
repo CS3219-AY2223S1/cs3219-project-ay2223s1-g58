@@ -13,7 +13,7 @@ const MatchTimeout = ({ onClose, handleRetry }) => {
       <ModalCloseButton />
 
       <ModalBody>
-        Please try again. Consider relaxing your matching critera(s).
+        Please try again. Consider relaxing your matching critera.
       </ModalBody>
 
       <ModalFooter>
