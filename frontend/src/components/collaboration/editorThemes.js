@@ -20,7 +20,9 @@ const chalky = '#e5c07b',
   highlightBackground = '#2c313a',
   background = '#282c34',
   selection = '#3E4451',
-  cursor = '#528bff'
+  cursor = '#528bff',
+  darkOtherCursor = '#9aa38b', // Colour of the other user's cursor. Greyish/Yellowish colour
+  darkOtherSelection = '#404240'  // Colour of the other user's selection. A lighter, greener shade
 
 // The editor theme styles for One Dark.
 const oneDarkTheme = EditorView.theme(
@@ -34,13 +36,11 @@ const oneDarkTheme = EditorView.theme(
       borderWidth: '3px',
     },
 
-    // Colour of the other user's selection. A lighter, greener shade than this user's selection
     '.cm-other-selection': {
-      backgroundColor: '#4e524e',
+      backgroundColor: darkOtherSelection,
     },
-    // Colour of the other user's cursor. Same colour as light mode (magenta)
     '.cm-tooltip.cm-other-cursor': {
-      backgroundColor: "magenta",
+      backgroundColor: darkOtherCursor,
       padding: "8px 0.75px",
     },
 
@@ -139,6 +139,8 @@ const oneDarkHighlightStyle = HighlightStyle.define([
 export const oneDark = [oneDarkTheme, syntaxHighlighting(oneDarkHighlightStyle)]
 
 // Extension for light mode
+const otherCursor = '#528bff',
+  otherSelection = '#d4ebfa'
 export const lightTheme = EditorView.theme({
   '&': {
     height: '85vh',
@@ -150,10 +152,10 @@ export const lightTheme = EditorView.theme({
     borderWidth: '1px',
   },
   '.cm-other-selection': {
-    backgroundColor: 'lightblue',
+    backgroundColor: otherSelection,
   },
   '.cm-other-cursor': {
-    borderColor: 'magenta',
+    borderColor: otherCursor,
     height: '16px',
   },          
 })

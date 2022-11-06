@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: history-test-web
+    ports:
+      - "8080:8080"
+    links:
+      - mongo
+    environment:
+      - ENV=TEST
+      - DB_LOCAL_URI=mongodb://mongo:27017/historyTest
+    command: npm run test
+  
+  mongo:
+    image: mongo
+    container_name: history-test-mongo
+    ports:
+      - "27017:27017"
+    command: mongod --quiet --logpath /dev/null
