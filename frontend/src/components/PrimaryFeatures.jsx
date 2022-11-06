@@ -209,7 +209,7 @@ function SecondScreen({ custom, animated = false }) {
               src={collaboration}
               alt=""
               className="inset-0 w-full mt-10 pointer-events-none "
-              unoptimized
+              unoptimized="true"
             />
           </div>
           <div className="flex items-center gap-4 px-4 py-3">
@@ -217,7 +217,7 @@ function SecondScreen({ custom, animated = false }) {
               src={video}
               alt=""
               className="inset-0 w-full pointer-events-none "
-              unoptimized
+              unoptimized="true"
             />
           </div>
         </div>
@@ -257,7 +257,7 @@ function ThirdScreen({ custom, animated = false }) {
               </div>
             ))}
             <div className="px-3 py-2 text-sm font-semibold text-center text-white rounded-lg bg-cyan-500">
-              Go to History
+              Go to Learning History
             </div>
           </div>
         </div>

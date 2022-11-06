@@ -1,6 +1,6 @@
 const questionServiceFallback =
   process.env.ENV === 'production' // production means using Docker
-    ? `http://${process.env.QUESTION_SERVICE_HOST}:8500`
+    ? `http://${process.env.URI_QUESTION_SERVICE}:8500`
     : 'http://localhost:8500'
 
 const URI_QUESTION_SERVICE =

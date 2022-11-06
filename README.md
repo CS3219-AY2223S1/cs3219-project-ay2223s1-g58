@@ -4,9 +4,29 @@ LeetWithFriend at https://leetwithfriend.com/
 
 - An interview preparation platform and peer matching system, where students can find peers to practice whiteboard-style interview questions together.
 
-## Development
+## Development Guide
 
-Spin up all the services for local manual testing
+### To make adjustments to only the frontend application:
+
+Start other services at root
+
+```bash
+docker-compose -f docker-compose.frontend.yml up --build -d
+```
+
+Run `npm run start` in the `frontend` directory.
+
+Visit the frontend at http://localhost:3000
+
+To stop the services
+
+```bash
+docker-compose -f docker-compose.frontend.yml stop
+```
+
+---
+
+### Spin up all the services for local manual testing
 
 ```bash
 docker-compose -f docker-compose.local.yml up --build -d
