@@ -25,7 +25,9 @@ const {
     getAllQuestions,
     getAllTypes,
     getQuestionNames,
+    getTypesByDifficulty,
 } = require('./controller/question-controller')
+
 const router = express.Router()
 
 // Controller will contain all the User-defined Routes
@@ -39,6 +41,7 @@ router.get('/nextQuestion', getNextQuestion)
 router.get('/allQuestions', getAllQuestions)
 router.get('/questionNames', getQuestionNames)
 router.get('/allTypes', getAllTypes)
+router.get('/types', getTypesByDifficulty)
 router.post('/', createQuestion)
 router.put('/', updateQuestion)
 router.delete('', deleteQuestionById)

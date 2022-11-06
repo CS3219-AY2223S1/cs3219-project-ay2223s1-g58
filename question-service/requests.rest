@@ -19,6 +19,9 @@ GET http://localhost:8500/api/v1/question/allQuestions
 ### GET ALL TYPES
 GET http://localhost:8500/api/v1/question/allTypes
 
+### GET TYPES BY DIFFICULTY
+GET http://localhost:8500/api/v1/question/types?difficulty=hard
+
 ### GET Question Names
 GET http://localhost:8500/api/v1/question/questionNames?id=1&id=2&id=3
 

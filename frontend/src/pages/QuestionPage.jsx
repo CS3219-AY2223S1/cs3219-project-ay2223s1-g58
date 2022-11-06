@@ -1,5 +1,6 @@
 import {
   Text,
+  Center,
   Code,
   HStack,
   StackDivider,
@@ -47,7 +48,7 @@ const supTheme = {
 
 const newTheme = {
   img: ({ node, children, ...props }) => {
-    return <Image m={4} src={node.properties.src}></Image>
+    return <Image m={4} sizes='md' src={node.properties.src}></Image>
   },
   code: ({ node, inline, children, ...props }) => {
     return !inline ? (
@@ -58,7 +59,7 @@ const newTheme = {
         />
       </Code>
     ) : (
-      <Code fontSize="md">
+      <Code fontSize="md" mb={2} size="md">
         <ReactMarkdown
           components={ChakraUIRenderer(supTheme)}
           children={children[0]}
@@ -167,18 +168,19 @@ const QuestionPage = () => {
   const difficultyColor = (difficulty) => difficultyColorMap.get(difficulty)
   return (
     <>
-      <Box className="rounded-lg border">
+    <Center>
+      <Box className="rounded-lg border" maxWidth='900px' maxHeight='700px' overflow='auto' m={5}>
         <VStack h="100vh" divider={<StackDivider borderColor="gray.200" />}>
           <Heading size="lg" fontWeight="semibold" color="gray 500">
             {questionData.name}
           </Heading>
-          <HStack spacing={450}>
+          <HStack spacing={180}>
             <Button
               onClick={previousQuestion}
               variant="outline"
               className=" dark:text-gray-300"
             >
-              Previous Question
+              Previous
             </Button>
             <Badge
               align="center"
@@ -194,10 +196,10 @@ const QuestionPage = () => {
               variant="outline"
               className=" dark:text-gray-300"
             >
-              Next Question
+              Next
             </Button>
           </HStack>
-          <Box overflow="auto" w="95%" mx="2" my="2">
+          <Box maxHeight='700px' m={4}>
             <ReactMarkdown
               components={ChakraUIRenderer(newTheme)}
               children={parse(questionData.content)}
@@ -206,6 +208,7 @@ const QuestionPage = () => {
           </Box>
         </VStack>
       </Box>
+      </Center>
     </>
   )
 }
