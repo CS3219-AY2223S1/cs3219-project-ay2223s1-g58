@@ -61,6 +61,7 @@ export const EVENT_LISTEN = {
   MATCH_SUCCESS: 'matchSuccess',
   MATCH_FAIL: 'matchFail',
   MATCH_TIMEOUT: 'matchTimeout',
+  MATCH_UNAVAILABLE: 'matchUnavailable',
   ROOM_END: 'roomEnd',
   ROOM_UPDATE: 'roomUpdate',
 }

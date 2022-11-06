@@ -12,6 +12,25 @@ const MatchRepository = {
       },
     });
   },
+  findByTypesAndDifficulty: function (difficulty, types, socketId) {
+    return db.Match.findOne({
+      where: {
+        [Sequelize.Op.and]: [
+          { difficulty: difficulty },
+          {
+            socketId: {
+              [Sequelize.Op.ne]: socketId,
+            },
+          },
+          {
+            types: {
+              [Sequelize.Op.or]: [null, "", types],
+            },
+          },
+        ],
+      },
+    });
+  },
   findBySocketId: function (socketId) {
     return db.Match.findOne({
       where: {
@@ -26,8 +45,8 @@ const MatchRepository = {
       },
     });
   },
-  create: function (socketId, difficulty, userId) {
-    return db.Match.create({ socketId, difficulty, userId });
+  create: function (socketId, difficulty, types, userId) {
+    return db.Match.create({ socketId, difficulty, userId, types });
   },
   deleteBySocketId: function (socketId) {
     return db.Match.destroy({

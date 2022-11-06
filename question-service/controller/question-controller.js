@@ -72,25 +72,48 @@ async function getAllTypes(req, res) {
         })
     } catch (err) {
         return res.status(500).json({
-            message: 'Database failure when retriving all questions! ' + err,
+            message: 'Database failure when retriving all types! ' + err,
+        })
+    }
+}
+
+async function getTypesByDifficulty(req, res) {
+    try {
+        const { difficulty } = req.query
+        const types = await CategoryRepository.getTypesByDifficulty(difficulty)
+        let union = []
+        types.map(
+            (arr) => (union = Array.from(new Set([...union, ...arr.types])))
+        )
+        return res.status(200).json({
+            message: 'Types retrieved!',
+            types: union,
+        })
+    } catch (err) {
+        return res.status(500).json({
+            message: 'Database failure when retriving types! ' + err,
         })
     }
 }
 
 async function getNextQuestion(req, res) {
     try {
-        var category, question
+        let category, question
         const { past_id, difficulty, types } = req.query
-        console.log(past_id)
-        if (!types && !difficulty) {
-            return res
-                .status(400)
-                .json({ message: `The difficulty/types is missing!` })
-        } else if (types) {
-            category = await CategoryRepository.findNextQuestionOfSameTypes(
-                types,
-                past_id
-            )
+        if (types && difficulty) {
+            category =
+                await CategoryRepository.findNextQuestionOfSameDifficultyAndTypes(
+                    [types],
+                    difficulty,
+                    past_id
+                )
+            if (typeof category === 'undefined') {
+                // if no more next question, just retrieve randomly
+                category = await CategoryRepository.findByTypesAndDifficulty(
+                    difficulty,
+                    types
+                )
+            }
             question = await QuestionRepository.findById(category.questionId)
         } else if (difficulty) {
             category =
@@ -119,12 +142,34 @@ async function getNextQuestion(req, res) {
 async function getQuestion(req, res) {
     try {
         const { difficulty, id, types } = req.query
-        var category, question
-        if (difficulty) {
+        let category, question
+        if (difficulty && types) {
+            console.log(types)
+            category = await CategoryRepository.findByTypesAndDifficulty(
+                difficulty,
+                types
+            )
+            if (!category) {
+                return res.status(400).json({
+                    message: 'The required question is not available',
+                })
+            }
+            question = await QuestionRepository.findById(category.questionId)
+        } else if (difficulty) {
             category = await CategoryRepository.findByDifficulty(difficulty)
+            if (!category) {
+                return res.status(400).json({
+                    message: 'The required question is not available',
+                })
+            }
             question = await QuestionRepository.findById(category.questionId)
         } else if (types) {
             category = await CategoryRepository.findByQuestionTypes(types)
+            if (!category) {
+                return res.status(400).json({
+                    message: 'The required question is not available',
+                })
+            }
             question = await QuestionRepository.findById(category.questionId)
         } else if (id) {
             question = await QuestionRepository.findById(id)
@@ -217,4 +262,5 @@ module.exports = {
     updateQuestion,
     getNextQuestion,
     getAllTypes,
+    getTypesByDifficulty,
 }

@@ -29,6 +29,7 @@ const RoomRepository = {
     userId1,
     userId2,
     difficulty,
+    types,
     current
   ) {
     return db.Room.create({
@@ -37,6 +38,7 @@ const RoomRepository = {
       userId1,
       userId2,
       difficulty,
+      types,
       current,
     });
   },
