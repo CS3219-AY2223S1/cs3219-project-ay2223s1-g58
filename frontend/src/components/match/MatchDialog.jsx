@@ -26,6 +26,7 @@ const PHASES = {
   FINDING: 'FINDING',
   TIMEOUT: 'TIMEOUT',
   ERROR: 'ERROR',
+  UNAVAILABLE: 'UNAVAILABLE',
 }
 
 const MatchDialog = ({ isDisabled }) => {
@@ -60,17 +61,16 @@ const MatchDialog = ({ isDisabled }) => {
       console.log('timed out')
       setPhase(PHASES.TIMEOUT)
     })
+    newSocket.on(EVENT_LISTEN.MATCH_UNAVAILABLE, () => {
+      console.log('match combination not available')
+      setPhase(PHASES.UNAVAILABLE)
+    })
     return () => newSocket.close()
   }, [auth.accessToken, navigate])
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (difficulty) {
-      socket.emit(EVENT_EMIT.MATCH_FIND, { difficulty: difficulty })
-    } else {
-      socket.emit(EVENT_EMIT.MATCH_FIND, { type: type })
-    }
-
+    socket.emit(EVENT_EMIT.MATCH_FIND, { difficulty: difficulty, types: type })
     setPhase(PHASES.FINDING)
   }
 
@@ -109,11 +109,22 @@ const MatchDialog = ({ isDisabled }) => {
             handleRetry={() => setPhase(PHASES.SELECT)}
           />
         )
+      case PHASES.UNAVAILABLE:
+        return (
+          <MatchError
+            onClose={handleClose}
+            handleRetry={() => setPhase(PHASES.SELECT)}
+            header="Question Unavailable"
+            message="The question combination you have selected is currently unavailable."
+          />
+        )
       default:
         return (
           <MatchError
             onClose={handleClose}
             handleRetry={() => setPhase(PHASES.SELECT)}
+            header="Match Error"
+            message="Something went wrong, please wait for a while before trying again."
           />
         )
     }

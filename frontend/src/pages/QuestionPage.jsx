@@ -1,5 +1,6 @@
 import {
   Text,
+  Center,
   Code,
   HStack,
   StackDivider,
@@ -9,9 +10,7 @@ import {
   Image,
   Badge,
   Heading,
-  IconButton,
 } from '@chakra-ui/react'
-import { ArrowBackIcon, ArrowForwardIcon } from '@chakra-ui/icons'
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer'
 import { AuthLayout } from '../components/AuthLayout'
 import ReactMarkdown from 'react-markdown'
@@ -19,6 +18,7 @@ import { URL_QUESTION_SERVICE } from '../constants'
 import axios from '../api/axios'
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { Button } from '../components/Button'
 
 const difficultyColorMap = new Map([
   ['easy', 'green'],
@@ -48,18 +48,18 @@ const supTheme = {
 
 const newTheme = {
   img: ({ node, children, ...props }) => {
-    return <Image m={4} src={node.properties.src}></Image>
+    return <Image m={4} sizes='md' src={node.properties.src}></Image>
   },
   code: ({ node, inline, children, ...props }) => {
     return !inline ? (
-      <Code overflow="auto" fontSize="lg" w="100%" p={2} mt={4} mb={4}>
+      <Code overflow="auto" fontSize="md" w="100%" p={1} mt={1} mb={1}>
         <ReactMarkdown
           components={ChakraUIRenderer(supTheme)}
           children={children[0]}
         />
       </Code>
     ) : (
-      <Code fontSize="lg">
+      <Code fontSize="md" mb={2} size="md">
         <ReactMarkdown
           components={ChakraUIRenderer(supTheme)}
           children={children[0]}
@@ -70,7 +70,7 @@ const newTheme = {
   p: (props) => {
     const { children } = props
     return (
-      <Text overflow="auto" mb={1} className="text-lg">
+      <Text overflow="auto" mb={1} className="text-md">
         {children}
       </Text>
     )
@@ -168,17 +168,20 @@ const QuestionPage = () => {
   const difficultyColor = (difficulty) => difficultyColorMap.get(difficulty)
   return (
     <>
-      <Box className="rounded-lg border">
+    <Center>
+      <Box className="rounded-lg border" maxWidth='900px' maxHeight='700px' overflow='auto' m={5}>
         <VStack h="100vh" divider={<StackDivider borderColor="gray.200" />}>
           <Heading size="lg" fontWeight="semibold" color="gray 500">
             {questionData.name}
           </Heading>
-          <HStack spacing={350}>
-            <IconButton
+          <HStack spacing={180}>
+            <Button
               onClick={previousQuestion}
-              aria-label="Back"
-              icon={<ArrowBackIcon />}
-            ></IconButton>
+              variant="outline"
+              className=" dark:text-gray-300"
+            >
+              Previous
+            </Button>
             <Badge
               align="center"
               textAlign="center"
@@ -188,21 +191,24 @@ const QuestionPage = () => {
             >
               {questionData.difficulty}
             </Badge>
-            <IconButton
+            <Button
               onClick={nextQuestion}
-              aria-label="Back"
-              icon={<ArrowForwardIcon />}
-            ></IconButton>
+              variant="outline"
+              className=" dark:text-gray-300"
+            >
+              Next
+            </Button>
           </HStack>
-          <div className="mx-2 max-h-full overflow-y-auto px-2">
+          <Box maxHeight='700px' m={4}>
             <ReactMarkdown
               components={ChakraUIRenderer(newTheme)}
               children={parse(questionData.content)}
               skipHtml
             />
-          </div>
+          </Box>
         </VStack>
       </Box>
+      </Center>
     </>
   )
 }

@@ -92,8 +92,8 @@ exports.createRoom = async function (req, res) {
     if (error) {
       throw error;
     }
-    const { roomId, userId1, userId2, difficulty } = value;
-    await RoomService.createRoom(roomId, userId1, userId2, difficulty);
+    const { roomId, userId1, userId2, difficulty, types } = value;
+    await RoomService.createRoom(roomId, userId1, userId2, difficulty, types);
     return res.status(200).json({
       message: "Created Room successfully",
       data: {
