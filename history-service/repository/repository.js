@@ -3,10 +3,9 @@ import HistoryModel from '../model/history.js'
 import { MongoServerError } from 'mongodb'
 import 'dotenv/config'
 
-const uri =
-  process.env.ENV == 'PROD'
-    ? process.env.DB_URI_PROD
-    : process.env.DB_LOCAL_URI
+const uri = process.env.ENV == "production"
+  ? process.env.DB_MONGO_URI
+  : "mongodb://mongo:27017/peerprep"
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 const db = mongoose.connection

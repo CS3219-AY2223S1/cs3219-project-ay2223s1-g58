@@ -5,6 +5,9 @@ WORKDIR /app
 COPY package.json .
 COPY package-lock.json .
 
+# Set env for react_app
+ENV REACT_APP_ENV=production
+
 RUN npm ci
 
 COPY . .

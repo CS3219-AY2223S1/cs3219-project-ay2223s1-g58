@@ -12,7 +12,7 @@ services:
       - mongo
     environment:
       - ENV=TEST
-      - DB_LOCAL_URI=mongodb://mongo:27017/historyTest
+      - DB_MONGO_URI=mongodb://mongo:27017/historyTest
     command: npm run test
   
   mongo:

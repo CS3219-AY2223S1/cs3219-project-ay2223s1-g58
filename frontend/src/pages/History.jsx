@@ -137,7 +137,7 @@ const History = () => {
                 src={blank}
                 alt="blank"
                 className="inset-0 w-full pointer-events-none"
-                unoptimized
+                unoptimized="true"
               />
             </div>
           </div>

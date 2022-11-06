@@ -40,6 +40,15 @@ describe('POST /user', function () {
     });
 
     it('responds unsuccessfully for creating duplicate user', async function () {
+        // Creates once
+        await request(app)
+            .post(`${BASE_URL_PREFIX}`)
+            .set('Accept', 'application/json')
+            .send({
+                username: 'testuser',
+                password: 'testuser'
+            })
+        // Creates twice
         const response = await request(app)
             .post(`${BASE_URL_PREFIX}`)
             .set('Accept', 'application/json')

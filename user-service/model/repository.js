@@ -3,9 +3,9 @@ import mongoose from "mongoose"
 import logger from "../logger.js"
 import { hashPassword } from "../auth/index.js"
 
-const mongoDB = process.env.ENV == "PROD"
-    ? process.env.DB_CLOUD_URI
-    : process.env.DB_LOCAL_URI // Either via docker-compose, or local mongo db needed
+const mongoDB = process.env.ENV == "production"
+    ? process.env.DB_MONGO_URI
+    : "mongodb://mongo:27017/peerprep"
 
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true })
 

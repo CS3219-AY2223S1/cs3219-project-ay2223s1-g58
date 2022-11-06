@@ -21,12 +21,10 @@ spec:
           env:
             - name: REDIS_HOST
               value: redis-cluster-ip-service
-            - name: DB_LOCAL_URI
+            - name: DB_MONGO_URI
               value: mongodb://mongo-cluster-ip-service:27017/peerprep
             - name: ENV
               value: production
-            - name: PORT
-              value: '80'
             - name: URI_QUESTION_SERVICE
               value: http://question-cluster-ip-service:8500
           resources:

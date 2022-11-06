@@ -18,6 +18,9 @@ spec:
           ports:
             - name: http
               containerPort: 3000
+          env:
+            - name: REACT_APP_ENV
+              value: production
           resources:
             requests:
               cpu: 2m

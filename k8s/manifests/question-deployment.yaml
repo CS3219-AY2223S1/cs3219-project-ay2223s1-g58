@@ -19,8 +19,6 @@ spec:
             - name: http
               containerPort: 8500
           env:
-            - name: PORT
-              value: '80'
             - name: ENV
               value: production
             - name: POSTGRES_USER
