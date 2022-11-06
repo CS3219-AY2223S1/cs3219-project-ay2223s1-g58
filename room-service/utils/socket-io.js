@@ -28,6 +28,8 @@ exports.initSocket = (httpServer) => {
     console.log("connection here");
     socket.on("join-room", (payload) => {
       console.log("join-room payload", payload);
+      // Assuming that I have access to userId
+      console.log(socket.userId);
       const { roomId, userId } = payload;
 
       socket.join(roomId);

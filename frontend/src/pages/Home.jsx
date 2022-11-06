@@ -1,5 +1,6 @@
 import useAuth from '../hooks/useAuth'
 import { Helmet } from 'react-helmet-async'
+import { SecondaryFeatures } from '../components/SecondaryFeatures'
 
 const Home = () => {
   const { auth } = useAuth()
@@ -15,12 +16,7 @@ const Home = () => {
         />
       </Helmet>
       <main className="flex flex-col items-center justify-center h-full">
-        <h1>Home</h1>
-        <br />
-        <p>Username: {auth.username}</p>
-        <p>You are logged in!</p>
-        <br />
-        <br />
+        <SecondaryFeatures username={auth.username} />
       </main>
     </div>
   )

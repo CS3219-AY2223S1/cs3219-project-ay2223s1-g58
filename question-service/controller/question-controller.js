@@ -81,6 +81,7 @@ async function getNextQuestion(req, res) {
     try {
         var category, question
         const { past_id, difficulty, types } = req.query
+        console.log(past_id)
         if (!types && !difficulty) {
             return res
                 .status(400)

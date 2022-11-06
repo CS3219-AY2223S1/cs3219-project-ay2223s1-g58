@@ -5,7 +5,7 @@ const MatchRepository = {
   findByDifficulty: function (difficulty, socketId) {
     return db.Match.findOne({
       where: {
-        difficulty: difficulty,
+        difficulty,
         socketId: {
           [Sequelize.Op.ne]: socketId,
         },
@@ -34,17 +34,31 @@ const MatchRepository = {
   findBySocketId: function (socketId) {
     return db.Match.findOne({
       where: {
-        socketId: socketId,
+        socketId,
+      },
+    });
+  },
+  findById: function (id) {
+    return db.Match.findOne({
+      where: {
+        id,
       },
     });
   },
   create: function (socketId, difficulty, types, userId) {
     return db.Match.create({ socketId, difficulty, userId, types });
   },
-  delete: function (socketId) {
+  deleteBySocketId: function (socketId) {
     return db.Match.destroy({
       where: {
-        socketId: socketId,
+        socketId,
+      },
+    });
+  },
+  deleteById: function (id) {
+    return db.Match.destroy({
+      where: {
+        id,
       },
     });
   },

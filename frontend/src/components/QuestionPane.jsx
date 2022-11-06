@@ -8,11 +8,13 @@ import {
   Image,
   Code,
   StackDivider,
+  Flex,
+  Spacer,
+  Button,
 } from '@chakra-ui/react'
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer'
 import { AuthLayout } from '../components/AuthLayout'
 import ReactMarkdown from 'react-markdown'
-import { Button } from '../components/Button'
 import {
   URL_QUESTION_SERVICE,
   URL_ROOM_SERVICE,
@@ -54,16 +56,15 @@ const newTheme = {
     return <Image m={4} src={node.properties.src}></Image>
   },
   code: ({ node, inline, children, ...props }) => {
-
     return !inline ? (
-      <Code overflow="auto" fontSize="md" w="100%" >
+      <Code overflow="auto" fontSize="md" w="100%">
         <ReactMarkdown
           components={ChakraUIRenderer(supTheme)}
           children={children[0]}
         />
       </Code>
     ) : (
-      <Code fontSize="md" >
+      <Code fontSize="md">
         <ReactMarkdown
           components={ChakraUIRenderer(supTheme)}
           children={children[0]}
@@ -107,7 +108,7 @@ const parse = (text) => {
   return text
 }
 
-const QuestionPane = ({ questionId, roomId }) => {
+const QuestionPane = ({ questionId, roomId, isFirstQuestion }) => {
   const [questionData, setQuestionData] = useState([])
   const toast = useToast()
   const axiosPrivate = useAxiosPrivate()
@@ -127,7 +128,24 @@ const QuestionPane = ({ questionId, roomId }) => {
 
   const getNextQuestion = async () => {
     await axiosPrivate
-      .put(`${URL_ROOM_SERVICE}/${roomId}`)
+      .put(`${URL_ROOM_SERVICE}/next/${roomId}`)
+      .then((res) => {
+        if (res && res.status !== STATUS_CODE_SUCCESS) {
+          toast({
+            title: 'Something went wrong',
+            description: 'Please try again',
+            status: 'error',
+            duration: 4000,
+            isClosable: true,
+          })
+        }
+      })
+      .catch(console.log)
+  }
+
+  const getPrevQuestion = async () => {
+    await axiosPrivate
+      .put(`${URL_ROOM_SERVICE}/prev/${roomId}`)
       .then((res) => {
         if (res && res.status !== STATUS_CODE_SUCCESS) {
           toast({
@@ -155,34 +173,39 @@ const QuestionPane = ({ questionId, roomId }) => {
   return (
     <>
       <Box className="rounded-lg border">
-        <VStack h="100vh" divider={<StackDivider borderColor="gray.200" />}>
-          <VStack divider={<StackDivider borderColor="gray.200"/>}>
+        <VStack h="90vh" divider={<StackDivider borderColor="gray.200" />}>
+          <VStack divider={<StackDivider borderColor="gray.200" />}>
             <Heading size="lg" fontWeight="semibold" color="gray 500">
-                {questionData.name}
-              </Heading>
-              <Badge
-                borderRadius="full"
-                px="2"
-                colorScheme={difficultyColor(questionData.difficulty)}
-              >
-                {questionData.difficulty}
-              </Badge>
-              {TypesStack(questionData.types)}
+              {questionData.name}
+            </Heading>
+            <Badge
+              borderRadius="full"
+              px="2"
+              colorScheme={difficultyColor(questionData.difficulty)}
+            >
+              {questionData.difficulty}
+            </Badge>
+            {TypesStack(questionData.types)}
           </VStack>
-          <Box overflow='auto' w="95%" mx='2' my='2'>
+          <Box overflow="auto" w="95%" mx="2" my="2">
             <ReactMarkdown
               components={ChakraUIRenderer(newTheme)}
               children={parse(questionData.content)}
               skipHtml
             />
           </Box>
-          <Button
-              onClick={getNextQuestion}
-              variant="outline"
-              className=" dark:text-gray-300"
+          <Flex>
+            <Spacer />
+            <Button
+              isDisabled={isFirstQuestion}
+              onClick={getPrevQuestion}
+              mr={2}
             >
-              Next Question
+              Previous Question
             </Button>
+            <Button onClick={getNextQuestion}>Next Question</Button>
+            <Spacer />
+          </Flex>
         </VStack>
       </Box>
     </>

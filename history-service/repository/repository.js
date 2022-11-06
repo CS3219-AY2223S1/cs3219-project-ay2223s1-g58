@@ -43,8 +43,11 @@ const HistoryRepository = {
     if (!doc) {
       return { err: 'roomId does not exist' }
     }
-    console.log(doc)
   },
+  /** Deletes all history of room if exists. */
+  delete: function (roomId) {
+    return HistoryModel.deleteOne({ roomId: roomId })
+  }
 }
 
 export default HistoryRepository

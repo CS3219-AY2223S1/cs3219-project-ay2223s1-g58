@@ -39,6 +39,7 @@
     "react-table": "^7.8.0",
     "socket.io": "^4.5.2",
     "socket.io-client": "^4.5.1",
+    "use-debounce": "^8.0.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

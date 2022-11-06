@@ -27,6 +27,8 @@ export async function createHistory(req, res) {
     const { roomId, u1, u2 } = req.body
     if (!roomId) {
       return res.status(400).json({ message: 'roomId is missing' })
+    } else if (!u1 || !u2) {
+      return res.status(400).json({ message: 'u1 or u2 missing, must provide usernames' })
     }
     const resp = await HistoryService.createRoomHistory(roomId, u1, u2)
     if (resp?.err) {
@@ -58,6 +60,25 @@ export async function updateHistory(req, res) {
       return res.status(400).json({ message: msg })
     }
     return res.status(200).json({ message: 'Update history successfully' })
+  } catch (err) {
+    console.log(err)
+    return res.status(500).json({ message: err.message })
+  }
+}
+
+export async function deleteHistory(req, res) {
+  try {
+    const { roomId } = req.body
+    if (!roomId) {
+      return res.status(400).json({ message: 'roomId is missing' })
+    }
+    const resp = await HistoryService.deleteRoomHistory(roomId)
+    if (resp?.err) {
+      const msg = `Could not delete room ${roomId}`
+      console.log(`${msg}: ${resp.err}`)
+      return res.status(400).json({ message: msg })
+    }
+    return res.status(200).json({ message: 'Deleted all history for room' })
   } catch (err) {
     console.log(err)
     return res.status(500).json({ message: err.message })

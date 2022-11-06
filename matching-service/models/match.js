@@ -14,8 +14,13 @@ module.exports = (sequelize, DataTypes) => {
   }
   Match.init(
     {
-      socketId: {
+      id: {
         type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      socketId: {
+        type: DataTypes.STRING,
         field: "socket_id",
       },
       difficulty: {

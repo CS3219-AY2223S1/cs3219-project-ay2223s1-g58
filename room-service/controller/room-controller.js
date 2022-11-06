@@ -1,5 +1,6 @@
 const { createRoomDto } = require("../dto/room-dto");
 const RoomService = require("../service/room-service");
+const { setBetween } = require("../utils/common");
 
 exports.getRoomById = async function (req, res) {
   try {
@@ -9,13 +10,18 @@ exports.getRoomById = async function (req, res) {
     if (!room || (room.userId1 !== userId && room.userId2 !== userId)) {
       return res.status(400).json({ message: "Could not get Room info" });
     }
+    console.log("getRoom", room);
     return res.status(200).json({
       message: "Get Room info successfully",
       data: {
         roomId: room.roomId,
         userId1: room.userId1,
         userId2: room.userId2,
-        questionId: room.questionId,
+        questionId:
+          room.questionIds[
+            setBetween(room.current, room.questionIds.length - 1, 0)
+          ],
+        isFirst: room.current === 0,
       },
     });
   } catch (err) {
@@ -43,7 +49,7 @@ exports.getRoomByUserId = async function (req, res) {
   }
 };
 
-exports.updateRoomQuestionId = async function (req, res) {
+exports.nextRoomQuestionId = async function (req, res) {
   try {
     const room = await RoomService.findByRoomId(req.params.roomId);
     // room not found or user does not belong to room
@@ -51,9 +57,27 @@ exports.updateRoomQuestionId = async function (req, res) {
     if (!room || (room.userId1 !== userId && room.userId2 !== userId)) {
       return res.status(400).json({ message: "Could not update Room info" });
     }
-    await RoomService.updateRoomQuestionId(req.params.roomId);
+    await RoomService.updateRoomQuestionIds(req.params.roomId, 1);
     return res.status(200).json({
-      message: "Update Room questionId successfully",
+      message: "Update Room next questionId successfully",
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+exports.previousRoomQuestionId = async function (req, res) {
+  try {
+    const room = await RoomService.findByRoomId(req.params.roomId);
+    // room not found or user does not belong to room
+    const userId = req.user.username;
+    if (!room || (room.userId1 !== userId && room.userId2 !== userId)) {
+      return res.status(400).json({ message: "Could not update Room info" });
+    }
+    await RoomService.updateRoomQuestionIds(req.params.roomId, -1);
+    return res.status(200).json({
+      message: "Update Room previous questionId successfully",
     });
   } catch (err) {
     console.log(err);

@@ -18,9 +18,13 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         field: "room_id",
       },
-      questionId: {
-        type: DataTypes.NUMBER,
-        field: "question_id",
+      questionIds: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        field: "question_ids",
+      },
+      current: {
+        type: DataTypes.INTEGER,
+        field: "current",
       },
       userId1: {
         type: DataTypes.STRING,

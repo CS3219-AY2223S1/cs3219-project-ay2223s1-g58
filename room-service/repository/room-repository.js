@@ -23,8 +23,22 @@ const RoomRepository = {
       },
     });
   },
-  create: function (roomId, questionId, userId1, userId2, difficulty) {
-    return db.Room.create({ roomId, questionId, userId1, userId2, difficulty });
+  create: function (
+    roomId,
+    questionIds,
+    userId1,
+    userId2,
+    difficulty,
+    current
+  ) {
+    return db.Room.create({
+      roomId,
+      questionIds,
+      userId1,
+      userId2,
+      difficulty,
+      current,
+    });
   },
   delete: function (roomId) {
     return db.Room.destroy({

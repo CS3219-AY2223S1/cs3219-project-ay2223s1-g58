@@ -6,6 +6,7 @@ const {
   URL_QUESTION_SERVICE,
   URL_QUESTION_SERVICE_NEXT_QUESTION,
 } = require("../const/constants");
+const { setBetween } = require("../utils/common");
 
 const RoomService = {
   findByRoomId: function (roomId) {
@@ -20,24 +21,49 @@ const RoomService = {
     });
     return RoomRepository.create(
       roomId,
-      response.data.id,
+      [response.data.id],
       userId1,
       userId2,
       difficulty,
+      0
     );
   },
-  updateRoomQuestionId: async function (roomId) {
+  updateRoomQuestionIds: async function (roomId, change) {
     const room = await RoomRepository.findByRoomId(roomId);
-    console.log(room);
-    const response = await axios.get(URL_QUESTION_SERVICE_NEXT_QUESTION, {
-      params: { difficulty: room.difficulty, past_id: room.questionId },
+    const updatedCurrent = setBetween(
+      room.current + change,
+      room.questionIds.length,
+      0
+    );
+
+    let updatedQuestionId = room.questionIds;
+
+    if (updatedCurrent >= room.questionIds.length) {
+      const response = await axios.get(URL_QUESTION_SERVICE_NEXT_QUESTION, {
+        params: { difficulty: room.difficulty, past_id: room.questionIds },
+      });
+      console.log("response", response);
+      updatedQuestionId = [...room.questionIds, response.data.id];
+      console.log("updatedQuestionId", updatedQuestionId);
+    }
+
+    console.log("Updated room", {
+      ...room,
+      current: updatedCurrent,
+      questionIds: updatedQuestionId,
     });
-    // TODO append it to array instead of replacing when update to Postgres
-    RoomRepository.update(roomId, { ...room, questionId: response.data.id });
+
+    RoomRepository.update(roomId, {
+      ...room,
+      current: updatedCurrent,
+      questionIds: updatedQuestionId,
+    });
+
     emit(`${roomId}-${EVENT_EMIT.ROOM_UPDATE}`, {
       status: EVENT_EMIT.ROOM_UPDATE,
       room: roomId,
-      question: response.data.id,
+      question: updatedQuestionId[updatedCurrent],
+      isFirst: updatedCurrent === 0,
     });
   },
   deleteRoom: function (roomId) {

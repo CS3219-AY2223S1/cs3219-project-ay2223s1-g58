@@ -13,11 +13,13 @@ const {
 const MATCH_TIMEOUT_SECONDS = 30;
 const MATCH_TIMEOUT = MATCH_TIMEOUT_SECONDS * 1000;
 
-const scheduleTimeout = (socketId) => {
+const scheduleTimeout = (id, socketId) => {
   const date = new Date();
   schedule.scheduleJob(new Date(date.getTime() + MATCH_TIMEOUT), async () => {
-    if (await MatchRepository.findBySocketId(socketId)) {
-      MatchRepository.delete(socketId);
+    const match = await MatchRepository.findById(id);
+    console.log("30s after match, is match found? ", match != null);
+    if (match != null) {
+      MatchRepository.deleteById(id);
       console.log(EVENT_EMIT.MATCH_TIMEOUT);
       sendMessageToOne(
         socketId,
@@ -46,11 +48,11 @@ const MatchService = {
       types,
       userId
     );
-    scheduleTimeout(socketId);
+    scheduleTimeout(created.id, socketId);
     return created;
   },
   deleteMatch: function (socketId) {
-    return MatchRepository.delete(socketId);
+    return MatchRepository.deleteBySocketId(socketId);
   },
   matchSuccess: async function (
     socketIdWaiting,
