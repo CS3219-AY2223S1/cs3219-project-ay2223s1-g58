@@ -8,11 +8,13 @@ import {
   Image,
   Code,
   StackDivider,
+  Flex,
+  Spacer,
+  Button,
 } from '@chakra-ui/react'
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer'
 import { AuthLayout } from '../components/AuthLayout'
 import ReactMarkdown from 'react-markdown'
-import { Button } from '../components/Button'
 import {
   URL_QUESTION_SERVICE,
   URL_ROOM_SERVICE,
@@ -105,7 +107,7 @@ const parse = (text) => {
   return text
 }
 
-const QuestionPane = ({ questionId, roomId }) => {
+const QuestionPane = ({ questionId, roomId, isFirstQuestion }) => {
   const [questionData, setQuestionData] = useState([])
   const toast = useToast()
   const axiosPrivate = useAxiosPrivate()
@@ -125,7 +127,24 @@ const QuestionPane = ({ questionId, roomId }) => {
 
   const getNextQuestion = async () => {
     await axiosPrivate
-      .put(`${URL_ROOM_SERVICE}/${roomId}`)
+      .put(`${URL_ROOM_SERVICE}/next/${roomId}`)
+      .then((res) => {
+        if (res && res.status !== STATUS_CODE_SUCCESS) {
+          toast({
+            title: 'Something went wrong',
+            description: 'Please try again',
+            status: 'error',
+            duration: 4000,
+            isClosable: true,
+          })
+        }
+      })
+      .catch(console.log)
+  }
+
+  const getPrevQuestion = async () => {
+    await axiosPrivate
+      .put(`${URL_ROOM_SERVICE}/prev/${roomId}`)
       .then((res) => {
         if (res && res.status !== STATUS_CODE_SUCCESS) {
           toast({
@@ -154,17 +173,17 @@ const QuestionPane = ({ questionId, roomId }) => {
     <>
       <Box className="rounded-lg border">
         <VStack h="100vh" divider={<StackDivider borderColor="gray.200" />}>
-          <VStack divider={<StackDivider borderColor="gray.200"/>}>
+          <VStack divider={<StackDivider borderColor="gray.200" />}>
             <Heading size="lg" fontWeight="semibold" color="gray 500">
-                {questionData.name}
-              </Heading>
-              <Badge
-                borderRadius="full"
-                px="2"
-                colorScheme={difficultyColor(questionData.difficulty)}
-              >
-                {questionData.difficulty}
-              </Badge>
+              {questionData.name}
+            </Heading>
+            <Badge
+              borderRadius="full"
+              px="2"
+              colorScheme={difficultyColor(questionData.difficulty)}
+            >
+              {questionData.difficulty}
+            </Badge>
           </VStack>
           <div className="mx-2 max-h-full overflow-y-auto px-2">
             <ReactMarkdown
@@ -173,13 +192,18 @@ const QuestionPane = ({ questionId, roomId }) => {
               skipHtml
             />
           </div>
-          <Button
-              onClick={getNextQuestion}
-              variant="outline"
-              className=" dark:text-gray-300"
+          <Flex>
+            <Spacer />
+            <Button
+              isDisabled={isFirstQuestion}
+              onClick={getPrevQuestion}
+              mr={2}
             >
-              Next Question
+              Previous Question
             </Button>
+            <Button onClick={getNextQuestion}>Next Question</Button>
+            <Spacer />
+          </Flex>
         </VStack>
       </Box>
     </>

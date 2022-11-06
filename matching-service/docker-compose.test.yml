@@ -1,11 +1,6 @@
 version: "3.8"
 
 services:
-  peerjs-server:
-    image: peerjs/peerjs-server
-    ports:
-      - "9000:9000"
-
   postgres_db:
     image: postgres:latest
     restart: always
@@ -27,7 +22,7 @@ services:
     build:
       context: .
     ports:
-      - "8022:8022"
+      - "8001:8001"
     depends_on:
       postgres_db:
         condition: service_healthy
@@ -38,9 +33,11 @@ services:
       - .env.prod
     environment:
       ENV: production
+      HISTORY_SERVICE_HOST: host.docker.internal
       QUESTION_SERVICE_HOST: host.docker.internal
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres_db
       POSTGRES_USER: postgres
       POSTGRES_HOST: postgres_db
       POSTGRES_PORT: 5432
+    command: npm run test:ci

@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       socket_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
         unique: true,
       },

@@ -4,7 +4,8 @@ const {
   getRoomById,
   deleteRoom,
   createRoom,
-  updateRoomQuestionId,
+  nextRoomQuestionId,
+  previousRoomQuestionId,
   getRoomByUserId,
 } = require("../controller/room-controller");
 
@@ -17,7 +18,9 @@ router.get("/", authenticationMiddleware, getRoomByUserId);
 // no authentication for createRoom, since it is used by internally
 router.post("/", createRoom);
 
-router.put("/:roomId", authenticationMiddleware, updateRoomQuestionId);
+router.put("/next/:roomId", authenticationMiddleware, nextRoomQuestionId);
+
+router.put("/prev/:roomId", authenticationMiddleware, previousRoomQuestionId);
 
 router.delete("/:roomId", authenticationMiddleware, deleteRoom);
 

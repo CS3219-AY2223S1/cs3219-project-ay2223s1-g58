@@ -9,9 +9,8 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-
 if (process.env.ENV === "production") {
-  app.use(cors())
+  app.use(cors());
   app.options("*", cors());
 } else {
   app.use(
@@ -19,7 +18,7 @@ if (process.env.ENV === "production") {
       origin: `http://localhost:${process.env.PORT || 3000}`,
       credentials: true,
     })
-  )
+  );
 }
 
 app.get("/", (req, res) => {
@@ -34,3 +33,5 @@ const httpServer = createServer(app);
 initSocket(httpServer);
 
 httpServer.listen(8022);
+
+module.exports = app;

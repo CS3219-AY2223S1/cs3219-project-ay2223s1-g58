@@ -27,18 +27,17 @@ async function createQuestion(req, res) {
 async function getQuestionNames(req, res) {
     try {
         let { id } = req.query
-        if (!(id instanceof Array)) {  // If there is only 1 id, the value will not be an array
-          id = [id]
+        if (!(id instanceof Array)) {
+            // If there is only 1 id, the value will not be an array
+            id = [id]
         }
         const questionArray = await QuestionRepository.findQuestionsById(id)
         const id2name = {}
-        questionArray.forEach(q => id2name[q.id] = q.name)
-        return res
-                .status(200)
-                .json({ 
-                    message: 'Question names successfully!',
-                    data: id2name,
-                 })
+        questionArray.forEach((q) => (id2name[q.id] = q.name))
+        return res.status(200).json({
+            message: 'Question names successfully!',
+            data: id2name,
+        })
     } catch (err) {
         return res.status(500).json({
             message: 'Database failure when retriving question names! ' + err,
@@ -64,12 +63,12 @@ async function getAllTypes(req, res) {
     try {
         const allTypes = await CategoryRepository.getAllTypes()
         let union = []
-        allTypes.map(arr => 
-         union = Array.from(new Set([...union, ...arr.types]))
+        allTypes.map(
+            (arr) => (union = Array.from(new Set([...union, ...arr.types])))
         )
         return res.status(200).json({
             message: 'All types retrieved!',
-            types: union
+            types: union,
         })
     } catch (err) {
         return res.status(500).json({
@@ -82,6 +81,7 @@ async function getNextQuestion(req, res) {
     try {
         var category, question
         const { past_id, difficulty, types } = req.query
+        console.log(past_id)
         if (!types && !difficulty) {
             return res
                 .status(400)

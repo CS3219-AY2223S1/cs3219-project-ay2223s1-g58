@@ -1,5 +1,7 @@
 export const STATUS_CODE_CREATED = 201
 export const STATUS_CODE_SUCCESS = 200
+
+export const STATUS_CODE_NOT_MODIFIED = 304
 export const STATUS_CODE_CONFLICT = 409
 export const STATUS_CODE_BAD_REQUEST = 400
 
@@ -41,7 +43,7 @@ const PREFIX_ROOM_SERVICE = '/api/v1/room'
 export const URL_ROOM_SERVICE = URI_ROOM_SERVICE + PREFIX_ROOM_SERVICE
 
 export const PEERJS_HOST =
-  process.env.NODE_ENV === 'production' ? '' : 'localhost'
+  process.env.NODE_ENV === 'production' ? 'localhost' : 'localhost'
 export const PEERJS_PORT = process.env.NODE_ENV === 'production' ? 80 : 9000
 export const PEERJS_PATH = '/myapp'
 
