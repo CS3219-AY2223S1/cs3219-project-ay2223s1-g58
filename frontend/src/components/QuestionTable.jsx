@@ -51,7 +51,7 @@ export default function QuestionTable({ columns, data }) {
   return (
     <>
       <VStack gap={4}>
-        <TableContainer overflowY="auto" maxH="650" align="center" mawW="md">
+        <TableContainer overflowY="auto" maxH="650" align="center">
           <Table maxH="400" variant="striped" {...getTableProps()}>
             <Thead>
               {headerGroups.map((headerGroup) => (
@@ -80,7 +80,7 @@ export default function QuestionTable({ columns, data }) {
             </Tbody>
           </Table>
         </TableContainer>
-        <HStack gap={6}>
+        <HStack gap={6} className="pb-4">
           <Tooltip label="First Page">
             <IconButton
               onClick={() => gotoPage(0)}
