@@ -1,7 +1,17 @@
 import { useId } from 'react'
-import { Link } from 'react-router-dom'
 
 import { Container } from './Container'
+import {
+  Box,
+  Text,
+  Button,
+  Stack,
+  Icon,
+  useColorModeValue,
+} from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
+
+import Arrow from './Arrow'
 
 const features = [
   {
@@ -195,29 +205,60 @@ export function SecondaryFeatures({ username }) {
       className="py-20 sm:py-32"
     >
       <Container>
-        <div className="max-w-2xl mx-auto sm:text-center">
+        <div className="mx-auto flex max-w-2xl flex-col items-center sm:text-center">
           <h2 className="text-3xl font-medium tracking-tight text-gray-900 dark:text-white">
-            Welcome to LeetWithFriend, {username}!
+            Welcome to{' '}
+            <span className="font-semibold text-cyan-500">LeetWithFriend</span>,
+            {` ${username}`}!
           </h2>
           <p className="my-2 text-lg text-gray-600 dark:text-gray-400 ">
             Practicing for your next interivew? LeetWithFriend provides the
             collaborative experience to optimize your learning!
           </p>
-          <Link to="/match" className="font-bold underline">
-            Go Match
-          </Link>
+          <Stack
+            direction={'column'}
+            align={'center'}
+            alignSelf={'center'}
+            position={'relative'}
+            width={'min-content'}
+            mt={3}
+          >
+            <Button px={6} as={Link} to="/match">
+              Get Started
+            </Button>
+            <Box>
+              <Icon
+                as={Arrow}
+                color={useColorModeValue('gray.800', 'gray.300')}
+                w={71}
+                position={'absolute'}
+                right={-71}
+                top={'10px'}
+              />
+              <Text
+                fontSize={'lg'}
+                fontFamily={'Caveat'}
+                position={'absolute'}
+                right={'-125px'}
+                top={'-15px'}
+                transform={'rotate(10deg)'}
+              >
+                Find a match now!
+              </Text>
+            </Box>
+          </Stack>
           <p className="mt-4 text-sm italic dark:text-gray-300">
             "The best time to plant a tree was 20 years ago. The second best
             time is now."
           </p>
         </div>
-        <ul className="grid max-w-2xl grid-cols-1 gap-6 mx-auto mt-16 text-sm sm:mt-20 sm:grid-cols-2 md:gap-y-10 lg:max-w-none lg:grid-cols-3">
+        <ul className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 text-sm sm:mt-20 sm:grid-cols-2 md:gap-y-10 lg:max-w-none lg:grid-cols-3">
           {features.map((feature) => (
             <li
               key={feature.name}
-              className="p-8 border border-gray-200 rounded-2xl"
+              className="rounded-2xl border border-gray-200 p-8"
             >
-              <feature.icon className="w-8 h-8" />
+              <feature.icon className="h-8 w-8" />
               <h3 className="mt-6 font-semibold text-gray-900 dark:text-white ">
                 {feature.name}
               </h3>

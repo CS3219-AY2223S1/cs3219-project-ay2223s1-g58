@@ -16,7 +16,9 @@ exports.initSocket = (httpServer, matchHandler, cancelHandler) => {
     try {
       const { token } = socket.handshake.auth;
       // TODO update to verify when expired token is fixed
-      const payload = jwt.decode(token, process.env.ACCESS_TOKEN_SECRET);
+      const payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, {
+        ignoreExpiration: true,
+      });
       console.log("middleware payload", payload);
       socket.userId = payload.username;
       next();

@@ -33,15 +33,20 @@ exports.authenticationMiddleware = (req, res, next) => {
     // Skip deny check as the token is only valid for 60 seconds if circumventing the frontend
     // Reasonable risk to tolerate
 
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-      if (err) {
-        console.log(err);
-        return res.status(401).json({ message: "Invalid access token" });
+    jwt.verify(
+      token,
+      process.env.ACCESS_TOKEN_SECRET,
+      { ignoreExpiration: true },
+      (err, user) => {
+        if (err) {
+          console.log(err);
+          return res.status(401).json({ message: "Invalid access token" });
+        }
+        req.user = user;
+        req.accessToken = token;
+        next();
       }
-      req.user = user;
-      req.accessToken = token;
-      next();
-    });
+    );
   } catch (err) {
     console.log("Fail to authenticate token in middleware");
     console.log(err);

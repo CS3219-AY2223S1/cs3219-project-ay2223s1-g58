@@ -11,6 +11,7 @@ import { PhoneFrame } from './PhoneFrame'
 import collaboration from '../images/collaboration.png'
 import video from '../images/video.png'
 import { Image } from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
 
 const MotionAppScreenHeader = motion(AppScreen.Header)
 const MotionAppScreenBody = motion(AppScreen.Body)
@@ -184,7 +185,13 @@ function FirstScreen({ custom, animated = false }) {
               </div>
             ))}
           </div>
-          <div className="px-3 py-2 mt-6 text-sm font-semibold text-center text-white rounded-lg bg-cyan-500">
+          <div
+            onClick={() => {
+              if (document.getElementById('MatchDialog'))
+                document.getElementById('MatchDialog').click()
+            }}
+            className="px-3 py-2 mt-6 text-sm font-semibold text-center text-white rounded-lg cursor-pointer bg-cyan-500"
+          >
             Match
           </div>
         </div>
@@ -256,9 +263,11 @@ function ThirdScreen({ custom, animated = false }) {
                 </div>
               </div>
             ))}
-            <div className="px-3 py-2 text-sm font-semibold text-center text-white rounded-lg bg-cyan-500">
-              Go to Learning History
-            </div>
+            <Link to="/history">
+              <div className="px-3 py-2 text-sm font-semibold text-center text-white rounded-lg bg-cyan-500">
+                Go to History
+              </div>
+            </Link>
           </div>
         </div>
       </MotionAppScreenBody>
