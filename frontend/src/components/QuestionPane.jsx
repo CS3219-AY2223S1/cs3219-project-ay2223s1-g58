@@ -23,6 +23,7 @@ import {
 import axios from '../api/axios'
 import { useEffect, useState } from 'react'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import TypesStack from './TypesStack'
 
 const difficultyColorMap = new Map([
   ['easy', 'green'],
@@ -52,18 +53,18 @@ const supTheme = {
 
 const newTheme = {
   img: ({ node, children, ...props }) => {
-    return <Image m={4} src={node.properties.src}></Image>
+    return <Image m={4} size="md" src={node.properties.src}></Image>
   },
   code: ({ node, inline, children, ...props }) => {
     return !inline ? (
-      <Code overflow="auto" fontSize="lg" w="100%" p={2} mt={4} mb={4}>
+      <Code overflow="auto" fontSize="md" w="100%">
         <ReactMarkdown
           components={ChakraUIRenderer(supTheme)}
           children={children[0]}
         />
       </Code>
     ) : (
-      <Code fontSize="lg">
+      <Code fontSize="md" size="md" mb={2}>
         <ReactMarkdown
           components={ChakraUIRenderer(supTheme)}
           children={children[0]}
@@ -74,7 +75,7 @@ const newTheme = {
   p: (props) => {
     const { children } = props
     return (
-      <Text overflow="auto" mb={1} className="text-lg">
+      <Text overflow="auto" mb={1} className="text-md">
         {children}
       </Text>
     )
@@ -172,7 +173,7 @@ const QuestionPane = ({ questionId, roomId, isFirstQuestion }) => {
   return (
     <>
       <Box className="rounded-lg border">
-        <VStack h="100vh" divider={<StackDivider borderColor="gray.200" />}>
+        <VStack h="90vh" divider={<StackDivider borderColor="gray.200" />}>
           <VStack divider={<StackDivider borderColor="gray.200" />}>
             <Heading size="lg" fontWeight="semibold" color="gray 500">
               {questionData.name}
@@ -184,14 +185,15 @@ const QuestionPane = ({ questionId, roomId, isFirstQuestion }) => {
             >
               {questionData.difficulty}
             </Badge>
+            {TypesStack(questionData.types)}
           </VStack>
-          <div className="mx-2 max-h-full overflow-y-auto px-2">
+          <Box overflow="auto" w="95%" mx="2" my="2">
             <ReactMarkdown
               components={ChakraUIRenderer(newTheme)}
               children={parse(questionData.content)}
               skipHtml
             />
-          </div>
+          </Box>
           <Flex>
             <Spacer />
             <Button

@@ -15,9 +15,9 @@ const RoomService = {
   findByUserId: function (userId) {
     return RoomRepository.findByUserId(userId);
   },
-  createRoom: async function (roomId, userId1, userId2, difficulty) {
+  createRoom: async function (roomId, userId1, userId2, difficulty, types) {
     const response = await axios.get(URL_QUESTION_SERVICE, {
-      params: { difficulty: difficulty },
+      params: { difficulty: difficulty, types: types },
     });
     return RoomRepository.create(
       roomId,
@@ -25,6 +25,7 @@ const RoomService = {
       userId1,
       userId2,
       difficulty,
+      types,
       0
     );
   },
@@ -40,18 +41,16 @@ const RoomService = {
 
     if (updatedCurrent >= room.questionIds.length) {
       const response = await axios.get(URL_QUESTION_SERVICE_NEXT_QUESTION, {
-        params: { difficulty: room.difficulty, past_id: room.questionIds },
+        params: {
+          difficulty: room.difficulty,
+          past_id: room.questionIds,
+          types: room.types,
+        },
       });
       console.log("response", response);
       updatedQuestionId = [...room.questionIds, response.data.id];
       console.log("updatedQuestionId", updatedQuestionId);
     }
-
-    console.log("Updated room", {
-      ...room,
-      current: updatedCurrent,
-      questionIds: updatedQuestionId,
-    });
 
     RoomRepository.update(roomId, {
       ...room,
