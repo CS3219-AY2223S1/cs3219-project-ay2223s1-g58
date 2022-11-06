@@ -31,6 +31,10 @@ const HistoryService = {
     }
     return HistoryRepository.add(roomId, questionId, answer)
   },
+  /** Deletes the entire history of room. For used in tests only. */
+  deleteRoomHistory: async function (roomId) {
+    return HistoryRepository.delete(roomId)
+  }
 }
 
 /**

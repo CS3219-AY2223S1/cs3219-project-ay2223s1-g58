@@ -1,6 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-import { getHistory, createHistory, updateHistory } from './handler/handler.js'
+import { getHistory, createHistory, deleteHistory, updateHistory } from './handler/handler.js'
 import 'dotenv/config'
 
 const app = express()
@@ -22,6 +22,9 @@ const router = express.Router()
 router.get('/user/:uid', getHistory)
 router.post('/room/', createHistory)
 router.put('/room/:roomId', updateHistory)
+
+// Delete room (for test only)
+router.delete('/room/testDelete', deleteHistory)
 
 const URL_PREFIX = '/api/v1/history'
 app.use(URL_PREFIX, router).all((_, res) => {

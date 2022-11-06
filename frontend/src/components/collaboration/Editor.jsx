@@ -88,7 +88,8 @@ const Editor = ({ roomId, setEditorComponent }) => {
         // extensions to manage the other person's cursor and selection
         getCursorExtension(uid),
         getSelectionExtension(uid),
-      ],
+        EditorView.exceptionSink.of((err) => {}),   // silence errors
+      ]
     })
 
     const firepad = Firepad.fromCodeMirror6(
@@ -116,7 +117,7 @@ const Editor = ({ roomId, setEditorComponent }) => {
       parentNode.removeChild(parentNode.children[0])
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [docPath, lang, tabSize, uid])
+  }, [docPath, lang, tabSize, uid, colorMode])
 
   return (
     <>
