@@ -35,16 +35,25 @@ describe('POST /room (create room history)', function () {
     expect(resp.body.message).to.equal('Created room history')
   })
 
-  it('fails for duplicate roomId', function (done) {
-    request(app)
+  it('fails for duplicate roomId', async function () {
+    // Make sure there is a duplicate room
+    await request(app)
       .post(`${URI_PREFIX}/room`)
       .send({
         'roomId': 'testRoom',
         'u1': 'testUser1',
         'u2': 'testUser2',
       })
-      .expect(400)
-      .expect({ message: 'Could not create room history for roomId testRoom' }, done)
+    
+    const resp = await request(app)
+      .post(`${URI_PREFIX}/room`)
+      .send({
+        'roomId': 'testRoom',
+        'u1': 'testUser1',
+        'u2': 'testUser2',
+      })
+    expect(resp.statusCode).to.equal(400)
+    expect(resp.body.message).to.equal('Could not create room history for roomId testRoom')
   })
 
   it('fails for missing fields in request body', function (done) {
