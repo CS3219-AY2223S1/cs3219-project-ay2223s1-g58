@@ -29,7 +29,6 @@ jobs:
 
       - name: Delete existing K8s Config
         run: |-
-          kubectl apply -f k8s/manifests
           kubectl delete -f k8s/manifests/room-deployment.yaml
           kubectl delete -f k8s/manifests/history-deployment.yaml
           kubectl delete -f k8s/manifests/matching-deployment.yaml
