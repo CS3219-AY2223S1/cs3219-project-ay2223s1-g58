@@ -9,6 +9,7 @@ exports.initSocket = (httpServer) => {
       origin: "*",
       methods: ["GET", "POST"],
     },
+    credentials: true,
   });
   io.path("/socket.io/room");
   io.use((socket, next) => {

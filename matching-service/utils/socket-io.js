@@ -10,6 +10,7 @@ exports.initSocket = (httpServer, matchHandler, cancelHandler) => {
       origin: "*",
       methods: ["GET", "POST"],
     },
+    credentials: true,
   });
   io.path("/socket.io/matching");
   io.use((socket, next) => {
