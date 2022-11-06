@@ -167,7 +167,7 @@ const HistTable = ({ columns, data }) => {
     )
 
   return (
-    <TableContainer overflowY="auto" whiteSpace="pre-wrap" maxHeight="100vh">
+    <TableContainer overflowY="auto" whiteSpace="pre-wrap" height="100vh">
       <Table
         variant="striped"
         className="w-full max-w-screen-xl table-fixed"
