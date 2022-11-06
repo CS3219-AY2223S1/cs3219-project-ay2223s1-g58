@@ -1,15 +1,16 @@
 /* eslint-disable no-param-reassign */
 const { Server } = require("socket.io");
 const jwt = require("jsonwebtoken");
-const { EVENT_LISTEN } = require("../const/constants");
+const { EVENT_LISTEN, ALLOWED_ORIGINS } = require("../const/constants");
 
 let io;
 exports.initSocket = (httpServer, matchHandler, cancelHandler) => {
   io = new Server(httpServer, {
     cors: {
-      origin: "*",
+      origin: ALLOWED_ORIGINS,
       methods: ["GET", "POST"],
     },
+    credentials: true,
   });
   io.path("/socket.io/matching");
   io.use((socket, next) => {

@@ -1,14 +1,16 @@
 /* eslint-disable no-param-reassign */
 const { Server } = require("socket.io");
 const jwt = require("jsonwebtoken");
+const { ALLOWED_ORIGINS } = require("../const/constants");
 
 let io;
 exports.initSocket = (httpServer) => {
   io = new Server(httpServer, {
     cors: {
-      origin: "*",
+      origin: ALLOWED_ORIGINS,
       methods: ["GET", "POST"],
     },
+    credentials: true,
   });
   io.path("/socket.io/room");
   io.use((socket, next) => {

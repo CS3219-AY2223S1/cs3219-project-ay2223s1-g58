@@ -43,6 +43,9 @@ services:
       - POSTGRES_HOST=postgres_db
       - POSTGRES_PORT=5432
       - ENV=production
+      - QUESTION_SERVICE_HOST=question-service
+      - HISTORY_SERVICE_HOST=history-service
+      - ROOM_SERVICE_HOST=room-service
 
   room-service:
     build:
@@ -63,6 +66,7 @@ services:
       - POSTGRES_HOST=postgres_db
       - POSTGRES_PORT=5432
       - ENV=production
+      - QUESTION_SERVICE_HOST=question-service
 
   peerjs-server:
     image: peerjs/peerjs-server

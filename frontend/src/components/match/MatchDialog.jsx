@@ -46,6 +46,8 @@ const MatchDialog = ({ isDisabled }) => {
       auth: {
         token: auth.accessToken,
       },
+      transports: ['websocket'],
+      withCredentials: true,
     })
     setSocket(newSocket)
     newSocket.on(EVENT_LISTEN.MATCHING, () => console.log('matching'))

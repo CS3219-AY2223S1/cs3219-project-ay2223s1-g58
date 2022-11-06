@@ -61,6 +61,8 @@ const Room = () => {
       auth: {
         token: auth.accessToken,
       },
+      transports: ['websocket'],
+      withCredentials: true,
     })
     newSocket.on(`${roomId}-${EVENT_LISTEN.ROOM_END}`, () => {
       toast({
@@ -140,7 +142,7 @@ const Room = () => {
       {getHelmet()}
 
       {!isValid || !questionId ? (
-        <main className="flex h-full flex-col items-center justify-start">
+        <main className="flex flex-col items-center justify-start h-full">
           <h1>
             {isValid ? (
               'Retrieving room...'
