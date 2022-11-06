@@ -61,6 +61,7 @@ const Room = () => {
       auth: {
         token: auth.accessToken,
       },
+      transports: ['websocket'],
       withCredentials: true,
     })
     newSocket.on(`${roomId}-${EVENT_LISTEN.ROOM_END}`, () => {

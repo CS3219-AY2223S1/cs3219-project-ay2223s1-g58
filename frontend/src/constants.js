@@ -53,7 +53,7 @@ export const URL_HISTORY_ROOM =
 
 export const PEERJS_HOST =
   process.env.REACT_APP_ENV === 'production' ? 'leetwithfriend.com' : 'localhost'
-export const PEERJS_PORT = process.env.REACT_APP_ENV === 'production' || process.env.NODE_ENV === 'development' ? 9000 : 80
+export const PEERJS_PORT = process.env.REACT_APP_ENV === 'production' ? 443 : process.env.NODE_ENV === 'development' ? 9000 : 80
 export const PEERJS_PATH = '/myapp'
 
 export const EVENT_LISTEN = {

@@ -46,6 +46,7 @@ const MatchDialog = ({ isDisabled }) => {
       auth: {
         token: auth.accessToken,
       },
+      transports: ['websocket'],
       withCredentials: true,
     })
     setSocket(newSocket)
