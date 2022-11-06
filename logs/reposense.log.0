@@ -1,40 +1,40 @@
-Nov 06, 2022 8:11:52 AM reposense.parser.CsvParser validateHeader
+Nov 06, 2022 8:51:30 AM reposense.parser.CsvParser validateHeader
 INFO: Parsed header of CSV file, repo-config.csv, and recognized columns: Ignore Standalone Config,  Repository's Location,  Skip Ignored File Analysis,  Branch,  File formats,  Ignore Glob List,  Ignore Authors List,  Ignore Commits List
-Nov 06, 2022 8:11:53 AM reposense.parser.CsvParser validateHeader
+Nov 06, 2022 8:51:30 AM reposense.parser.CsvParser validateHeader
 INFO: Parsed header of CSV file, author-config.csv, and recognized columns: Author's Emails,  Repository's Location,  Author's GitHub ID,  Branch,  Author's Display Name,  Ignore Glob List,  Author's Git Author Name
-Nov 06, 2022 8:11:53 AM reposense.model.AuthorConfiguration checkDuplicateAliases
+Nov 06, 2022 8:51:30 AM reposense.model.AuthorConfiguration checkDuplicateAliases
 WARNING: Duplicate alias tlylt found. The alias will belong to the last author - tlylt
-Nov 06, 2022 8:11:53 AM reposense.model.AuthorConfiguration checkDuplicateAliases
+Nov 06, 2022 8:51:30 AM reposense.model.AuthorConfiguration checkDuplicateAliases
 WARNING: Duplicate alias tlylt found. The alias will belong to the last author - tlylt
-Nov 06, 2022 8:11:53 AM reposense.report.RepoCloner spawnCloneProcess
+Nov 06, 2022 8:51:30 AM reposense.report.RepoCloner spawnCloneProcess
 INFO: Cloning in parallel from https://github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g58.git...
-Nov 06, 2022 8:11:53 AM reposense.report.RepoCloner waitForCloneProcess
+Nov 06, 2022 8:51:30 AM reposense.report.RepoCloner waitForCloneProcess
 INFO: Waiting for cloning of https://github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g58.git to complete...
-Nov 06, 2022 8:11:54 AM reposense.report.RepoCloner waitForCloneProcess
+Nov 06, 2022 8:51:31 AM reposense.report.RepoCloner waitForCloneProcess
 INFO: Cloning of https://github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g58.git completed!
-Nov 06, 2022 8:11:54 AM reposense.report.ReportGenerator analyzeRepos
+Nov 06, 2022 8:51:31 AM reposense.report.ReportGenerator analyzeRepos
 INFO: [1/1] Analyzing https://github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g58.git (main)...
-Nov 06, 2022 8:11:54 AM reposense.report.ReportGenerator updateRepoConfig
+Nov 06, 2022 8:51:31 AM reposense.report.ReportGenerator updateRepoConfig
 INFO: https://github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g58.git (main) does not contain a standalone config file.
-Nov 06, 2022 8:11:54 AM reposense.authorship.FileInfoExtractor extractTextFileInfos
+Nov 06, 2022 8:51:31 AM reposense.authorship.FileInfoExtractor extractTextFileInfos
 INFO: Extracting relevant file info from https://github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g58.git (main)...
-Nov 06, 2022 8:11:54 AM reposense.authorship.FileInfoExtractor generateFileInfo
+Nov 06, 2022 8:51:31 AM reposense.authorship.FileInfoExtractor generateFileInfo
 WARNING: File "matching-service/package-lock.json" has 517408B size. The file size limit is set at 500000B. Skipping analysis of this file...
-Nov 06, 2022 8:11:55 AM reposense.authorship.FileInfoExtractor generateFileInfo
+Nov 06, 2022 8:51:31 AM reposense.authorship.FileInfoExtractor generateFileInfo
 WARNING: File "room-service/package-lock.json" has 512687B size. The file size limit is set at 500000B. Skipping analysis of this file...
-Nov 06, 2022 8:11:55 AM reposense.authorship.FileInfoExtractor generateFileInfo
+Nov 06, 2022 8:51:31 AM reposense.authorship.FileInfoExtractor generateFileInfo
 WARNING: File "question-service/seeders/category.json" has 549717B size. The file size limit is set at 500000B. Skipping analysis of this file...
-Nov 06, 2022 8:11:55 AM reposense.authorship.FileInfoExtractor generateFileInfo
+Nov 06, 2022 8:51:31 AM reposense.authorship.FileInfoExtractor generateFileInfo
 WARNING: File "frontend/package-lock.json" has 1486662B size. The file size limit is set at 500000B. Skipping analysis of this file...
-Nov 06, 2022 8:11:55 AM reposense.authorship.FileInfoExtractor generateFileInfo
+Nov 06, 2022 8:51:31 AM reposense.authorship.FileInfoExtractor generateFileInfo
 WARNING: File "question-service/seeders/question.json" has 2895015B size. The file size limit is set at 500000B. Skipping analysis of this file...
-Nov 06, 2022 8:11:58 AM reposense.commits.CommitInfoExtractor extractCommitInfos
+Nov 06, 2022 8:51:34 AM reposense.commits.CommitInfoExtractor extractCommitInfos
 INFO: Extracting commits info for https://github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g58.git (main)...
-Nov 06, 2022 8:11:58 AM reposense.commits.CommitInfoAnalyzer analyzeCommits
+Nov 06, 2022 8:51:35 AM reposense.commits.CommitInfoAnalyzer analyzeCommits
 INFO: Analyzing commits info for https://github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g58.git (main)...
-Nov 06, 2022 8:11:59 AM reposense.report.ReportGenerator analyzeRepo
+Nov 06, 2022 8:51:35 AM reposense.report.ReportGenerator analyzeRepo
 INFO: Analysis of https://github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g58.git (main) completed!
-Nov 06, 2022 8:11:59 AM reposense.report.ReportGenerator generateReposReport
+Nov 06, 2022 8:51:35 AM reposense.report.ReportGenerator generateReposReport
 INFO: The report is generated at /home/runner/work/cs3219-project-ay2223s1-g58/cs3219-project-ay2223s1-g58/reposense-report
-Nov 06, 2022 8:11:59 AM reposense.RepoSense main
-INFO: Elapsed processing time: 6.77 second(s)
+Nov 06, 2022 8:51:35 AM reposense.RepoSense main
+INFO: Elapsed processing time: 4.64 second(s)
