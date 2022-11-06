@@ -1,5 +1,5 @@
 import {
-  Badge,
+  Tag,
   HStack,
 } from '@chakra-ui/react'
 
@@ -10,16 +10,15 @@ const TypesStack = (types) => {
   }
   types.forEach((type, index) => {
     badgeList.push(
-      <Badge
-        fontWeight="bold"
-        color="gray.600"
-        borderRadius="1"
+      <Tag
+        fontWeight="semibold"
         px="2"
-        colorScheme="blue"
+        variant='outline' 
+        colorScheme='blue'
         key={index}
       >
-        {type}
-      </Badge>
+        {type[0] + type.slice(1).toLowerCase()}
+      </Tag>
     )
   })
 
