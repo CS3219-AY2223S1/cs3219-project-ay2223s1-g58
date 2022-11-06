@@ -6,26 +6,6 @@ LeetWithFriend at https://leetwithfriend.com/
 
 ## Development Guide
 
-### To make adjustments to only the frontend application:
-
-Start other services at root
-
-```bash
-docker-compose -f docker-compose.frontend.yml up --build -d
-```
-
-Run `npm run start` in the `frontend` directory.
-
-Visit the frontend at http://localhost:3000
-
-To stop the services
-
-```bash
-docker-compose -f docker-compose.frontend.yml stop
-```
-
----
-
 ### Spin up all the services for local manual testing
 
 ```bash
@@ -47,6 +27,26 @@ Available seeded users for testing:
 | qwe      | qwe      |
 | asd      | asd      |
 | zxc      | zxc      |
+
+---
+
+### To make adjustments to only the frontend application:
+
+Start other services at root
+
+```bash
+docker-compose -f docker-compose.frontend.yml up --build -d
+```
+
+Run `npm run start` in the `frontend` directory.
+
+Visit the frontend at http://localhost:3000
+
+To stop the services
+
+```bash
+docker-compose -f docker-compose.frontend.yml stop
+```
 
 ## User Service
 1. Rename `.env.sample` file to `.env`.
