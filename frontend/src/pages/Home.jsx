@@ -14,8 +14,13 @@ const Home = () => {
           name="description"
           content="An interview preparation platform and peer matching system, where students can find peers to practice whiteboard-style interview questions together."
         />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap"
+          rel="stylesheet"
+        />
       </Helmet>
-      <main className="flex flex-col items-center justify-center h-full">
+
+      <main className="flex h-full flex-col items-center justify-center">
         <SecondaryFeatures username={auth.username} />
       </main>
     </div>

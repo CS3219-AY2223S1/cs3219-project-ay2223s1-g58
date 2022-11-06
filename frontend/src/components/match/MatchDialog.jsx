@@ -126,6 +126,7 @@ const MatchDialog = ({ isDisabled }) => {
         disabled={isDisabled}
         variant="outline"
         rightIcon={<ArrowForwardIcon />}
+        id="MatchDialog"
       >
         Find Match
       </Button>
