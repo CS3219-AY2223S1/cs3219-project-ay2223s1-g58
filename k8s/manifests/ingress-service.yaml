@@ -74,6 +74,13 @@ spec:
                 name: history-cluster-ip-service
                 port:
                   number: 8080
+          - path: /myapp/peerjs?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: peerjs-cluster-ip-service
+                port:
+                  number: 9000
     - host: 'www.leetwithfriend.com' # https
       http:
         paths:
@@ -133,3 +140,10 @@ spec:
                 name: history-cluster-ip-service
                 port:
                   number: 8080
+          - path: /myapp/peerjs?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: peerjs-cluster-ip-service
+                port:
+                  number: 9000

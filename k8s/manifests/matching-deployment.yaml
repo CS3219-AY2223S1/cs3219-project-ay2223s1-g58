@@ -19,8 +19,6 @@ spec:
             - name: http
               containerPort: 8001
           env:
-            - name: PORT
-              value: '80'
             - name: ENV
               value: production
             - name: URI_QUESTION_SERVICE
