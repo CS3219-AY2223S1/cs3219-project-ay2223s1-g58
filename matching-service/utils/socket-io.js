@@ -31,6 +31,7 @@ exports.initSocket = (httpServer, matchHandler, cancelHandler) => {
   io.on("connection", (socket) => {
     socket.on(EVENT_LISTEN.MATCH_FIND, matchHandler);
     socket.on(EVENT_LISTEN.MATCH_CANCEL, cancelHandler);
+    socket.on(EVENT_LISTEN.DISCONNECT, cancelHandler);
   });
 };
 

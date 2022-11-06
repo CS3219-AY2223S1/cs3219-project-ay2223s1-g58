@@ -35,12 +35,7 @@ exports.findMatch = async function (payload) {
     );
 
     // no other user with same requirements ready for match, or other user is not active
-    if (!match || !isSocketActive(match.socketId)) {
-      // matched but socket inactive
-      if (match) {
-        console.log("Inactive user found");
-        MatchService.deleteMatch(match.socketId);
-      }
+    if (!match) {
       await MatchService.createMatch(
         socket.id,
         value.difficulty,
