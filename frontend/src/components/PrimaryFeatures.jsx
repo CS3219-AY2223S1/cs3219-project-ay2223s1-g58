@@ -179,7 +179,7 @@ function FirstScreen({ custom, animated = false }) {
             ].map((field) => (
               <div key={field.label}>
                 <div className="text-sm text-gray-500">{field.label}</div>
-                <div className="mt-2 border-b border-gray-200 pb-2 text-sm text-gray-900">
+                <div className="pb-2 mt-2 text-sm text-gray-900 border-b border-gray-200">
                   {field.value}
                 </div>
               </div>
@@ -190,7 +190,7 @@ function FirstScreen({ custom, animated = false }) {
               if (document.getElementById('MatchDialog'))
                 document.getElementById('MatchDialog').click()
             }}
-            className="mt-6 cursor-pointer rounded-lg bg-cyan-500 px-3 py-2 text-center text-sm font-semibold text-white"
+            className="px-3 py-2 mt-6 text-sm font-semibold text-center text-white rounded-lg cursor-pointer bg-cyan-500"
           >
             Match
           </div>
@@ -215,16 +215,16 @@ function SecondScreen({ custom, animated = false }) {
             <Image
               src={collaboration}
               alt=""
-              className="pointer-events-none inset-0 mt-10 w-full "
-              unoptimized
+              className="inset-0 w-full mt-10 pointer-events-none "
+              unoptimized="true"
             />
           </div>
           <div className="flex items-center gap-4 px-4 py-3">
             <Image
               src={video}
               alt=""
-              className="pointer-events-none inset-0 w-full "
-              unoptimized
+              className="inset-0 w-full pointer-events-none "
+              unoptimized="true"
             />
           </div>
         </div>
@@ -255,7 +255,7 @@ function ThirdScreen({ custom, animated = false }) {
             ].map((item) => (
               <div
                 key={item.label}
-                className="flex justify-between border-b border-gray-100 pb-4"
+                className="flex justify-between pb-4 border-b border-gray-100"
               >
                 <div className="text-sm text-gray-500">{item.label}</div>
                 <div className="text-sm font-semibold text-gray-900">
@@ -264,7 +264,7 @@ function ThirdScreen({ custom, animated = false }) {
               </div>
             ))}
             <Link to="/history">
-              <div className="rounded-lg bg-cyan-500 px-3 py-2 text-center text-sm font-semibold text-white">
+              <div className="px-3 py-2 text-sm font-semibold text-center text-white rounded-lg bg-cyan-500">
                 Go to History
               </div>
             </Link>
@@ -303,7 +303,7 @@ function FeaturesDesktop() {
   return (
     <Tab.Group
       as="div"
-      className="grid grid-cols-12 items-center gap-8 lg:gap-16 xl:gap-24"
+      className="grid items-center grid-cols-12 gap-8 lg:gap-16 xl:gap-24"
       selectedIndex={selectedIndex}
       onChange={onChange}
       vertical
@@ -312,17 +312,17 @@ function FeaturesDesktop() {
         {features.map((feature, featureIndex) => (
           <div
             key={feature.name}
-            className="relative rounded-2xl border-2 transition-colors hover:border-gray-500"
+            className="relative transition-colors border-2 rounded-2xl hover:border-gray-500"
           >
             {featureIndex === selectedIndex && (
               <motion.div
                 layoutId="activeBackground"
-                className="absolute inset-0 border-2 bg-gray-800"
+                className="absolute inset-0 bg-gray-800 border-2"
                 initial={{ borderRadius: 16 }}
               />
             )}
             <div className="relative z-10 p-8">
-              <feature.icon className="h-8 w-8" />
+              <feature.icon className="w-8 h-8" />
               <h3 className="mt-6 text-lg font-semibold text-sky-600">
                 <Tab className="text-left [&:not(:focus-visible)]:focus:outline-none">
                   <span className="absolute inset-0 rounded-2xl" />
@@ -337,7 +337,7 @@ function FeaturesDesktop() {
         ))}
       </Tab.List>
       <div className="relative col-span-6">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
           <CircleBackground color="#13B5C8" className="animate-spin-slower" />
         </div>
         <PhoneFrame className="z-10 mx-auto w-full max-w-[366px]">
@@ -410,10 +410,10 @@ function FeaturesMobile() {
           <div
             key={featureIndex}
             ref={(ref) => (slideRefs.current[featureIndex] = ref)}
-            className="w-full flex-none snap-center px-4 sm:px-6"
+            className="flex-none w-full px-4 snap-center sm:px-6"
           >
-            <div className="relative transform overflow-hidden rounded-2xl bg-gray-800 px-5 py-6">
-              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+            <div className="relative px-5 py-6 overflow-hidden transform bg-gray-800 rounded-2xl">
+              <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2">
                 <CircleBackground
                   color="#13B5C8"
                   className={featureIndex % 2 === 1 ? 'rotate-180' : undefined}
@@ -422,8 +422,8 @@ function FeaturesMobile() {
               <PhoneFrame className="relative mx-auto w-full max-w-[366px]">
                 <feature.screen />
               </PhoneFrame>
-              <div className="absolute inset-x-0 bottom-0 bg-gray-800/95 p-6 backdrop-blur sm:p-10">
-                <feature.icon className="h-8 w-8" />
+              <div className="absolute inset-x-0 bottom-0 p-6 bg-gray-800/95 backdrop-blur sm:p-10">
+                <feature.icon className="w-8 h-8" />
                 <h3 className="mt-6 text-sm font-semibold text-white sm:text-lg">
                   {feature.name}
                 </h3>
@@ -435,7 +435,7 @@ function FeaturesMobile() {
           </div>
         ))}
       </div>
-      <div className="mt-6 flex justify-center gap-3">
+      <div className="flex justify-center gap-3 mt-6">
         {features.map((_, featureIndex) => (
           <button
             type="button"

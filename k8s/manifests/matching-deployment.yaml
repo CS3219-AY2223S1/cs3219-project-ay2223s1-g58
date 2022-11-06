@@ -19,8 +19,6 @@ spec:
             - name: http
               containerPort: 8001
           env:
-            - name: PORT
-              value: '80'
             - name: ENV
               value: production
             - name: URI_QUESTION_SERVICE
@@ -34,6 +32,17 @@ spec:
                 secretKeyRef:
                   name: access-token-secret
                   key: ACCESS_TOKEN_SECRET
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_HOST
+              value: postgres-cluster-ip-service
+            - name: POSTGRES_PORT
+              value: '5432'
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-password
+                  key: POSTGRES_PASSWORD
           resources:
             requests:
               cpu: 5m

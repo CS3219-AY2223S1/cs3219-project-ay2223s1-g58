@@ -17,12 +17,7 @@ function PlaceholderFrame(props) {
   )
 }
 
-export function PhoneFrame({
-  className,
-  children,
-  priority = false,
-  ...props
-}) {
+export function PhoneFrame({ className, children, priority, ...props }) {
   return (
     <div className={clsx('relative aspect-[366/729]', className)} {...props}>
       <div className="absolute inset-y-[calc(1/729*100%)] right-[calc(5/729*100%)] left-[calc(7/729*100%)] rounded-[calc(58/366*100%)/calc(58/729*100%)] shadow-2xl" />
@@ -34,8 +29,8 @@ export function PhoneFrame({
         src={frame}
         alt=""
         className="absolute inset-0 w-full h-full pointer-events-none"
-        unoptimized
-        priority={priority}
+        unoptimized="true"
+        priority="false"
       />
     </div>
   )

@@ -1,19 +1,19 @@
-version: "3.3"
+version: '3.3'
 
 services:
   mongo:
     image: mongo
     ports:
-      - "27017:27017"
+      - '27017:27017'
   redis:
     image: redis:alpine
     ports:
-      - "6379:6379"
+      - '6379:6379'
   user-service:
     build:
       context: ./user-service
     ports:
-      - "8000:8000"
+      - '8000:8000'
     links:
       - mongo
       - redis
@@ -22,21 +22,18 @@ services:
       - redis
     env_file:
       - .env.local
-    environment:
-      - PORT=3000
 
   matching-service:
     build:
       context: ./matching-service
     ports:
-      - "8001:8001"
+      - '8001:8001'
     depends_on:
       postgres_db:
         condition: service_healthy
     links:
       - postgres_db
     environment:
-      - PORT=3000
       - URI_ROOM_SERVICE=http://room-service:8022
       - URI_HISTORY_SERVICE=http://history-service:8080
       - ACCESS_TOKEN_SECRET=7c0dd92cafc2537595f48eca543a45e38e25b0322c558b8cb44907db49726b54a0809709c4491cbc086187009367ac4febfb8d5db310320c16d510818d833ad9
@@ -51,14 +48,13 @@ services:
     build:
       context: ./room-service
     ports:
-      - "8022:8022"
+      - '8022:8022'
     depends_on:
       postgres_db:
         condition: service_healthy
     links:
       - postgres_db
     environment:
-      - PORT=3000
       - URI_QUESTION_SERVICE=http://question-service:8500
       - ACCESS_TOKEN_SECRET=7c0dd92cafc2537595f48eca543a45e38e25b0322c558b8cb44907db49726b54a0809709c4491cbc086187009367ac4febfb8d5db310320c16d510818d833ad9
       - POSTGRES_PASSWORD=postgres
@@ -71,13 +67,13 @@ services:
   peerjs-server:
     image: peerjs/peerjs-server
     ports:
-      - "9000:9000"
+      - '9000:9000'
 
   postgres_db:
     image: postgres:latest
     restart: always
     ports:
-      - "5432:5432"
+      - '5432:5432'
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres_db
@@ -85,7 +81,7 @@ services:
       POSTGRES_HOST: postgres_db
       POSTGRES_PORT: 5432
     healthcheck:
-      test: ["CMD", "pg_isready", "-q", "-d", "postgres_db", "-U", "postgres"]
+      test: ['CMD', 'pg_isready', '-q', '-d', 'postgres_db', '-U', 'postgres']
       interval: 5s
       timeout: 5s
       retries: 5
@@ -94,12 +90,10 @@ services:
     build:
       context: ./question-service
     ports:
-      - "8500:8500"
+      - '8500:8500'
     depends_on:
       postgres_db:
         condition: service_healthy
-    environment:
-      - PORT=3000
     env_file:
       - .env.local
     links:
@@ -110,7 +104,7 @@ services:
     build:
       context: ./history-service
     ports:
-      - "8080:8080"
+      - '8080:8080'
     links:
       - mongo
     depends_on:
@@ -118,5 +112,4 @@ services:
     env_file:
       - .env.local
     environment:
-      - PORT=3000
       - URI_QUESTION_SERVICE=http://question-service:8500
