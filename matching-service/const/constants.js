@@ -9,6 +9,7 @@ exports.EVENT_EMIT = {
 exports.EVENT_LISTEN = {
   MATCH_FIND: "matchFind",
   MATCH_CANCEL: "matchCancel",
+  DISCONNECT: "disconnect",
 };
 
 exports.DIFFICULTY = {
