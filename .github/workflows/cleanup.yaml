@@ -1,0 +1,39 @@
+name: Production Cleanup
+on:
+  workflow_dispatch: # manual trigger
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set Service Key
+        uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: '${{ secrets.GKE_SA_KEY }}'
+
+      - name: Set Project
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: cs3219-365909 # from google cloud console
+
+      - name: Auth
+        run: |-
+          gcloud --quiet auth configure-docker
+
+      - name: Get Credentials
+        uses: google-github-actions/get-gke-credentials@v0
+        with:
+          cluster_name: cs3219-cluster
+          location: asia-southeast1-a
+
+      - name: Delete existing K8s Config
+        run: |-
+          kubectl apply -f k8s/manifests
+          kubectl delete -f k8s/manifests/room-deployment.yaml
+          kubectl delete -f k8s/manifests/history-deployment.yaml
+          kubectl delete -f k8s/manifests/matching-deployment.yaml
+          kubectl delete -f k8s/manifests/question-deployment.yaml
+
+          kubectl delete -f k8s/manifests/postgres-deployment.yaml
+          kubectl delete -f k8s/manifests/postgres-persistent-volume-claim.yaml
