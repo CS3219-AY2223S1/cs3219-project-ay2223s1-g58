@@ -19,6 +19,7 @@ import axios from '../api/axios'
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Button } from '../components/Button'
+import { Helmet } from 'react-helmet-async'
 
 const difficultyColorMap = new Map([
   ['easy', 'green'],
@@ -48,7 +49,7 @@ const supTheme = {
 
 const newTheme = {
   img: ({ node, children, ...props }) => {
-    return <Image m={4} sizes='md' src={node.properties.src}></Image>
+    return <Image m={4} sizes="md" src={node.properties.src}></Image>
   },
   code: ({ node, inline, children, ...props }) => {
     return !inline ? (
@@ -160,7 +161,7 @@ const QuestionPage = () => {
   ) {
     return (
       <AuthLayout title="Retrieving question...">
-        <div className="text-center text-xl"></div>
+        <div className="text-xl text-center"></div>
       </AuthLayout>
     )
   }
@@ -168,46 +169,60 @@ const QuestionPage = () => {
   const difficultyColor = (difficulty) => difficultyColorMap.get(difficulty)
   return (
     <>
-    <Center>
-      <Box className="rounded-lg border" maxWidth='900px' maxHeight='700px' overflow='auto' m={5}>
-        <VStack h="100vh" divider={<StackDivider borderColor="gray.200" />}>
-          <Heading size="lg" fontWeight="semibold" color="gray 500">
-            {questionData.name}
-          </Heading>
-          <HStack spacing={180}>
-            <Button
-              onClick={previousQuestion}
-              variant="outline"
-              className=" dark:text-gray-300"
-            >
-              Previous
-            </Button>
-            <Badge
-              align="center"
-              textAlign="center"
-              borderRadius="full"
-              px="2"
-              colorScheme={difficultyColor(questionData.difficulty)}
-            >
-              {questionData.difficulty}
-            </Badge>
-            <Button
-              onClick={nextQuestion}
-              variant="outline"
-              className=" dark:text-gray-300"
-            >
-              Next
-            </Button>
-          </HStack>
-          <Box maxHeight='700px' m={4}>
-            <ReactMarkdown
-              components={ChakraUIRenderer(newTheme)}
-              children={parse(questionData.content)}
-              skipHtml
-            />
-          </Box>
-        </VStack>
-      </Box>
+      <Helmet>
+        <title>{questionData.name} | LeetWithFriend</title>
+        <meta charSet="utf-8" />
+        <meta
+          name="description"
+          content="An interview preparation platform and peer matching system, where students can find peers to practice whiteboard-style interview questions together."
+        />
+      </Helmet>
+      <Center>
+        <Box
+          className="border rounded-lg"
+          maxWidth="900px"
+          maxHeight="700px"
+          overflow="auto"
+          m={5}
+        >
+          <VStack h="100vh" divider={<StackDivider borderColor="gray.200" />}>
+            <Heading size="lg" fontWeight="semibold" color="gray 500">
+              {questionData.name}
+            </Heading>
+            <HStack spacing={180}>
+              <Button
+                onClick={previousQuestion}
+                variant="outline"
+                className=" dark:text-gray-300"
+              >
+                Previous
+              </Button>
+              <Badge
+                align="center"
+                textAlign="center"
+                borderRadius="full"
+                px="2"
+                colorScheme={difficultyColor(questionData.difficulty)}
+              >
+                {questionData.difficulty}
+              </Badge>
+              <Button
+                onClick={nextQuestion}
+                variant="outline"
+                className=" dark:text-gray-300"
+              >
+                Next
+              </Button>
+            </HStack>
+            <Box maxHeight="700px" m={4}>
+              <ReactMarkdown
+                components={ChakraUIRenderer(newTheme)}
+                children={parse(questionData.content)}
+                skipHtml
+              />
+            </Box>
+          </VStack>
+        </Box>
       </Center>
     </>
   )
