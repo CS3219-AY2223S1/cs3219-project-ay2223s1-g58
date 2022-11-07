@@ -39,6 +39,7 @@
     "supertest": "^6.3.1"
   },
   "dependencies": {
+    "@socket.io/redis-adapter": "^7.2.0",
     "axios": "^0.27.2",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
@@ -48,6 +49,7 @@
     "jsonwebtoken": "^8.5.1",
     "node-schedule": "^2.1.0",
     "pg": "^8.8.0",
+    "redis": "^4.4.0",
     "sequelize": "^6.21.4",
     "socket.io": "^4.5.1",
     "sqlite3": "^5.0.11",

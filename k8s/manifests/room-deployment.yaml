@@ -21,6 +21,8 @@ spec:
           env:
             - name: ENV
               value: production
+            - name: REDIS_HOST
+              value: redis-cluster-ip-service
             - name: URI_QUESTION_SERVICE
               value: http://question-cluster-ip-service:8500
             - name: ACCESS_TOKEN_SECRET
@@ -41,5 +43,6 @@ spec:
                   key: POSTGRES_PASSWORD
           resources:
             requests:
-              cpu: 25m
+              cpu: 8m
+              # cpu: 25m
               memory: 200Mi
