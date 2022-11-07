@@ -14,11 +14,12 @@ import { URL_QUESTION_SERVICE } from '../../constants'
 
 const MatchForm = ({ onClose, onSubmit, onChange }) => {
   const [data, setData] = useState()
+  const [difficulty, setDifficulty] = useState()
   useEffect(() => {
     const fetchData = async () => {
       try {
         const { data: response } = await axios.get(
-          URL_QUESTION_SERVICE + '/allTypes'
+          URL_QUESTION_SERVICE + '/types?difficulty=' + difficulty
         )
         const optionList = response.types.map((types) => (
           <option key={types} value={types}>
@@ -30,7 +31,7 @@ const MatchForm = ({ onClose, onSubmit, onChange }) => {
         console.error(error)
       }
     }
-    if (!data || data.length === 0) {
+    if (difficulty) {
       fetchData()
     }
   })
@@ -43,7 +44,10 @@ const MatchForm = ({ onClose, onSubmit, onChange }) => {
       <ModalBody>
         <FormControl isRequired>
           <FormLabel>Question difficulty</FormLabel>
-          <Select placeholder="Select a difficulty" onChange={onChange}>
+          <Select placeholder="Select a difficulty" onChange={(e) => {
+            onChange(e)
+            setDifficulty(e.target.value)
+          }}>
             <option value="easy">Easy</option>
             <option value="medium">Medium</option>
             <option value="hard">Hard</option>

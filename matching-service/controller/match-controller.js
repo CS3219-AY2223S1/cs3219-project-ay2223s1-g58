@@ -1,11 +1,5 @@
-const axios = require("axios").default;
 const MatchService = require("../service/match-service");
-const { isSocketActive } = require("../utils/socket-io");
-const {
-  EVENT_EMIT,
-  STATUS_CODE_BAD_REQUEST,
-  URL_QUESTION_SERVICE,
-} = require("../const/constants");
+const { EVENT_EMIT, STATUS_CODE_BAD_REQUEST } = require("../const/constants");
 const { matchDto } = require("../dto/match-dto");
 
 exports.findMatch = async function (payload) {
@@ -15,18 +9,6 @@ exports.findMatch = async function (payload) {
     if (error) {
       throw error;
     }
-
-    await axios
-      .get(URL_QUESTION_SERVICE, {
-        params: { difficulty: value.difficulty, types: value.types },
-      })
-      .catch((e) => {
-        if (e.response.status === STATUS_CODE_BAD_REQUEST) {
-          socket.emit(EVENT_EMIT.MATCH_UNAVAILABLE, {
-            status: EVENT_EMIT.MATCH_UNAVAILABLE,
-          });
-        }
-      });
 
     const match = await MatchService.findByDifficulty(
       value.difficulty,
