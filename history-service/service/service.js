@@ -21,18 +21,18 @@ const HistoryService = {
     return questions
   },
   /** Creates a new room for History purposes. To be called when the room is created by Matching service. */
-  createRoomHistory: async function (roomId, u1, u2) {
+  createRoomHistory: function (roomId, u1, u2) {
     return HistoryRepository.create(roomId, u1, u2)
   },
   /** Adds a completed question to this room. Also records the final answer when the question was completed. */
-  updateRoomHistory: async function (roomId, questionId, answer) {
+  updateRoomHistory: function (roomId, questionId, answer) {
     if (!answer) {
       answer = ''
     }
     return HistoryRepository.add(roomId, questionId, answer)
   },
   /** Deletes the entire history of room. For used in tests only. */
-  deleteRoomHistory: async function (roomId) {
+  deleteRoomHistory: function (roomId) {
     return HistoryRepository.delete(roomId)
   }
 }

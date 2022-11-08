@@ -1,6 +1,5 @@
 import mongoose from 'mongoose'
 import HistoryModel from '../model/history.js'
-import { MongoServerError } from 'mongodb'
 import 'dotenv/config'
 
 const uri = process.env.ENV == "production"
@@ -19,13 +18,13 @@ const HistoryRepository = {
   },
   /** Creates a new room for History service. Returns an error if roomId already exists. */
   create: async function (roomId, u1, u2) {
+    if (await HistoryModel.exists({ roomId: roomId })) {
+      return { err: 'roomId already exists' }
+    }
     try {
       await HistoryModel.create({ roomId, u1, u2 })
     } catch (err) {
-      // Check for duplicate roomId
-      if (err instanceof MongoServerError && err.code === 11000) {
-        return { err: 'roomId already exists' }
-      }
+      return { err }
     }
   },
   /** Adds a completed question and its answer to the room history. Returns an error if roomId does not exist. */
