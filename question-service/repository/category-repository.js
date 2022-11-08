@@ -119,7 +119,9 @@ const CategoryRepository = {
         return db.Category.findOne({
             where: {
                 difficulty: difficulty,
-                types: types,
+                types: {
+                    [Op.overlap]: types,
+                },
                 questionId: {
                     [Op.notIn]: numberIds,
                 },
