@@ -16,6 +16,7 @@ import { AuthLayout } from '../components/AuthLayout'
 import TypesStack from '../components/TypesStack'
 import axios from '../api/axios'
 import { URL_QUESTION_SERVICE } from '../constants'
+import { Helmet } from 'react-helmet-async'
 
 const difficultyColorMap = new Map([
   ['easy', 'green.500'],
@@ -134,6 +135,14 @@ const QuestionBank = () => {
 
   return !loading ? (
     <>
+      <Helmet>
+        <title>Question Bank | LeetWithFriend</title>
+        <meta charSet="utf-8" />
+        <meta
+          name="description"
+          content="An interview preparation platform and peer matching system, where students can find peers to practice whiteboard-style interview questions together."
+        />
+      </Helmet>
       <Box overflowY="auto">
         <VStack>
           <InputGroup w="35%" alignItems="center">
@@ -153,6 +162,14 @@ const QuestionBank = () => {
     </>
   ) : (
     <AuthLayout title="Retrieving question...">
+      <Helmet>
+        <title>Question Bank | LeetWithFriend</title>
+        <meta charSet="utf-8" />
+        <meta
+          name="description"
+          content="An interview preparation platform and peer matching system, where students can find peers to practice whiteboard-style interview questions together."
+        />
+      </Helmet>
       <div className="text-xl text-center"></div>
     </AuthLayout>
   )
