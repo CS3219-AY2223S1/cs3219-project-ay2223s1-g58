@@ -19,6 +19,7 @@ import axios from '../api/axios'
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Button } from '../components/Button'
+import { Helmet } from 'react-helmet-async'
 
 const difficultyColorMap = new Map([
   ['easy', 'green'],
@@ -48,18 +49,18 @@ const supTheme = {
 
 const newTheme = {
   img: ({ node, children, ...props }) => {
-    return <Image m={4} sizes='md' src={node.properties.src}></Image>
+    return <Image m={4} sizes="md" src={node.properties.src}></Image>
   },
   code: ({ node, inline, children, ...props }) => {
     return !inline ? (
-      <Code overflow="auto" fontSize="md" w="100%" p={1} mt={1} mb={1}>
+      <Code overflow="auto" fontSize="md" w="100%"  >
         <ReactMarkdown
           components={ChakraUIRenderer(supTheme)}
           children={children[0]}
         />
       </Code>
     ) : (
-      <Code fontSize="md" mb={2} size="md">
+      <Code fontSize="md">
         <ReactMarkdown
           components={ChakraUIRenderer(supTheme)}
           children={children[0]}
@@ -160,7 +161,7 @@ const QuestionPage = () => {
   ) {
     return (
       <AuthLayout title="Retrieving question...">
-        <div className="text-center text-xl"></div>
+        <div className="text-xl text-center"></div>
       </AuthLayout>
     )
   }
@@ -168,8 +169,15 @@ const QuestionPage = () => {
   const difficultyColor = (difficulty) => difficultyColorMap.get(difficulty)
   return (
     <>
+    <Helmet>
+      <title>{questionData.name} | LeetWithFriend</title>
+      <meta charSet="utf-8" />
+      <meta
+        name="description"
+        content="An interview preparation platform and peer matching system, where students can find peers to practice whiteboard-style interview questions together."
+      />
+    </Helmet>
     <Center>
-      <Box className="rounded-lg border" maxWidth='900px' maxHeight='700px' overflow='auto' m={5}>
         <VStack h="100vh" divider={<StackDivider borderColor="gray.200" />}>
           <Heading size="lg" fontWeight="semibold" color="gray 500">
             {questionData.name}
@@ -199,7 +207,7 @@ const QuestionPage = () => {
               Next
             </Button>
           </HStack>
-          <Box maxHeight='700px' m={4}>
+          <Box maxHeight="750px" maxWidth="900px" overflow="auto" m={2}>
             <ReactMarkdown
               components={ChakraUIRenderer(newTheme)}
               children={parse(questionData.content)}
@@ -207,7 +215,6 @@ const QuestionPage = () => {
             />
           </Box>
         </VStack>
-      </Box>
       </Center>
     </>
   )
