@@ -52,14 +52,14 @@ const newTheme = {
   },
   code: ({ node, inline, children, ...props }) => {
     return !inline ? (
-      <Code overflow="auto" fontSize="md" w="100%" p={1} mt={1} mb={1}>
+      <Code overflow="auto" fontSize="md" w="100%"  >
         <ReactMarkdown
           components={ChakraUIRenderer(supTheme)}
           children={children[0]}
         />
       </Code>
     ) : (
-      <Code fontSize="md" mb={2} size="md">
+      <Code fontSize="md">
         <ReactMarkdown
           components={ChakraUIRenderer(supTheme)}
           children={children[0]}
@@ -169,7 +169,6 @@ const QuestionPage = () => {
   return (
     <>
     <Center>
-      <Box className="rounded-lg border" maxWidth='900px' maxHeight='700px' overflow='auto' m={5}>
         <VStack h="100vh" divider={<StackDivider borderColor="gray.200" />}>
           <Heading size="lg" fontWeight="semibold" color="gray 500">
             {questionData.name}
@@ -199,7 +198,7 @@ const QuestionPage = () => {
               Next
             </Button>
           </HStack>
-          <Box maxHeight='700px' m={4}>
+          <Box maxHeight='750px' maxWidth='900px' overflow='auto' m={2}>
             <ReactMarkdown
               components={ChakraUIRenderer(newTheme)}
               children={parse(questionData.content)}
@@ -207,7 +206,6 @@ const QuestionPage = () => {
             />
           </Box>
         </VStack>
-      </Box>
       </Center>
     </>
   )
