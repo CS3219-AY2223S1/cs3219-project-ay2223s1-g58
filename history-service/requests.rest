@@ -23,6 +23,7 @@ Content-Type: application/json
 }
 
 ### GET HISTORY OF USER qwe
+### (requires Question service!)
 ### expect: array of qwe's rooms
 GET http://localhost:8080/api/v1/history/user/qwe
 

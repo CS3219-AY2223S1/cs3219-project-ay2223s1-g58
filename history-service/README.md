@@ -1,20 +1,22 @@
 # History service
 For recording a user's matching history and the questions completed in each match.
+## Setting up
 
-## Usage and Local development
 1. Install Node 14 and above
-2. Rename file `.env.example` to `.env`. The default environment is `DEV`, but you can also change to `PROD`. Provide the mongoDB URI for the variable `DB_LOCAL_URI` or `DB_URI_PROD` accordingly.
-    * For example, `DB_LOCAL_URI=mongodb://localhost:27017/leetwithfriend` and make sure mongoDB is running on localhost port 27017
-    * Or, `DB_URI_PROD=<mongoDB Atlas cluster URI>`
-3. Install dependencies with `npm install`.
-4. Run with `npm run dev`.
+2. Install dependencies with `npm install`.
+3. Rename file `.env.example` to `.env`.
+4. **Important**: This guide only starts the History service. The endpoint to get user's history depends on the Question service as well, so you must make sure Question service is up and running (see Question service's [README](../question-service/README.md))
+5. Run `docker-compose up --build`
+6. The service is available on http://localhost:8080. API endpoints are documented at [requests.rest](./requests.rest).
 
-## Run with Docker
-- Via docker-compose: `docker-compose up --build`
-- Via docker
+## Local development
+For daily development on the local environment, 
+1. Follow steps 1 to 4 of [Setting up](#setting-up)
+2. In the `.env` file, change the environment to `production` and `DB_MONGO_URI` to `mongodb://localhost:27017/peerprep`
+    - If you want to provide a custom URI such as a mongoDB Atlas cluster, fill in `DB_MONGO_URI` accordingly.
+3. Start the database service with `docker-compose -f docker-compose.dev.yml up --build -d`
+4. Start the Express server with `npm run dev`
+5. To shut down the database, run `docker-compose -f docker-compose.dev.yml stop`
 
-Provide your mongoDB URI in the docker run command. This **must** be a cloud URI (e.g. Atlas cluster). Recommended to encase the URL within quotes like `'your_URI'` to avoid any parsing error in the shell.
-```bash
-docker build -t history-service .
-docker run -d -p 8080:8080 -e DB_LOCAL_URI={your_URI} history-service
-```
+## Run automated tests with Docker
+Run Mocha tests for the Express server with `docker-compose -f docker-compose.test.yml up --exit-code-from web --build`
