@@ -21,6 +21,8 @@ spec:
           env:
             - name: ENV
               value: production
+            - name: REDIS_HOST
+              value: redis-cluster-ip-service
             - name: URI_QUESTION_SERVICE
               value: http://question-cluster-ip-service:8500
             - name: URI_ROOM_SERVICE
