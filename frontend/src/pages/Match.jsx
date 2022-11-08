@@ -6,6 +6,7 @@ import { URL_ROOM_SERVICE, STATUS_CODE_SUCCESS } from '../constants'
 import { Button } from '@chakra-ui/react'
 import { PrimaryFeatures } from '../components/PrimaryFeatures'
 import { ArrowForwardIcon } from '@chakra-ui/icons'
+import { Link } from 'react-router-dom'
 
 const Match = () => {
   const [roomId, setRoomId] = useState()
@@ -43,14 +44,11 @@ const Match = () => {
                 <h2 className="text-3xl font-medium tracking-tight text-gray-600 dark:text-white">
                   Already in room!
                 </h2>
-                <Button
-                  as="a"
-                  href={`/room/${roomId}`}
-                  variant="outline"
-                  rightIcon={<ArrowForwardIcon />}
-                >
-                  Rejoin
-                </Button>
+                <Link to={`/room/${roomId}`}>
+                  <Button variant="outline" rightIcon={<ArrowForwardIcon />}>
+                    Rejoin
+                  </Button>
+                </Link>
               </div>
             }
           />

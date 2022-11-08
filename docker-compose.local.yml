@@ -44,6 +44,7 @@ services:
       - POSTGRES_HOST=postgres_db
       - POSTGRES_PORT=5432
       - ENV=production
+      - REDIS_HOST=redis
 
   room-service:
     build:
@@ -64,6 +65,7 @@ services:
       - POSTGRES_HOST=postgres_db
       - POSTGRES_PORT=5432
       - ENV=production
+      - REDIS_HOST=redis
 
   peerjs-server:
     image: peerjs/peerjs-server

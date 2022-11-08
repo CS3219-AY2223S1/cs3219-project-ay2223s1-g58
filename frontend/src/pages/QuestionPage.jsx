@@ -19,6 +19,7 @@ import axios from '../api/axios'
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Button } from '../components/Button'
+import { Helmet } from 'react-helmet-async'
 
 const difficultyColorMap = new Map([
   ['easy', 'green'],
@@ -48,7 +49,7 @@ const supTheme = {
 
 const newTheme = {
   img: ({ node, children, ...props }) => {
-    return <Image m={4} sizes='md' src={node.properties.src}></Image>
+    return <Image m={4} sizes="md" src={node.properties.src}></Image>
   },
   code: ({ node, inline, children, ...props }) => {
     return !inline ? (
@@ -160,7 +161,7 @@ const QuestionPage = () => {
   ) {
     return (
       <AuthLayout title="Retrieving question...">
-        <div className="text-center text-xl"></div>
+        <div className="text-xl text-center"></div>
       </AuthLayout>
     )
   }
@@ -168,6 +169,14 @@ const QuestionPage = () => {
   const difficultyColor = (difficulty) => difficultyColorMap.get(difficulty)
   return (
     <>
+    <Helmet>
+      <title>{questionData.name} | LeetWithFriend</title>
+      <meta charSet="utf-8" />
+      <meta
+        name="description"
+        content="An interview preparation platform and peer matching system, where students can find peers to practice whiteboard-style interview questions together."
+      />
+    </Helmet>
     <Center>
         <VStack h="100vh" divider={<StackDivider borderColor="gray.200" />}>
           <Heading size="lg" fontWeight="semibold" color="gray 500">

@@ -46,6 +46,7 @@ services:
       - QUESTION_SERVICE_HOST=question-service
       - HISTORY_SERVICE_HOST=history-service
       - ROOM_SERVICE_HOST=room-service
+      - REDIS_HOST=redis
 
   room-service:
     build:
@@ -67,6 +68,7 @@ services:
       - POSTGRES_PORT=5432
       - ENV=production
       - QUESTION_SERVICE_HOST=question-service
+      - REDIS_HOST=redis
 
   peerjs-server:
     image: peerjs/peerjs-server
