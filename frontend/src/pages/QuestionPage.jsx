@@ -198,7 +198,7 @@ const QuestionPage = () => {
               Next
             </Button>
           </HStack>
-          <Box maxHeight='750px' maxWidth='900px' overflow='auto' m={2}>
+          <Box maxHeight="750px" maxWidth="900px" overflow="auto" m={2}>
             <ReactMarkdown
               components={ChakraUIRenderer(newTheme)}
               children={parse(questionData.content)}
