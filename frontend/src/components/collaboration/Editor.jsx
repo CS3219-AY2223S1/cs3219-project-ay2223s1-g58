@@ -139,7 +139,7 @@ const Editor = ({ roomId, setEditorComponent }) => {
             {Object.keys(indents).map((indent, i) => {
               return (
                 <option key={i} value={indent}>
-                  {indent}
+                  Tab size: {indent}
                 </option>
               )
             })}
