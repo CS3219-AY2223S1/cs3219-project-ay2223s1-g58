@@ -37,5 +37,5 @@ spec:
                   key: REFRESH_TOKEN_SECRET
           resources:
             requests:
-              cpu: 10m
+              cpu: 20m
               memory: 100Mi

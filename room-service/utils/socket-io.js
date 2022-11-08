@@ -1,7 +1,16 @@
 /* eslint-disable no-param-reassign */
 const { Server } = require("socket.io");
 const jwt = require("jsonwebtoken");
+const { createClient } = require("redis");
+const { createAdapter } = require("@socket.io/redis-adapter");
 const { ALLOWED_ORIGINS } = require("../const/constants");
+require("dotenv").config();
+
+const pubClient = createClient({
+  url: `redis://${process.env.REDIS_HOST}:6379`,
+});
+
+const subClient = pubClient.duplicate();
 
 let io;
 exports.initSocket = (httpServer) => {
@@ -12,6 +21,14 @@ exports.initSocket = (httpServer) => {
     },
     credentials: true,
   });
+
+  // redis adapter
+  Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
+    io.adapter(createAdapter(pubClient, subClient));
+  });
+
+  console.log("Redis adapter connected...");
+
   io.path("/socket.io/room");
   io.use((socket, next) => {
     try {
