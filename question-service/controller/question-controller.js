@@ -107,7 +107,8 @@ async function getNextQuestion(req, res) {
                     difficulty,
                     past_id
                 )
-            if (typeof category === 'undefined') {
+
+            if (!category || typeof category === 'undefined') {
                 // if no more next question, just retrieve randomly
                 category = await CategoryRepository.findByTypesAndDifficulty(
                     difficulty,
@@ -121,6 +122,13 @@ async function getNextQuestion(req, res) {
                     difficulty,
                     past_id
                 )
+                if (!category || typeof category === 'undefined') {
+                    // if no more next question, just retrieve randomly
+                    category = await CategoryRepository.findByTypesAndDifficulty(
+                        difficulty,
+                        types
+                    )
+                }
             question = await QuestionRepository.findById(category.questionId)
         } else {
             return res.status(400).json({ message: `Unexpected format` })
@@ -133,6 +141,8 @@ async function getNextQuestion(req, res) {
             types: category.types,
         })
     } catch (err) {
+        
+        
         return res.status(500).json({
             message: 'Database failure when retrieving the question! ' + err,
         })

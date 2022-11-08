@@ -53,14 +53,14 @@ const newTheme = {
   },
   code: ({ node, inline, children, ...props }) => {
     return !inline ? (
-      <Code overflow="auto" fontSize="md" w="100%" p={1} mt={1} mb={1}>
+      <Code overflow="auto" fontSize="md" w="100%"  >
         <ReactMarkdown
           components={ChakraUIRenderer(supTheme)}
           children={children[0]}
         />
       </Code>
     ) : (
-      <Code fontSize="md" mb={2} size="md">
+      <Code fontSize="md">
         <ReactMarkdown
           components={ChakraUIRenderer(supTheme)}
           children={children[0]}
@@ -169,60 +169,52 @@ const QuestionPage = () => {
   const difficultyColor = (difficulty) => difficultyColorMap.get(difficulty)
   return (
     <>
-      <Helmet>
-        <title>{questionData.name} | LeetWithFriend</title>
-        <meta charSet="utf-8" />
-        <meta
-          name="description"
-          content="An interview preparation platform and peer matching system, where students can find peers to practice whiteboard-style interview questions together."
-        />
-      </Helmet>
-      <Center>
-        <Box
-          className="border rounded-lg"
-          maxWidth="900px"
-          maxHeight="700px"
-          overflow="auto"
-          m={5}
-        >
-          <VStack h="100vh" divider={<StackDivider borderColor="gray.200" />}>
-            <Heading size="lg" fontWeight="semibold" color="gray 500">
-              {questionData.name}
-            </Heading>
-            <HStack spacing={180}>
-              <Button
-                onClick={previousQuestion}
-                variant="outline"
-                className=" dark:text-gray-300"
-              >
-                Previous
-              </Button>
-              <Badge
-                align="center"
-                textAlign="center"
-                borderRadius="full"
-                px="2"
-                colorScheme={difficultyColor(questionData.difficulty)}
-              >
-                {questionData.difficulty}
-              </Badge>
-              <Button
-                onClick={nextQuestion}
-                variant="outline"
-                className=" dark:text-gray-300"
-              >
-                Next
-              </Button>
-            </HStack>
-            <Box maxHeight="700px" m={4}>
-              <ReactMarkdown
-                components={ChakraUIRenderer(newTheme)}
-                children={parse(questionData.content)}
-                skipHtml
-              />
-            </Box>
-          </VStack>
-        </Box>
+    <Helmet>
+      <title>{questionData.name} | LeetWithFriend</title>
+      <meta charSet="utf-8" />
+      <meta
+        name="description"
+        content="An interview preparation platform and peer matching system, where students can find peers to practice whiteboard-style interview questions together."
+      />
+    </Helmet>
+    <Center>
+        <VStack h="100vh" divider={<StackDivider borderColor="gray.200" />}>
+          <Heading size="lg" fontWeight="semibold" color="gray 500">
+            {questionData.name}
+          </Heading>
+          <HStack spacing={180}>
+            <Button
+              onClick={previousQuestion}
+              variant="outline"
+              className=" dark:text-gray-300"
+            >
+              Previous
+            </Button>
+            <Badge
+              align="center"
+              textAlign="center"
+              borderRadius="full"
+              px="2"
+              colorScheme={difficultyColor(questionData.difficulty)}
+            >
+              {questionData.difficulty}
+            </Badge>
+            <Button
+              onClick={nextQuestion}
+              variant="outline"
+              className=" dark:text-gray-300"
+            >
+              Next
+            </Button>
+          </HStack>
+          <Box maxHeight="750px" maxWidth="900px" overflow="auto" m={2}>
+            <ReactMarkdown
+              components={ChakraUIRenderer(newTheme)}
+              children={parse(questionData.content)}
+              skipHtml
+            />
+          </Box>
+        </VStack>
       </Center>
     </>
   )
