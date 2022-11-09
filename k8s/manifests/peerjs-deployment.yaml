@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: peerjs-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: peerjs
+  template:
+    metadata:
+      labels:
+        app: peerjs
+    spec:
+      containers:
+        - name: peerjs
+          image: peerjs/peerjs-server
+          ports:
+            - name: http
+              containerPort: 9000
+          resources:
+            requests:
+              cpu: 5m
+              memory: 50Mi

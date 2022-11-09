@@ -1,0 +1,16 @@
+FROM node:14-alpine
+
+WORKDIR /app
+
+COPY package.json .
+COPY package-lock.json .
+
+# Set env for react_app
+ENV REACT_APP_ENV=local
+
+RUN npm ci --quiet
+
+# Can be removed if using docker-compose, which maps the volume for you
+COPY . .
+
+CMD ["npm", "start"]

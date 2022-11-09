@@ -1,0 +1,20 @@
+name: User Service Test
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+  pull_request:
+
+jobs:
+  Test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: user-service
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run lint & test via docker-compose
+        run: docker-compose -f docker-compose.test.yml up --exit-code-from web --build

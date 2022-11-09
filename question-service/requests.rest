@@ -1,0 +1,57 @@
+### CHECK SERVER ALIVE
+GET http://localhost:8500/api/v1/question/status
+
+### CREATE QUESTION
+POST http://localhost:8500/api/v1/question
+Content-Type: application/json
+
+{
+    "name":"Two Sum",
+    "type":["Array", "Hashmap"],
+    "content": "# [1\\. Two Sum](https://leetcode.com/problems/two-sum/)\n\n## Description\n\nDifficulty: **Easy**  \n\nRelated Topics: [Array](https://leetcode.com/tag/array/), [Hash Table](https://leetcode.com/tag/hash-table/)\n\n\nGiven an array of integers `nums` and an integer `target`, return _indices of the two numbers such that they add up to `target`_.\n\nYou may assume that each input would have **_exactly_ one solution**, and you may not use the _same_ element twice.\n\nYou can return the answer in any order.\n\n**Example 1:**\n\n```\nInput: nums = [2,7,11,15], target = 9\nOutput: [0,1]\nExplanation: Because nums[0] + nums[1] == 9, we return [0, 1].\n```\n\n**Example 2:**\n\n```\nInput: nums = [3,2,4], target = 6\nOutput: [1,2]\n```\n\n**Example 3:**\n\n```\nInput: nums = [3,3], target = 6\nOutput: [0,1]\n```\n\n**Constraints:**\n\n*   2 <= nums.length <= 10<sup>4</sup>\n*   -10<sup>9</sup> <= nums[i] <= 10<sup>9</sup>\n*   -10<sup>9</sup> <= target <= 10<sup>9</sup>\n*   **Only one valid answer exists.**\n\n**Follow-up:** Can you come up with an algorithm that is less than O(n<sup>2</sup>) time complexity?\n\n"
+,
+    "difficulty":"easy"
+}
+
+### GET ALL QUESTIONS
+GET http://localhost:8500/api/v1/question/allQuestions
+
+### GET ALL TYPES
+GET http://localhost:8500/api/v1/question/allTypes
+
+### GET TYPES BY DIFFICULTY
+GET http://localhost:8500/api/v1/question/types?difficulty=hard
+
+### GET Question Names
+GET http://localhost:8500/api/v1/question/questionNames?id=1&id=2&id=3
+
+### GET QUESTION By difficulty
+GET http://localhost:8500/api/v1/question?difficulty=easy
+
+### GET QUESTION By difficulty and types
+GET http://localhost:8500/api/v1/question?difficulty=easy&types=Hash+Table
+
+### GET QUESTION By types
+GET http://localhost:8500/api/v1/question?types=Array&types=Hash+Table
+
+### GET QUESTION By id
+GET http://localhost:8500/api/v1/question?id=1
+
+### Get Next Question given a list of id by difficulty
+GET http://localhost:8500/api/v1/question/nextQuestion?past_id=1&difficulty=easy
+
+### Get Next Question given a list of id by types
+GET http://localhost:8500/api/v1/question/nextQuestion?past_id=1&past_id=4&types=String&types=Hash+Table
+
+### UPDATE QUESTION
+PUT http://localhost:8500/api/v1/question
+Content-Type: application/json
+
+{   
+    "id": 1,
+    "name":"Updated question",
+    "difficulty":"medium"
+}
+
+### DELETE QUESTION By id
+DELETE http://localhost:8500/api/v1/question?id=7

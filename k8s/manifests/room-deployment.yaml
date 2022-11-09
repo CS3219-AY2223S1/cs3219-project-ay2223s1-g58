@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: room-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: room
+  template:
+    metadata:
+      labels:
+        app: room
+    spec:
+      containers:
+        - name: room
+          image: b9jmthkk/room
+          ports:
+            - name: http
+              containerPort: 8022
+          env:
+            - name: ENV
+              value: production
+            - name: REDIS_HOST
+              value: redis-cluster-ip-service
+            - name: URI_QUESTION_SERVICE
+              value: http://question-cluster-ip-service:8500
+            - name: ACCESS_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: access-token-secret
+                  key: ACCESS_TOKEN_SECRET
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_HOST
+              value: postgres-cluster-ip-service
+            - name: POSTGRES_PORT
+              value: '5432'
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-password
+                  key: POSTGRES_PASSWORD
+          resources:
+            requests:
+              cpu: 25m
+              memory: 200Mi

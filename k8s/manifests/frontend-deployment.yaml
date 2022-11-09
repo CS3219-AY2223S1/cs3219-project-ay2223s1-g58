@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: b9jmthkk/frontend
+          ports:
+            - name: http
+              containerPort: 3000
+          env:
+            - name: REACT_APP_ENV
+              value: production
+          resources:
+            requests:
+              cpu: 10m
+              memory: 20Mi
